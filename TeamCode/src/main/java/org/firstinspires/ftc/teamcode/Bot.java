@@ -173,7 +173,7 @@ public class Bot {
     }
 
 
-//cope
+//Hello there!!!!
     public void resetEncoder() {
         fl.setMode(STOP_AND_RESET_ENCODER);
         fr.setMode(STOP_AND_RESET_ENCODER);
