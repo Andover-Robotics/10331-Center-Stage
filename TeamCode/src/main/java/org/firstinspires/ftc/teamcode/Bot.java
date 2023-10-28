@@ -108,14 +108,12 @@ public class Bot {
     }
 
 
-
     public void prepForOuttake() {
         currentState = BotState.STORAGE_FULL;
-        resetOuttake();
     }
 
-    // must be combined with bot.slide.run___() in MainTeleOp
-    public void outtake(int stage, boolean pixelTwo) {
+
+    public void outtakeWithSensing(int stage, boolean pixelTwo) {
         currentState = BotState.OUTTAKE;
         aprilTagTuning();
         slides.runTo(stage);
@@ -241,6 +239,18 @@ public class Bot {
             box.depositSecondPixel();
             box.resetBox();
         }
+    }
+
+    public void outtakeWithoutSlides(){
+        currentState = BotState.OUTTAKE;
+        fourbar.outtake();
+    }
+
+    public void slidesSensingDeposit(int stage){
+        currentState = BotState.OUTTAKE;
+        aprilTagTuning();
+        slides.runTo(stage);
+        box.depositFirstPixel();
     }
 
 

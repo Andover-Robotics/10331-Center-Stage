@@ -458,7 +458,7 @@ public class MainAuto extends LinearOpMode{
             }else if(teamPropLocation != TeamProp.NOTDETECTED){
                 throw new PropException("the prop wasn't detected");
             }
-            bot.outtake(1,true);
+            bot.outtakeWithSensing(1,true);
 
         }catch(Exception e){
             e.printStackTrace();

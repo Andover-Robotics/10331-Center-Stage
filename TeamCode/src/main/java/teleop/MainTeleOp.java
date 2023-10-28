@@ -34,7 +34,6 @@ public class MainTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bot.initializeImus();
         gp2 = new GamepadEx(gamepad2);
         gp1 = new GamepadEx(gamepad1);
 
@@ -77,6 +76,7 @@ public class MainTeleOp extends LinearOpMode {
 
             //Finite state machine enabled
             if(isAutomatic) {
+
                 //noodle intake
                 if(gp2.wasJustPressed(GamepadKeys.Button.Y)) {
                     bot.noodles.Intake();
@@ -86,19 +86,21 @@ public class MainTeleOp extends LinearOpMode {
                     }
                     if(bot.box.getIsFull()) {
                         bot.noodles.stop();
-                        bot.prepForOuttake();
+
+                        //four bar at correct position (box at correct angle too)
+                        bot.outtakeWithoutSlides();
                     }
                 }
 
-                //slide movement (automatic stages)
+                //slide movement (automatic stages) => automatically deposit first pixel
                 if (gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                    bot.outtake(3,false);
+                    bot.slidesSensingDeposit(3);
                 } else if (gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                    bot.outtake(2,false);
+                    bot.slidesSensingDeposit(2);
                 } else if (gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                    bot.outtake(4, false);
+                    bot.slidesSensingDeposit(4);
                 } else if (gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                    bot.outtake(1, false);
+                    bot.slidesSensingDeposit(1);
                 }
 
                 //keeping second pixel deposit manual for reasons
@@ -130,9 +132,6 @@ public class MainTeleOp extends LinearOpMode {
                 //Box movement
                 if(gp2.wasJustPressed(GamepadKeys.Button.Y)){
                     bot.box.resetBox();
-                }
-                if(gp2.wasJustPressed(GamepadKeys.Button.A)){
-                    bot.outtakeBox();
                 }
                 if(gp2.wasJustPressed(GamepadKeys.Button.A)){
                     bot.outtakeBox();
@@ -171,7 +170,7 @@ public class MainTeleOp extends LinearOpMode {
 
     private void drive() {
         if (gp1.wasJustReleased(GamepadKeys.Button.LEFT_STICK_BUTTON)) {
-            bot.resetIMU();
+            bot.resetEncoder();
         }
      //   driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
