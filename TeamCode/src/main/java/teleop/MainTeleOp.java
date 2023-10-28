@@ -40,11 +40,10 @@ public class MainTeleOp extends LinearOpMode {
         //Camera Stuff
         WebcamName camName = hardwareMap.get(WebcamName.class, "Webcam 1");
         bot.camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
-        TeamPropDetectionPipeline teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
         bot.aprilTagsPipeline = new AprilTagsPipeline(tagSize, fx, fy, cx, cy);
 
 
-        bot.camera.setPipeline(teamPropDetectionPipeline);
+        bot.camera.setPipeline(bot.aprilTagsPipeline);
         bot.camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
 
             @Override
@@ -151,16 +150,8 @@ public class MainTeleOp extends LinearOpMode {
                 //slides
                 if(gp2.getLeftY()!=0){
                     double raw = gp2.getLeftY();
-                    bot.outtakeSlides(raw*1800);
+                    bot.outtakeManual(raw*1800);
                     //the max value for the joystick will be equal to 1, so the max value for runTo in slides will be 1800
-                }
-
-                //fourbar
-                if(gp2.getRightY()>0){
-                    bot.outtakeFourbar(gp2.getRightY());
-                }
-                if(gp2.getRightY()<0){
-                    bot.outtakeFourbar(gp2.getLeftY());
                 }
             }
             //constantly checking for drive inputs
@@ -172,15 +163,17 @@ public class MainTeleOp extends LinearOpMode {
         if (gp1.wasJustReleased(GamepadKeys.Button.LEFT_STICK_BUTTON)) {
             bot.resetEncoder();
         }
-     //   driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+        //are we supposed to be resetting the encoder every single time the left joystick is released?
+        //driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
 
-        Vector2d driveVector = new Vector2d(gp1.getLeftX(), -gp1.getLeftY()),
+        Vector2d driveVector = new Vector2d(gp1.getLeftX(), gp1.getLeftY()),
                 turnVector = new Vector2d(
                         gp1.getRightX(), 0);
         bot.driveRobotCentric(driveVector.getX() * driveSpeed,
                 driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
+                //why divided by 1.7??
         );
     }
 }

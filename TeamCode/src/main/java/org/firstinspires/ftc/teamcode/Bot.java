@@ -25,39 +25,38 @@ public class Bot {
 
     public enum BotState {
         INTAKE, // surgical tubing ready to pick up pixel
-        STORAGE_FULL, // 2 pixels in storage
         STORAGE_NOT_FULL, //1 or 0 pixels in storage
-        OUTTAKE, //is in outtake position
+        READY_TO_OUTTAKE, //everything is ready except slides
+        OUTTAKE
     }
 
+    // Motors and servos
+    private final DcMotorEx FL, FR, BL, BR;
+
+    //Bot stuff
     public OpMode opMode;
     public BotState currentState = STORAGE_NOT_FULL;
+    public boolean fieldCentricRunMode = false;
     public static Bot instance;
+    private double distanceFromBackdrop;
+    private final double optimalDistanceFromBackdrop = 10;
+    //arbitrary number for now
+
+    //Sensing
     public OpenCvCamera camera;
     public AprilTagsPipeline aprilTagsPipeline;
-
     public static org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection detections;
+    public static DistanceSensor distanceSensor;
 
+    //Subsystems
     public Slides slides;
     public Noodles noodles;
     public Drone drone;
     public Fourbar fourbar;
     public Box box;
 
-    public static DistanceSensor distanceSensor;
 
-    private final DcMotorEx FL, FR, BL, BR;
-
-
-
-
-    public boolean fieldCentricRunMode = false;
-
-
-    private double distanceFromBackdrop;
-    private final double optimalDistanceFromBackdrop = 10;
-    //arbitrary number for now
-
+    //Bot init (getInstance and constructors)
     public static Bot getInstance() {
         if (instance == null) {
             throw new IllegalStateException("tried to getInstance of Bot when uninitialized");
@@ -76,7 +75,8 @@ public class Bot {
     private Bot(OpMode opMode) {
         this.opMode = opMode;
         enableAutoBulkRead();
-        //what is this
+
+
         try {
             fieldCentricRunMode = false;
         } catch (Exception e) {
@@ -100,67 +100,13 @@ public class Bot {
 
         slides = new Slides(opMode);
         noodles = new Noodles(opMode);
-        drone= new Drone(opMode);
+        drone = new Drone(opMode);
         fourbar = new Fourbar(opMode);
-        box= new Box(opMode);
-
-
+        box = new Box(opMode);
     }
 
 
-    public void prepForOuttake() {
-        currentState = BotState.STORAGE_FULL;
-    }
-
-
-    public void outtakeWithSensing(int stage, boolean pixelTwo) {
-        currentState = BotState.OUTTAKE;
-        aprilTagTuning();
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
-
-    public void outtake(boolean pixelTwo, int stage){
-        currentState = BotState.OUTTAKE;
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
-
-
-
-    public void storageSlides(){
-        slides.runTo(1);
-    }
-
-    public void resetOuttake(){
-        box.resetBox();
-        storageSlides();
-        fourbar.storage();
-    }
-
-
-    public void fixMotors(double velocity) {
-        FL.setDirection(DcMotorEx.Direction.REVERSE); //invert
-        FR.setVelocity(velocity);
-        BL.setDirection(DcMotorEx.Direction.REVERSE); // invert
-        BR.setVelocity(velocity);
-
-        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-    }
-
+    //Drive methods
     public void driveRobotCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed) {
         double[] speeds = {
                 forwardBackSpeed - strafeSpeed - turnSpeed,
@@ -217,77 +163,6 @@ public class Bot {
         BR.setPower(speeds[3]);
     }
 
-    private void enableAutoBulkRead() {
-        for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
-            mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
-    }
-
-    public void intake(double power){
-        currentState = BotState.INTAKE;
-        noodles.intake(power);
-        if(power<=0.1){
-            noodles.stop();
-        }
-    }
-
-    public void outtakeBox(){
-        currentState = BotState.OUTTAKE;
-        if(box.getNumPixelsDeposited() == 0){
-            box.depositFirstPixel();
-        }else if(box.getNumPixelsDeposited()==1){
-            box.depositSecondPixel();
-            box.resetBox();
-        }
-    }
-
-    public void outtakeWithoutSlides(){
-        currentState = BotState.OUTTAKE;
-        fourbar.outtake();
-    }
-
-    public void slidesSensingDeposit(int stage){
-        currentState = BotState.OUTTAKE;
-        aprilTagTuning();
-        slides.runTo(stage);
-        box.depositFirstPixel();
-    }
-
-
-    public void outtakeSlides(double target){
-        currentState = BotState.OUTTAKE;
-        slides.runTo(target);
-    }
-
-    public void outtakeFourbar(double input){
-        if(!fourbar.getIsOuttakePos()){
-            fourbar.runManualOuttake(input);
-        }
-    }
-
-
-
-    public void resetEncoder() {
-        FL.setMode(STOP_AND_RESET_ENCODER);
-        FR.setMode(STOP_AND_RESET_ENCODER);
-        BR.setMode(STOP_AND_RESET_ENCODER);
-        BL.setMode(STOP_AND_RESET_ENCODER);
-        //slides.resetEncoder(); code this in slides subsystems
-        //reset encoder in slides
-
-    }
-
-
-
-
-
-
-
-    public void resetProfiler() {
-        //slides.resetProfiler(); code in slides subsystem
-        //figure this out
-
-    }
     public void turn(double power){
         if(power>0) {
             //turn right
@@ -352,6 +227,53 @@ public class Bot {
         BL.setPower(0.1);
     }
 
+    //Intake methods
+    public void intake(double power){
+        currentState = BotState.INTAKE;
+        noodles.intake(power);
+        if(power<=0.1){
+            noodles.stop();
+        }
+    }
+
+    //Reset methods
+    private void enableAutoBulkRead() {
+        for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
+            mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+    }
+    public void storageSlides(){
+        slides.runTo(1);
+    }
+
+    public void resetEncoder() {
+        FL.setMode(STOP_AND_RESET_ENCODER);
+        FR.setMode(STOP_AND_RESET_ENCODER);
+        BR.setMode(STOP_AND_RESET_ENCODER);
+        BL.setMode(STOP_AND_RESET_ENCODER);
+        slides.resetEncoder();
+        //reset encoder in slides
+    }
+
+    public void resetOuttake(){
+        box.resetBox();
+        storageSlides();
+        fourbar.storage();
+    }
+
+    public void fixMotors(double velocity) {
+        FL.setDirection(DcMotorEx.Direction.REVERSE); //invert
+        FR.setVelocity(velocity);
+        BL.setDirection(DcMotorEx.Direction.REVERSE); // invert
+        BR.setVelocity(velocity);
+
+        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+    }
+
+    //Drive Tuning
     public void distanceTuning(DistanceSensor sensor){
         double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
         boolean inRange = Math.abs(diffy) <= 5;
@@ -386,5 +308,60 @@ public class Bot {
             diffy = distanceFromBackdrop - optimalDistanceFromBackdrop;
             inRange = Math.abs(diffy) <= 5;
         }
+    }
+
+    //Outtake
+    public void outtakeWithSensing(int stage, boolean pixelTwo) {
+        //used in optimal auto
+        currentState = BotState.OUTTAKE;
+        aprilTagTuning();
+        slides.runTo(stage);
+        fourbar.outtake();
+        box.depositFirstPixel();
+        if(pixelTwo){
+            box.depositSecondPixel();
+            resetOuttake();
+        }
+    }
+
+    public void outtake(boolean pixelTwo, int stage){
+        //used in noSense auto
+        currentState = BotState.OUTTAKE;
+        slides.runTo(stage);
+        fourbar.outtake();
+        box.depositFirstPixel();
+        if(pixelTwo){
+            box.depositSecondPixel();
+            resetOuttake();
+        }
+    }
+
+    public void outtakeBox(){
+        currentState = BotState.OUTTAKE;
+        if(box.getNumPixelsDeposited() == 0){
+            box.depositFirstPixel();
+        }else if(box.getNumPixelsDeposited()==1){
+            box.depositSecondPixel();
+            box.resetBox();
+        }
+    }
+
+    public void outtakeWithoutSlides(){
+        currentState = BotState.READY_TO_OUTTAKE;
+        fourbar.outtake();
+    }
+
+    public void slidesSensingDeposit(int stage){
+        currentState = BotState.OUTTAKE;
+        aprilTagTuning();
+        slides.runTo(stage);
+        box.depositFirstPixel();
+    }
+
+
+    public void outtakeManual(double target){
+        currentState = BotState.OUTTAKE;
+        slides.runTo(target);
+        fourbar.outtake();
     }
 }
