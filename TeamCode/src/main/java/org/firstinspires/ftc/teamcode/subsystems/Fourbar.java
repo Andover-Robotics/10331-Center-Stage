@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-public class Fourbar {
+/*public class Fourbar {
     private final Servo fourbar;
     private final Servo angleBoxServo;
 
@@ -52,3 +52,5 @@ public class Fourbar {
     }
 
 }
+
+ */

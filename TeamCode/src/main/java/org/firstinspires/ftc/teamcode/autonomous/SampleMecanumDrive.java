@@ -31,6 +31,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -51,11 +52,14 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(7, 0, 0.3);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(3.7, 0, 0);
 
+    public OpMode opMode;
     public static double LATERAL_MULTIPLIER = 1.22;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
+
+    public static SampleMecanumDrive instance;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
@@ -67,51 +71,48 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    private VoltageSensor batteryVoltageSensor;
+    //private VoltageSensor batteryVoltageSensor;
 
-    public SampleMecanumDrive(HardwareMap hardwareMap) {
+    public static SampleMecanumDrive getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("tried to getInstance of Bot when uninitialized");
+        }
+        return instance;
+    }
+
+    public static SampleMecanumDrive getInstance(OpMode opMode) {
+        if (instance == null) {
+            return instance = new SampleMecanumDrive(opMode);
+        }
+        instance.opMode = opMode;
+        return instance;
+    }
+
+    public SampleMecanumDrive(OpMode opMode) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+        this.opMode= opMode;
 
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+       // follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+         //       new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
-        batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+       // LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+      //  batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+
+       /* for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        // TODO: adjust the names of the following hardware devices to match your configuration
+        */
 
 
-        // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
-        // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
-        //
-        //             | +Z axis
-        //             |
-        //             |
-        //             |
-        //      _______|_____________     +Y axis
-        //     /       |_____________/|__________
-        //    /   REV / EXPANSION   //
-        //   /       / HUB         //
-        //  /_______/_____________//
-        // |_______/_____________|/
-        //        /
-        //       / +X axis
-        //
-        // This diagram is derived from the axes in section 3.4 https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bno055-ds000.pdf
-        // and the placement of the dot/orientation from https://docs.revrobotics.com/rev-control-system/control-system-overview/dimensions#imu-location
-        //
-        // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
-        // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "motorFL");
-        leftRear = hardwareMap.get(DcMotorEx.class, "motorBL");
-        rightRear = hardwareMap.get(DcMotorEx.class, "motorBR");
-        rightFront = hardwareMap.get(DcMotorEx.class, "motorFR");
+        leftFront = opMode.hardwareMap.get(DcMotorEx.class, "fl");
+        leftRear = opMode.hardwareMap.get(DcMotorEx.class, "bl");
+        rightRear = opMode.hardwareMap.get(DcMotorEx.class, "br");
+        rightFront = opMode.hardwareMap.get(DcMotorEx.class, "fr");
+
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -137,9 +138,11 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
+       /* if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
+
+        */
 
         // TODO: reverse any motors using DcMotor.setDirection()
 
@@ -247,7 +250,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
     }
 
-    public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
+   /* public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
         PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
                 coefficients.p, coefficients.i, coefficients.d,
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
@@ -257,6 +260,8 @@ public class SampleMecanumDrive extends MecanumDrive {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients);
         }
     }
+
+    */
 
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = drivePower;

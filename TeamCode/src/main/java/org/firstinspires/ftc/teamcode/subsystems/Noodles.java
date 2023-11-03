@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
-public class Noodles {
+/*public class Noodles {
     //we need a sensor to sense how many pixels we are intaking!
     public final DcMotorEx noodleMotor;
     private final OpMode opMode;
@@ -44,3 +44,5 @@ public class Noodles {
     }
 
 }
+
+ */

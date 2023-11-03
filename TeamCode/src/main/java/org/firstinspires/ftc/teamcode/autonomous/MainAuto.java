@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.subsystems.odometry.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.autonomous.TeamPropDetectionPipeline.TeamProp;
+//import org.firstinspires.ftc.teamcode.Bot;
+//import org.firstinspires.ftc.teamcode.subsystems.odometry.StandardTrackingWheelLocalizer;
+//import org.firstinspires.ftc.teamcode.autonomous.TeamPropDetectionPipeline.TeamProp;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -32,9 +32,9 @@ To Do:
 
 public class MainAuto extends LinearOpMode{
 
-    SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-    Bot bot;
+    SampleMecanumDrive drive= SampleMecanumDrive.getInstance(this);
+
     double distanceFromObject;
 
     enum Side {
@@ -49,7 +49,7 @@ public class MainAuto extends LinearOpMode{
         MECHANICAL_FAILURE, NO_SENSE, OPTIMAL
     }
 
-    private TeamProp teamPropLocation = TeamProp.NOTDETECTED;
+  //  private TeamProp teamPropLocation = TeamProp.NOTDETECTED;
     //change based on what we're detecting
 
     Side side = Side.NULL;
@@ -68,7 +68,6 @@ public class MainAuto extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bot = Bot.getInstance(this);
         GamepadEx gp1 = new GamepadEx(gamepad1);
 
         //different start positions depending on alliance and distance from backdrop
@@ -114,7 +113,7 @@ public class MainAuto extends LinearOpMode{
 
         while (!isStarted() && !isStopRequested()) {
             gp1.readButtons();
-            drive.setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+         //   drive.setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
             //Set distance, side, and auto type
             /*

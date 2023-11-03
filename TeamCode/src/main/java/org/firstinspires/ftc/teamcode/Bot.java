@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
@@ -44,7 +44,7 @@ public class Bot {
     public Fourbar fourbar;
     public Box box;
 
-    */
+
 
     //public static DistanceSensor distanceSensor;
 
@@ -112,7 +112,7 @@ public class Bot {
          */
 
 
-    }
+    //}
 
 
 /*
@@ -158,7 +158,7 @@ public class Bot {
     }
 
 
- */
+
 
     public void fixMotors(double velocity) {
         FL.setDirection(DcMotorEx.Direction.REVERSE); //invert
@@ -281,7 +281,7 @@ public class Bot {
 
     }
 
-     */
+
     public void turn(double power){
         if(power>0) {
             //turn right
@@ -366,7 +366,7 @@ public class Bot {
         }
     }
 
-     */
+
 
     public void aprilTagTuning(){
         AprilTagsDetection.detectTag();
@@ -385,3 +385,5 @@ public class Bot {
         }
     }
 }
+
+ */

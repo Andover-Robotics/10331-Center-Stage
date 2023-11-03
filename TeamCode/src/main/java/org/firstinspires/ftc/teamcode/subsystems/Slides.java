@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+/*import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,8 +10,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 import org.firstinspires.ftc.teamcode.PIDController;
 
+ */
 
-public class Slides {
+
+/*public class Slides {
     public final DcMotorEx slidesMotor;
     private final static double p = 0.015, i = 0 , d = 0, f = 0;
     private final PIDFCoefficients coeff = new PIDFCoefficients(p,i,d,f);
@@ -142,3 +144,5 @@ public class Slides {
     }
 
 }
+
+ */

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+/*package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Set of helper functions for drawing Road Runner paths and trajectories on dashboard canvases.
- */
+
 public class DashboardUtil {
     private static final double DEFAULT_RESOLUTION = 2.0; // distance units; presumed inches
     private static final double ROBOT_RADIUS = 9; // in
@@ -52,3 +52,5 @@ public class DashboardUtil {
         canvas.strokeLine(x1, y1, x2, y2);
     }
 }
+
+ */
