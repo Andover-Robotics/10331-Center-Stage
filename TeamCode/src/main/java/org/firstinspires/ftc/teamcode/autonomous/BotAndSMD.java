@@ -1,12 +1,11 @@
-
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ANG_VEL;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.TRACK_WIDTH;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.encoderTicksToInches;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.kA;
@@ -15,12 +14,8 @@ import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.kV;
 
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
-import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
-import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
@@ -35,130 +30,84 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/*
- * Simple mecanum drive hardware implementation for REV hardware.
- */
-@Config
-public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(7, 0, 0.3);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(3.7, 0, 0);
-
-    public OpMode opMode;
-    public static double LATERAL_MULTIPLIER = 1.22;
-
-    public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1;
-    public static double OMEGA_WEIGHT = 1;
-
-    public static SampleMecanumDrive instance;
+public class BotAndSMD  extends MecanumDrive{
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
+    public static double LATERAL_MULTIPLIER = 1.22;
+    public static double VX_WEIGHT = 1;
+    public static double VY_WEIGHT = 1;
+    public static double OMEGA_WEIGHT = 1;
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
+    public OpMode opMode;
 
-    private TrajectoryFollower follower;
+    public static BotAndSMD instance;
 
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+
+    private DcMotorEx FL, FR, BL, BR;
+
     private List<DcMotorEx> motors;
 
-    //private VoltageSensor batteryVoltageSensor;
 
-    public static SampleMecanumDrive getInstance() {
+
+    public static BotAndSMD getInstance() {
         if (instance == null) {
             throw new IllegalStateException("tried to getInstance of Bot when uninitialized");
         }
         return instance;
     }
 
-    public static SampleMecanumDrive getInstance(OpMode opMode) {
+    public static BotAndSMD getInstance(OpMode opMode) {
         if (instance == null) {
-            return instance = new SampleMecanumDrive(opMode);
+            return instance = new BotAndSMD(opMode);
         }
         instance.opMode = opMode;
         return instance;
     }
 
-    public SampleMecanumDrive(OpMode opMode) {
+    public BotAndSMD(OpMode opMode) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
-        this.opMode= opMode;
-
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
-
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
-
-       // batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
-
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
+        this.opMode = opMode;
+        enableAutoBulkRead();
 
 
+        //@NonNull ???/
+        FL = opMode.hardwareMap.get(DcMotorEx.class, "FL");
+        FR = opMode.hardwareMap.get(DcMotorEx.class, "FR");
+        BL = opMode.hardwareMap.get(DcMotorEx.class, "BL");
+        BR = opMode.hardwareMap.get(DcMotorEx.class, "BR");
 
+        FL.setMode(RUN_USING_ENCODER);
+        FR.setMode(RUN_USING_ENCODER);
+        BL.setMode(RUN_USING_ENCODER);
+        BR.setMode(RUN_USING_ENCODER);
 
-
-        leftFront = opMode.hardwareMap.get(DcMotorEx.class, "fl");
-        leftRear = opMode.hardwareMap.get(DcMotorEx.class, "bl");
-        rightRear = opMode.hardwareMap.get(DcMotorEx.class, "br");
-        rightFront = opMode.hardwareMap.get(DcMotorEx.class, "fr");
-
-
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
-
-        for (DcMotorEx motor : motors) {
-            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-            motor.setMotorType(motorConfigurationType);
-        }
-
-        if (RUN_USING_ENCODER) {
-            setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-       /* if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
-            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
-        }
-
-        */
-
-        // TODO: reverse any motors using DcMotor.setDirection()
-
-        // TODO: if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-
-        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motors = Arrays.asList(FL, BL, BR, FR);
     }
 
-    public void fixMotors(){
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+    public void fixMotors(){
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
+        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -247,7 +196,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
     }
 
-   /* public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
+  /* public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
         PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
                 coefficients.p, coefficients.i, coefficients.d,
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
@@ -258,7 +207,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
     }
 
-    */
+   */
+
 
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = drivePower;
@@ -284,6 +234,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
+
+
     }
 
     @NonNull
@@ -307,10 +259,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        FL.setPower(v);
+        BL.setPower(v1);
+        BR.setPower(v2);
+        FR.setPower(v3);
     }
 
     @Override
@@ -334,3 +286,5 @@ public class SampleMecanumDrive extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 }
+
+
