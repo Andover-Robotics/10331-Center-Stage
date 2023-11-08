@@ -1,6 +1,7 @@
 
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ANG_VEL;
@@ -108,10 +109,17 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
 
-        leftFront = opMode.hardwareMap.get(DcMotorEx.class, "fl");
-        leftRear = opMode.hardwareMap.get(DcMotorEx.class, "bl");
-        rightRear = opMode.hardwareMap.get(DcMotorEx.class, "br");
-        rightFront = opMode.hardwareMap.get(DcMotorEx.class, "fr");
+        if(opMode!=null){
+            leftFront = opMode.hardwareMap.get(DcMotorEx.class, "fl");
+            leftRear = opMode.hardwareMap.get(DcMotorEx.class, "bl");
+            rightRear = opMode.hardwareMap.get(DcMotorEx.class, "br");
+            rightFront = opMode.hardwareMap.get(DcMotorEx.class, "fr");
+
+        }
+        else{
+            telemetry.addData("NULL",".");
+            telemetry.update();
+        }
 
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
