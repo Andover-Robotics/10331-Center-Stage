@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+/*package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
@@ -10,7 +10,7 @@ import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
 
-
+@TeleOp
 public class AprilTagsDetection{
 
     static AprilTagsPipeline pipeline;
@@ -126,6 +126,6 @@ class AprilTagException extends Exception{
     {
         super(message);
     }
-
-
 }
+
+ */

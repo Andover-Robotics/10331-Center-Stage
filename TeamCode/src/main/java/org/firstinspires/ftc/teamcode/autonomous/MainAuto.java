@@ -7,14 +7,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.subsystems.odometry.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.autonomous.TeamPropDetectionPipeline.TeamProp;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
 
 /*
@@ -31,8 +26,7 @@ To Do:
 @Autonomous(name = "MainAutonomous")
 
 public class MainAuto extends LinearOpMode{
-    //aaaaaaaa
-    SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
 
     Bot bot;
     double distanceFromObject;
@@ -49,8 +43,7 @@ public class MainAuto extends LinearOpMode{
         MECHANICAL_FAILURE, NO_SENSE, OPTIMAL
     }
 
-    private TeamProp teamPropLocation = TeamProp.NOTDETECTED;
-    //change based on what we're detecting
+  //  private TeamProp teamPropLocation = TeamProp.NOTDETECTED;
 
     Side side = Side.NULL;
     DistanceToBackdrop dtb= DistanceToBackdrop.NULL;
@@ -68,7 +61,13 @@ public class MainAuto extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+       // Bot.instance = null;
         bot = Bot.getInstance(this);
+
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         GamepadEx gp1 = new GamepadEx(gamepad1);
 
         //different start positions depending on alliance and distance from backdrop
@@ -114,11 +113,8 @@ public class MainAuto extends LinearOpMode{
 
         while (!isStarted() && !isStopRequested()) {
             gp1.readButtons();
-            drive.setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
-            //Set distance, side, and auto type
             /*
-            Writing down configs here because reading these if statements is making me go insane:
             SIDE:
                 b=red
                 a=blue
@@ -446,6 +442,7 @@ public class MainAuto extends LinearOpMode{
     private void senseAndScore(){
         //locates and moves to corresponding position on Backdrop based on april tags
         //switch to aprilTagsPipeline => looking for AprilTags
+
        /* bot.camera.setPipeline(bot.aprilTagsPipeline);
         int counter=0;
 

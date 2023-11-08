@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 import org.firstinspires.ftc.teamcode.PIDController;
 
-
 public class Slides {
     public final DcMotorEx slidesMotor;
     private final static double p = 0.015, i = 0 , d = 0, f = 0;
@@ -142,3 +141,5 @@ public class Slides {
     }
 
 }
+
+

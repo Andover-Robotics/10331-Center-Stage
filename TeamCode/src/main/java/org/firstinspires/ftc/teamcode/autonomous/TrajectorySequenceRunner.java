@@ -16,7 +16,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 import com.acmerobotics.roadrunner.util.NanoClock;
 
-import org.firstinspires.ftc.teamcode.autonomous.DashboardUtil;
+//import org.firstinspires.ftc.teamcode.autonomous.DashboardUtil;
 import org.firstinspires.ftc.teamcode.autonomous.SequenceSegment;
 import org.firstinspires.ftc.teamcode.autonomous.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.autonomous.TrajectorySequence;
@@ -214,7 +214,7 @@ public class TrajectorySequenceRunner {
                     fieldOverlay.setStrokeWidth(1);
                     fieldOverlay.setStroke(COLOR_INACTIVE_TRAJECTORY);
 
-                    DashboardUtil.drawSampledPath(fieldOverlay, ((TrajectorySegment) segment).getTrajectory().getPath());
+                    //DashboardUtil.drawSampledPath(fieldOverlay, ((TrajectorySegment) segment).getTrajectory().getPath());
                 } else if (segment instanceof TurnSegment) {
                     Pose2d pose = segment.getStartPose();
 
@@ -237,7 +237,7 @@ public class TrajectorySequenceRunner {
                 fieldOverlay.setStrokeWidth(1);
                 fieldOverlay.setStroke(COLOR_ACTIVE_TRAJECTORY);
 
-                DashboardUtil.drawSampledPath(fieldOverlay, currentTrajectory.getPath());
+                //DashboardUtil.drawSampledPath(fieldOverlay, currentTrajectory.getPath());
             } else if (currentSegment instanceof TurnSegment) {
                 Pose2d pose = currentSegment.getStartPose();
 
@@ -255,14 +255,14 @@ public class TrajectorySequenceRunner {
         if (targetPose != null) {
             fieldOverlay.setStrokeWidth(1);
             fieldOverlay.setStroke("#4CAF50");
-            DashboardUtil.drawRobot(fieldOverlay, targetPose);
+            //DashboardUtil.drawRobot(fieldOverlay, targetPose);
         }
 
         fieldOverlay.setStroke("#3F51B5");
-        DashboardUtil.drawPoseHistory(fieldOverlay, poseHistory);
+        //DashboardUtil.drawPoseHistory(fieldOverlay, poseHistory);
 
         fieldOverlay.setStroke("#3F51B5");
-        DashboardUtil.drawRobot(fieldOverlay, poseEstimate);
+        //DashboardUtil.drawRobot(fieldOverlay, poseEstimate);
     }
 
     public Pose2d getLastPoseError() {
