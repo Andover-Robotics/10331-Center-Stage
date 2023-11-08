@@ -1,25 +1,12 @@
-/*package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode;
+
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
-import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
-import org.firstinspires.ftc.teamcode.subsystems.Box;
-import org.firstinspires.ftc.teamcode.subsystems.Drone;
-import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
-import org.firstinspires.ftc.teamcode.subsystems.Noodles;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.openftc.easyopencv.OpenCvCamera;
-
 
 public class Bot {
 
@@ -31,26 +18,26 @@ public class Bot {
     }
 
     public OpMode opMode;
-    public BotState currentState = STORAGE_NOT_FULL;
+    public BotState currentState = BotState.STORAGE_NOT_FULL;
     public static Bot instance;
+ /*
     public OpenCvCamera camera;
     public AprilTagsPipeline aprilTagsPipeline;
 
-    public static org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection detections;
+    public AprilTagsDetection detections;
 
-   /* public Slides slides;
+    public Slides slides;
     public Noodles noodles;
     public Drone drone;
     public Fourbar fourbar;
     public Box box;
 
+ */
 
 
-    //public static DistanceSensor distanceSensor;
+    //   public static DistanceSensor distanceSensor;
 
     private final DcMotorEx FL, FR, BL, BR;
-
-
 
 
     public boolean fieldCentricRunMode = false;
@@ -102,20 +89,19 @@ public class Bot {
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        /*
-        slides = new Slides(opMode);
+
+    /*  slides = new Slides(opMode);
         noodles = new Noodles(opMode);
-        drone= new Drone(opMode);
+        drone = new Drone(opMode);
         fourbar = new Fourbar(opMode);
-        box= new Box(opMode);
+        box = new Box(opMode);
 
-         */
-
-
-    //}
+      */
 
 
-/*
+    }
+
+    /*
     public void prepForOuttake() {
         currentState = BotState.STORAGE_FULL;
         resetOuttake();
@@ -228,11 +214,14 @@ public class Bot {
         BR.setPower(speeds[3]);
     }
 
+     */
+
     private void enableAutoBulkRead() {
         for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
+
     /*
 
     public void intake(double power){
@@ -386,4 +375,5 @@ public class Bot {
     }
 }
 
- */
+     */
+}
