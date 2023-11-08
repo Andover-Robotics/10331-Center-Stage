@@ -70,7 +70,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    private BNO055IMU imu;
+   // private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
    /* public static SampleMecanumDrive getInstance() {
@@ -105,10 +105,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
+       // imu = hardwareMap.get(BNO055IMU.class, "imu");
+      //  BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+      //  parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+      //  imu.initialize(parameters);
 
 
 
@@ -285,7 +285,8 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getAngularOrientation().firstAngle;
+      //  return imu.getAngularOrientation().firstAngle;
+        return 0;
     }
 
     @Override

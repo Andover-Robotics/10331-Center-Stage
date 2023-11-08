@@ -45,9 +45,9 @@ public class MainAuto extends LinearOpMode{
 
   //  private TeamProp teamPropLocation = TeamProp.NOTDETECTED;
 
-    Side side = Side.NULL;
-    DistanceToBackdrop dtb= DistanceToBackdrop.NULL;
-    AutoPath autopath = AutoPath.OPTIMAL;
+    Side side = Side.RED;
+    DistanceToBackdrop dtb= DistanceToBackdrop.CLOSE;
+    AutoPath autopath = AutoPath.MECHANICAL_FAILURE;
 
 
     public static double fx = 1078.03779;
@@ -111,7 +111,9 @@ public class MainAuto extends LinearOpMode{
 
 
 
-        while (!isStarted() && !isStopRequested()) {
+      //  while (!isStarted() && !isStopRequested()) {
+            telemetry.addLine("Robot has started");
+            telemetry.update();
             gp1.readButtons();
 
             /*
@@ -379,7 +381,6 @@ public class MainAuto extends LinearOpMode{
                     }
                 }
             }
-        }
     }
 
     private void dropPurplePixel(){

@@ -24,18 +24,18 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPoseBlueFar)
+                        drive.trajectorySequenceBuilder(startPoseRedClose)
                                 .splineTo(new Vector2d(-34,38), Math.toRadians(0))
                                 .turn(Math.toRadians(-90))
                                 //.UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                                 .waitSeconds(1.5)
                                 .turn(Math.toRadians(90))
                                 //.UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                                .splineTo(scoreBlue,Math.toRadians(0))
+                                .splineTo(scoreRed,Math.toRadians(0))
                                 //.UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
                                 .waitSeconds(1.5)
                                 //.UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                                .splineTo(parkingPosBlue,Math.toRadians(0))
+                                .splineTo(parkingPosRed,Math.toRadians(0))
                                 .build()
                 );
 
