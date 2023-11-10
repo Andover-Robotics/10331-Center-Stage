@@ -7,6 +7,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -22,17 +23,15 @@ public class Bot {
     }
 
     public static Bot instance;
-    private final DcMotorEx fl, fr, bl, br, susMotor;
-    private final Servo tcServo, droneServo_1, droneServo_2, outtakeServo;
+    private final DcMotorEx fl, fr, bl, br;
+ //   private final Servo tcServo, droneServo_1, droneServo_2, outtakeServo;
 
     public BotState state = BotState.STORAGE_NOT_FULL;
 
     public OpMode opMode;
 
-    public BNO055IMU imu;
     public boolean fieldCentricRunMode = false;
 
-    private double imuOffset = 0;
     //verify
 
     public static Bot getInstance() {
@@ -55,10 +54,8 @@ public class Bot {
         enableAutoBulkRead();
         //what is this
         try {
-            this.initializeImus();
             fieldCentricRunMode = false;
         } catch (Exception e) {
-            imu = null;
             fieldCentricRunMode = false;
 
         }
@@ -68,13 +65,15 @@ public class Bot {
         fr = opMode.hardwareMap.get(DcMotorEx.class, "fr");
         bl = opMode.hardwareMap.get(DcMotorEx.class, "bl");
         br = opMode.hardwareMap.get(DcMotorEx.class, "br");
-        tcServo = opMode.hardwareMap.get(Servo.class, "tcServo");
-        droneServo_1 = opMode.hardwareMap.get(Servo.class, "droneServo_1");;
-        droneServo_2= opMode.hardwareMap.get(Servo.class, "droneServo_2");;
-        outtakeServo = opMode.hardwareMap.get(Servo.class, "outtakeServo");;
-        susMotor = opMode.hardwareMap.get(DcMotorEx.class, "susMotor");
+
+
 
         fl.setMode(RUN_USING_ENCODER);
+    }
+
+    public void reverseMotors(){
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void prepForOuttake() {
@@ -89,18 +88,6 @@ public class Bot {
 
     public void secure() {
         //pipeline detected pixel, and intake was run
-    }
-    public void initializeImus() {
-        imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
-        final BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled = false;
-
-        imu.initialize(parameters);
-        resetIMU();
     }
 
 
@@ -181,19 +168,4 @@ public class Bot {
         bl.setMode(STOP_AND_RESET_ENCODER);
     }
 
-    public void setImuOffset(double offset) {
-        imuOffset += offset;
-    }
-
-    public void resetIMU() {
-        imuOffset += getIMU();
-    }
-
-    public double getIMU() {
-        double angle = (imu.getAngularOrientation().toAngleUnit(AngleUnit.DEGREES).firstAngle - imuOffset) % 360;
-        if (angle > 180) {
-            angle = angle - 360;
-        }
-        return angle;
-    }
 }
