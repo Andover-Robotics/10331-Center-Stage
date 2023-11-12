@@ -20,6 +20,7 @@ public class SlidesTest extends LinearOpMode {
         gp1 = new GamepadEx(gamepad1);
         gp2 = new GamepadEx(gamepad2);
 
+        telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
         bot.reverseMotors();
         bot.slides.resetEncoder();
@@ -28,11 +29,12 @@ public class SlidesTest extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             gp2.readButtons();
+            gp1.readButtons();
 
             telemetry.addData("TeleOp has started","wheeeee");
 
             drive();
-            runSlides();
+            bot.slides.runToManual(gp2.getLeftY());
             telemetry.addData("slide position:",gp2.getLeftY());
 
             /*
@@ -49,17 +51,16 @@ public class SlidesTest extends LinearOpMode {
 
 
  */
-
-
             if(gp2.wasJustPressed(GamepadKeys.Button.A)){
-                bot.fourbar.outtakeTest();
-                telemetry.addData("fourbar should be in outtake position",bot.fourbar.getOuttakePos());
+                bot.fourbar.outtake();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.B)){
-                bot.fourbar.storageTest();
-                telemetry.addData("fourbar should be in storage pos",bot.fourbar.getStoragePos());
+                bot.fourbar.storage();
             }
 
+            telemetry.addData("box position", bot.fourbar.getBoxPos());
+            telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
+            telemetry.update();
 
             telemetry.update();
         }
@@ -82,6 +83,9 @@ public class SlidesTest extends LinearOpMode {
                 -driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
         );
+    }
+    public void slidesRunToManual(double raw){
+        bot.slides.runTo(raw*1800);
     }
 
     private void runSlides(){
