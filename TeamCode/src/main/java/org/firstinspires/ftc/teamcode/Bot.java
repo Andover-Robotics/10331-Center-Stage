@@ -41,7 +41,7 @@ public class Bot {
       public Slides slides;
       public Fourbar fourbar;
 
-     // public Noodles noodles;
+      public Noodles noodles;
      // public Drone drone;
      // public Fourbar fourbar;
     //  public Box box;
@@ -101,13 +101,13 @@ public class Bot {
 
         this.slides = new Slides(opMode);
         this.fourbar = new Fourbar(opMode);
+        this.noodles = new Noodles(opMode);
 
-
-       /*noodles = new Noodles(opMode);
-        drone= new Drone(opMode);
+        /*drone= new Drone(opMode);
         fourbar = new Fourbar(opMode);
         box= new Box(opMode);
         */
+
     }
 
 
@@ -194,12 +194,11 @@ public class Bot {
                 speeds[i] /= maxSpeed;
             }
         }
-        /*FL.setPower(speeds[0]);
+        FL.setPower(speeds[0]);
         FR.setPower(speeds[1]);
         BL.setPower(speeds[2]);
         BR.setPower(speeds[3]);
 
-         */
     }
     /*
 
@@ -243,7 +242,7 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
-    /*
+
 
     public void intake(double power){
         currentState = BotState.INTAKE;
@@ -252,6 +251,7 @@ public class Bot {
             noodles.stop();
         }
     }
+    /*
 
     public void outtakeBox(){
         currentState = BotState.OUTTAKE;

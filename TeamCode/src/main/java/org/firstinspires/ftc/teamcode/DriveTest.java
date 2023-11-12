@@ -15,13 +15,15 @@ public class DriveTest extends LinearOpMode {
     private double driveSpeed =1;
     @Override
     public void runOpMode() throws InterruptedException {
-        Bot.instance = null;
+
         bot = Bot.getInstance(this);
         gp1 = new GamepadEx(gamepad1);
-        waitForStart();
 
-        while(opModeIsActive() && !isStopRequested()){
-            bot.reverseMotors();
+        waitForStart();
+        bot.reverseMotors();
+
+        while (opModeIsActive() && !isStopRequested()) {
+            telemetry.addData("TeleOp has started","wheeeee");
             drive();
         }
 
