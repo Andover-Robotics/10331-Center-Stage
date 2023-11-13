@@ -104,12 +104,16 @@ public class Slides {
         slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         if(power > min_power || power < -min_power){
             slidesMotor.setPower(power);
-            telemetry.addLine("Slide is running at this power");
+            telemetry.addData("Slide is running at this power:", power);
         }
         else{
             slidesMotor.setPower(min_power);
-            telemetry.addLine("Slide is running at minimum power");
+            telemetry.addLine("Slide is running at minimum power (0.1)");
         }
+    }
+
+    public void brake(){
+        slidesMotor.setPower(0);
     }
 
 
