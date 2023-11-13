@@ -7,15 +7,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class SlidesTest extends LinearOpMode {
+public class MainTeleop extends LinearOpMode {
     Bot bot;
     private double driveSpeed = 1;
     private GamepadEx gp1;
     private GamepadEx gp2;
+    public boolean isIntake=false;
 
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         bot = Bot.getInstance(this);
         gp1 = new GamepadEx(gamepad1);
         gp2 = new GamepadEx(gamepad2);
@@ -28,47 +30,44 @@ public class SlidesTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            gp2.readButtons();
-            gp1.readButtons();
 
-            telemetry.addData("TeleOp has started","wheeeee");
+        gp2.readButtons();
+        gp1.readButtons();
 
-            drive();
-            bot.slides.runToManual(gp2.getLeftY());
+        telemetry.addData("TeleOp has started","wheeeee");
 
-            /*
+        //divetrain movement
+        drive();
 
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-                bot.slides.runTo(1);
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                bot.slides.runTo(2);
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                bot.slides.runTo(3);
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                bot.slides.runTo(4);
+        //intake
+        if(gp2.wasJustPressed(GamepadKeys.Button.X)){
+            if(isIntake){
+                bot.stopIntake();
+                isIntake=false;
             }
-
-
- */
-            /* if(gp2.wasJustPressed(GamepadKeys.Button.A)){
-                bot.fourbar.outtake();
+            else if(!isIntake){
+                bot.intake();
+                isIntake=true;
             }
-            else if(gp2.wasJustPressed(GamepadKeys.Button.B)){
-                bot.fourbar.storage();
-            }
-
-            telemetry.addData("box position", bot.fourbar.getBoxPos());
-            telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
-            telemetry.update();
-
-      */
-
-            telemetry.addData("slide position:",gp2.getLeftY());
-            telemetry.update();
         }
 
+        //outtake position (without slide movement)
+        if(gp2.wasJustPressed(GamepadKeys.Button.A)){
+            bot.fourbar.outtake();
+        }
+        else if(gp2.wasJustPressed(GamepadKeys.Button.B)){
+            bot.fourbar.storage();
+        }
 
+        telemetry.addData("box position", bot.fourbar.getBoxPos());
+        telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
+        telemetry.update();
+
+        telemetry.update();
     }
+
+
+}
 
     private void drive() {
         driveSpeed = 1;
@@ -97,3 +96,4 @@ public class SlidesTest extends LinearOpMode {
     }
 
 }
+

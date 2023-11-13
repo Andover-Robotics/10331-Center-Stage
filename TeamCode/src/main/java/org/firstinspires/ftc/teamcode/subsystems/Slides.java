@@ -2,27 +2,30 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
-import com.acmerobotics.roadrunner.control.*;
-
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 import org.firstinspires.ftc.teamcode.PIDController;
 
 
 public class Slides {
     public final DcMotorEx slidesMotor;
-    private final static double p = 0.015, i = 0 , d = 0;
+
     //ABSOLUTELY HAVE TO TUNE!!!!
+    private final static double p = 0.015, i = 0 , d = 0, f = 0, kA = 0.5, kV =0.5;
     private double final_pos, start_pos;
 
     private final double min_power = 0.1;
     public static final double MAX_VELOCITY = 1150 * 5.2, MAX_ACCELERATION = 30, TICKS_PER_REV = 145.1;
     private MotionProfiler profiler;
     private PIDController controller;
+    private final PIDCoefficients coeff = new PIDCoefficients(p,i,d);
+    private final PIDFCoefficients pidfcoeff = new PIDFCoefficients(p,i,d,f);
     private ElapsedTime time;
 
 
@@ -45,7 +48,8 @@ public class Slides {
         this.opMode = opMode;
         time = new ElapsedTime();
         slidesMotor = opMode.hardwareMap.get(DcMotorEx.class, "slides motor");
-        slidesMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slidesMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfcoeff);
+        //slidesMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slidesMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         controller = new PIDController(p,i,d);
     }
@@ -98,9 +102,24 @@ public class Slides {
 
     public void runToManual(double power){
         slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        if(power > min_power || power < -min_power) slidesMotor.setPower(power);
-        else slidesMotor.setPower(min_power);
+        if(power > min_power || power < -min_power){
+            slidesMotor.setPower(power);
+            telemetry.addLine("Slide is running at this power");
+        }
+        else{
+            slidesMotor.setPower(min_power);
+            telemetry.addLine("Slide is running at minimum power");
+        }
     }
+
+
+
+  /*  public void runToManual(double target){
+        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slidesMotor.setPower(target);
+    }
+
+   */
 
     public void runTo(double target) {
         slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);

@@ -1,23 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
-import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.subsystems.Box;
-import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.openftc.easyopencv.OpenCvCamera;
 
 
 public class Bot {
@@ -41,7 +35,7 @@ public class Bot {
       public Slides slides;
       public Fourbar fourbar;
 
-     // public Noodles noodles;
+      public Noodles noodles;
      // public Drone drone;
      // public Fourbar fourbar;
     //  public Box box;
@@ -101,13 +95,13 @@ public class Bot {
 
         this.slides = new Slides(opMode);
         this.fourbar = new Fourbar(opMode);
+        this.noodles = new Noodles(opMode);
 
-
-       /*noodles = new Noodles(opMode);
-        drone= new Drone(opMode);
+        /*drone= new Drone(opMode);
         fourbar = new Fourbar(opMode);
         box= new Box(opMode);
         */
+
     }
 
 
@@ -194,12 +188,11 @@ public class Bot {
                 speeds[i] /= maxSpeed;
             }
         }
-        /*FL.setPower(speeds[0]);
+        FL.setPower(speeds[0]);
         FR.setPower(speeds[1]);
         BL.setPower(speeds[2]);
         BR.setPower(speeds[3]);
 
-         */
     }
     /*
 
@@ -243,7 +236,7 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
-    /*
+
 
     public void intake(double power){
         currentState = BotState.INTAKE;
@@ -252,6 +245,15 @@ public class Bot {
             noodles.stop();
         }
     }
+    public void intake(){
+        currentState = BotState.INTAKE;
+        noodles.intake();
+    }
+    public void stopIntake(){
+        currentState = BotState.STORAGE_FULL;
+        noodles.stop();
+    }
+    /*
 
     public void outtakeBox(){
         currentState = BotState.OUTTAKE;
