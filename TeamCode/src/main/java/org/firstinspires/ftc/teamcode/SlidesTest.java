@@ -35,7 +35,6 @@ public class SlidesTest extends LinearOpMode {
 
             drive();
             bot.slides.runToManual(gp2.getLeftY());
-            telemetry.addData("slide position:",gp2.getLeftY());
 
             /*
 
@@ -51,7 +50,7 @@ public class SlidesTest extends LinearOpMode {
 
 
  */
-            if(gp2.wasJustPressed(GamepadKeys.Button.A)){
+            /* if(gp2.wasJustPressed(GamepadKeys.Button.A)){
                 bot.fourbar.outtake();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.B)){
@@ -62,6 +61,9 @@ public class SlidesTest extends LinearOpMode {
             telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
             telemetry.update();
 
+      */
+
+            telemetry.addData("slide position:",gp2.getLeftY());
             telemetry.update();
         }
 

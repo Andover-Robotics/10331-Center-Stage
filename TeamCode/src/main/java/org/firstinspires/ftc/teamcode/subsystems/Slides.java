@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
-import com.acmerobotics.roadrunner.control.*;
-
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 import org.firstinspires.ftc.teamcode.PIDController;
 
@@ -100,25 +100,26 @@ public class Slides {
         slidesMotor.setPower(0);
     }
 
-   /* public void runToManual(double power){
+    public void runToManual(double power){
         slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         if(power > min_power || power < -min_power){
             slidesMotor.setPower(power);
+            telemetry.addLine("Slide is running at this power");
         }
         else{
             slidesMotor.setPower(min_power);
+            telemetry.addLine("Slide is running at minimum power");
         }
-
-        slidesMotor.setPower(power);
     }
 
-    */
 
 
-    public void runToManual(double target){
+  /*  public void runToManual(double target){
         slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slidesMotor.setPower(target);
     }
+
+   */
 
     public void runTo(double target) {
         slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);

@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,6 +12,7 @@ public class MainTeleop extends LinearOpMode {
     private double driveSpeed = 1;
     private GamepadEx gp1;
     private GamepadEx gp2;
+    public boolean isIntake=false;
 
 
     @Override
@@ -40,9 +36,22 @@ public class MainTeleop extends LinearOpMode {
 
         telemetry.addData("TeleOp has started","wheeeee");
 
+        //divetrain movement
         drive();
-        bot.intake(gp2.getLeftY());
 
+        //intake
+        if(gp2.wasJustPressed(GamepadKeys.Button.X)){
+            if(isIntake){
+                bot.stopIntake();
+                isIntake=false;
+            }
+            else if(!isIntake){
+                bot.intake();
+                isIntake=true;
+            }
+        }
+
+        //outtake position (without slide movement)
         if(gp2.wasJustPressed(GamepadKeys.Button.A)){
             bot.fourbar.outtake();
         }
