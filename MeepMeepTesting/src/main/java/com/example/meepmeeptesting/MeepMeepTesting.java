@@ -11,7 +11,7 @@ public class MeepMeepTesting {
         MeepMeep meepMeep = new MeepMeep(800);
 
         Pose2d startPoseBlueFar = new Pose2d(-52, 52, 0);
-        Pose2d startPoseBlueClose = new Pose2d(38, 56, 0);
+        Pose2d startPoseBlueClose = new Pose2d(38, 56, -90);
         Pose2d startPoseRedClose = new Pose2d(10, -52, 0);
         Pose2d startPoseRedFar = new Pose2d(-52, -48, 0);
 
@@ -24,20 +24,19 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPoseBlueFar)
-                                .splineTo(new Vector2d(-34,38), Math.toRadians(0))
-                                .turn(Math.toRadians(-90))
-                                //.UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                        drive.trajectorySequenceBuilder(startPoseRedClose)
+                                .splineTo(new Vector2d(15,-34),Math.toRadians(90))
                                 .waitSeconds(1.5)
-                                .turn(Math.toRadians(90))
-                                //.UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                                .splineTo(scoreBlue,Math.toRadians(0))
-                                //.UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+                                .splineTo(scoreRed,Math.toRadians(0))
                                 .waitSeconds(1.5)
-                                //.UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                                .splineTo(parkingPosBlue,Math.toRadians(0))
+                                .splineTo(parkingPosRed,Math.toRadians(0))
                                 .build()
                 );
+
+        //red close is done
+        // blue close is done
+        // blue far is done
+        //red far is done
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)

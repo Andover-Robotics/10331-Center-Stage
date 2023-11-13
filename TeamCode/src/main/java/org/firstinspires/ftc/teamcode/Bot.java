@@ -73,10 +73,10 @@ public class Bot {
 
         }
 
-        FL = opMode.hardwareMap.get(DcMotorEx.class, "FL");
-        FR = opMode.hardwareMap.get(DcMotorEx.class, "FR");
-        BL = opMode.hardwareMap.get(DcMotorEx.class, "BL");
-        BR = opMode.hardwareMap.get(DcMotorEx.class, "BR");
+        FL = opMode.hardwareMap.get(DcMotorEx.class, "fl");
+        FR = opMode.hardwareMap.get(DcMotorEx.class, "fr");
+        BL = opMode.hardwareMap.get(DcMotorEx.class, "bl");
+        BR = opMode.hardwareMap.get(DcMotorEx.class, "br");
 
         //distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
