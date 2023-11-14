@@ -1,19 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.arcrobotics.ftclib.controller.PIDFController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 
 
 public class Slides {
-    public final DcMotorEx slidesMotor;
+    public final MotorEx slidesMotor;
 
     private double targetPoint = 0 ;
 
@@ -49,18 +51,25 @@ public class Slides {
 
     public Slides(OpMode opMode) {
         this.opMode = opMode;
+        slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
+        slidesMotor.setInverted(true);
+        slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
-        slidesMotor = opMode.hardwareMap.get(DcMotorEx.class, "slides motor");
-        slidesMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfcoeff);
-        slidesMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        slidesMotor = opMode.hardwareMap.get(DcMotorEx.class, "slides motor");
+//        slidesMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfcoeff);
+//        slidesMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         controller = new PIDFController(p,i,d,f);
         controller.setTolerance(tolerance);
         controller.setSetPoint(0);
+
+        profiler = new MotionProfiler(MAX_VELOCITY, MAX_ACCELERATION);
     }
 
     public void runTo(double target) {
-        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+//        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slidesMotor.setRunMode(Motor.RunMode.RawPower);
+        slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(tolerance);
@@ -73,18 +82,18 @@ public class Slides {
     }
 
     public void runToTop() {
-        runToManual(top);
+        runTo(top);
         position = slidesPosition.HIGH;
     }
 
     public void runToMid() {
-        runToManual(mid);
+        runTo(mid);
         position = slidesPosition.MID;
     }
 
     public void runToBottom() {
-        runToManual(low);
-        position = slidesPosition.LOW;
+        runTo(top);
+        position = slidesPosition.HIGH;
     }
 
     /*
@@ -96,27 +105,26 @@ public class Slides {
      */
 
     public void runToManual(double power){
-        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+//        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         if(Math.abs(power) > MIN_POWER) {
-            slidesMotor.setPower(power);
-            telemetry.addData("Slide is running at this power", power);
+            manualPower = power;
         }
         else {
-            slidesMotor.setPower(MIN_POWER);
-            telemetry.addLine("Slide is running at minimum power (0.1)");
+            manualPower = 0;
         }
     }
 
     public void brake(){
-        slidesMotor.setPower(0);
+        slidesMotor.set(0);
     }
 
 
     public void resetEncoder() {
-        slidesMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slidesMotor.resetEncoder();
     }
 
     public void periodic() {
+        slidesMotor.setInverted(false);
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
         if (!profiler.isOver()) {
@@ -125,20 +133,21 @@ public class Slides {
             if (goingDown) {
                 power = powerDown * controller.calculate(slidesMotor.getCurrentPosition());
             }
-            slidesMotor.setPower(power);
+            slidesMotor.set(power);
         } else {
+            if (profiler.isDone())
                 profiler = new MotionProfiler(30000, 20000);
 
             if (manualPower != 0) {
                 controller.setSetPoint(slidesMotor.getCurrentPosition());
-                slidesMotor.setPower(manualPower / manualDivide);
+                slidesMotor.set(manualPower / manualDivide);
             } else {
                 power = staticF * controller.calculate(slidesMotor.getCurrentPosition());
-                slidesMotor.setPower(power);
+                slidesMotor.set(power);
                 if (power < Math.abs(0.1)) {
-                    slidesMotor.setPower(0);
+                    slidesMotor.set(0);
                 } else {
-                    slidesMotor.setPower(power);
+                    slidesMotor.set(power);
                 }
             }
         }

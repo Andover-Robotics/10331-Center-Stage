@@ -62,11 +62,12 @@ public class MainTeleOp extends LinearOpMode {
             bot.fourbar.storage();
         }
 
+        runSlides();
+        bot.slides.periodic();
+
         telemetry.addData("box position", bot.fourbar.getBoxPos());
         telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
         telemetry.update();
-
-        bot.slides.periodic();
     }
 
 
@@ -92,8 +93,13 @@ public class MainTeleOp extends LinearOpMode {
         bot.slides.runTo(raw*1800);
     }
 
-    private void runSlides(){
-        gp2.readButtons();
+//    private void runSlides(){
+//        gp2.readButtons();
+//        double power = gp2.getLeftY();
+//        bot.slides.runToManual(power);
+//    }
+
+    private void runSlides() {
         double power = gp2.getLeftY();
         bot.slides.runToManual(power);
     }

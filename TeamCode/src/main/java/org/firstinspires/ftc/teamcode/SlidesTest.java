@@ -1,27 +1,34 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp
-public class SlidesTest extends LinearOpMode {
+public class
+SlidesTest extends LinearOpMode {
     Bot bot;
     private GamepadEx gp2;
+
 
 
     @Override
     public void runOpMode(){
         bot = Bot.getInstance(this);
         gp2 = new GamepadEx(gamepad2);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         bot.slides.resetEncoder();
 
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
             gp2.readButtons();
-            telemetry.addLine("OpMode has started");
             runSlides();
+            telemetry.update();
 
             /*
 
@@ -37,14 +44,20 @@ public class SlidesTest extends LinearOpMode {
 
              */
 
-            telemetry.update();
+            bot.slides.periodic();
         }
     }
 
     private void runSlides() {
         double power = gp2.getLeftY();
+        telemetry.addData(
+                "Gamepad Power",power
+        );
+        telemetry.addData("Slide Power Given",bot.slides.manualPower);
+//        if(power == 0){
+//            bot.slides.brake();
+//        }
+        telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);
-        telemetry.addData("Motor power is ", power);
-        telemetry.update();
     }
 }
