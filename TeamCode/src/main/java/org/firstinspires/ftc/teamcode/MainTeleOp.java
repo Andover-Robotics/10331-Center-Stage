@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class MainTeleop extends LinearOpMode {
+public class MainTeleOp extends LinearOpMode {
     Bot bot;
     private double driveSpeed = 1;
     private GamepadEx gp1;
@@ -36,19 +36,19 @@ public class MainTeleop extends LinearOpMode {
 
         telemetry.addLine("TeleOp has started");
 
-        //divetrain movement
+        //drivetrain movement
         drive();
 
         //intake
         if(gp2.wasJustPressed(GamepadKeys.Button.X)){
             if(isIntake){
                 bot.stopIntake();
-                isIntake=false;
+                isIntake = false;
                 telemetry.addLine("Stopped Intaking");
             }
             else{
                 bot.intake();
-                isIntake=true;
+                isIntake = true;
                 telemetry.addLine("Currently intaking");
             }
             telemetry.update();
@@ -65,6 +65,8 @@ public class MainTeleop extends LinearOpMode {
         telemetry.addData("box position", bot.fourbar.getBoxPos());
         telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
         telemetry.update();
+
+        bot.slides.periodic();
     }
 
 

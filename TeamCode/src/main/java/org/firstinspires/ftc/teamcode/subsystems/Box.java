@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
+//link to intake, comment out breakbeam sensor
+
 public class Box {
     private final Servo wheelServo;
     private final Servo flapServo;

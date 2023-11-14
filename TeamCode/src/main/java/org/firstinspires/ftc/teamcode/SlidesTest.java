@@ -20,10 +20,8 @@ public class SlidesTest extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             gp2.readButtons();
-
             telemetry.addLine("OpMode has started");
-
-            bot.slides.runToManual(gp2.getLeftY());
+            runSlides();
 
             /*
 
@@ -42,14 +40,8 @@ public class SlidesTest extends LinearOpMode {
         }
     }
 
-    public void slidesRunToManual(double raw){
-        bot.slides.runTo(raw*1800);
-    }
-
-    private void runSlides(){
-        gp2.readButtons();
+    private void runSlides() {
         double power = gp2.getLeftY();
         bot.slides.runToManual(power);
     }
-
 }
