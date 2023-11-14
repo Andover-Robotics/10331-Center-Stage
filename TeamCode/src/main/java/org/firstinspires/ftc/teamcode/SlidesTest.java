@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -28,19 +29,17 @@ SlidesTest extends LinearOpMode {
             runSlides();
             telemetry.update();
 
-            /*
 
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-                bot.slides.runTo(1);
+                bot.slides.runToStorage();
             }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                bot.slides.runTo(2);
+                bot.slides.runToTop();
             }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                bot.slides.runTo(3);
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                bot.slides.runTo(4);
+                bot.slides.runToLow();
+            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
+                bot.slides.runToMid();
             }
 
-             */
 
             bot.slides.periodic();
         }

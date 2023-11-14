@@ -41,7 +41,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 0, top = -2200, mid = -1350, low = -600;
+    public static int storage=0, top = 3250, mid = 1700, low = 450;
     //all these values are probably wrong
 
     private final OpMode opMode;
@@ -52,9 +52,7 @@ public class Slides {
         slidesMotor.setInverted(true);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
-//        slidesMotor = opMode.hardwareMap.get(DcMotorEx.class, "slides motor");
-//        slidesMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfcoeff);
-//        slidesMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         controller = new PIDFController(p,i,d,f);
         controller.setTolerance(tolerance);
@@ -64,7 +62,6 @@ public class Slides {
     }
 
     public void runTo(double target) {
-//        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
         slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
@@ -88,18 +85,15 @@ public class Slides {
         position = slidesPosition.MID;
     }
 
-    public void runToBottom() {
+    public void runToLow() {
         runTo(low);
         position = slidesPosition.LOW;
     }
-
-    /*
-    public void runToMid2(int stage) {
-        runTo(top);
-        position = slidesPosition.HIGH;
+    public void runToStorage() {
+        runTo(storage);
+        position = slidesPosition.GROUND;
     }
 
-     */
 
     public void runToManual(double power){
 //        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
