@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
 
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -229,6 +230,15 @@ public class Bot {
     }
     */
 
+    public void resetEverything(){
+        reverseMotors();
+        resetEncoder();
+        slides.resetEncoder();
+        fourbar.storage();
+        slides.runToStorage();
+        noodles.stop();
+    }
+
     private void enableAutoBulkRead() {
         for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
@@ -279,20 +289,13 @@ public class Bot {
 
 
     public void resetEncoder() {
-        /*FL.setMode(STOP_AND_RESET_ENCODER);
+        FL.setMode(STOP_AND_RESET_ENCODER);
         FR.setMode(STOP_AND_RESET_ENCODER);
         BR.setMode(STOP_AND_RESET_ENCODER);
         BL.setMode(STOP_AND_RESET_ENCODER);
-
-         */
-        //slides.resetEncoder(); code this in slides subsystems
-        //reset encoder in slides
+        slides.resetEncoder();
 
     }
-
-
-
-
 
 
 
@@ -312,7 +315,7 @@ public class Bot {
         }
     }
     public void strafeRight(){
-       /* FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setPower(0.1);
         FR.setPower(0.1);
@@ -325,10 +328,9 @@ public class Bot {
         BR.setPower(0);
         BL.setPower(0);
 
-        */
     }
     public void strafeLeft(){
-       /*
+
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setPower(0.1);
@@ -342,10 +344,11 @@ public class Bot {
         BR.setPower(0);
         BL.setPower(0);
 
-        */
+
     }
     public void back(){
-        /*BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        /*
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -366,13 +369,14 @@ public class Bot {
 
     }
     public void forward(){
-        /*FL.setPower(0.1);
+     /*   FL.setPower(0.1);
         FR.setPower(0.1);
         BR.setPower(0.1);
         BL.setPower(0.1);
 
-         */
+      */
     }
+
 
     public void distanceTuning(DistanceSensor sensor){
         double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;

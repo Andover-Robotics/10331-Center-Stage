@@ -24,8 +24,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
-        bot.reverseMotors();
-        bot.slides.resetEncoder();
+        bot.resetEverything();
 
         waitForStart();
 
@@ -54,7 +53,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.update();
         }
 
-        //outtake position (without slide movement)
+        //fourbar and box position
         if(gp2.wasJustPressed(GamepadKeys.Button.A)){
             bot.fourbar.outtake();
         }
@@ -62,7 +61,23 @@ public class MainTeleOp extends LinearOpMode {
             bot.fourbar.storage();
         }
 
+        //slide movement to preset values
+        if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
+                bot.slides.runToStorage();
+        }
+        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+                bot.slides.runToTop();
+        }
+        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
+                bot.slides.runToLow();
+        }
+        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
+                bot.slides.runToMid();
+        }
+
+        //manual movement of slides
         runSlides();
+
         bot.slides.periodic();
 
         telemetry.addData("box position", bot.fourbar.getBoxPos());
@@ -89,18 +104,16 @@ public class MainTeleOp extends LinearOpMode {
         );
     }
 
-    public void slidesRunToManual(double raw){
-        bot.slides.runTo(raw*1800);
-    }
-
-//    private void runSlides(){
-//        gp2.readButtons();
-//        double power = gp2.getLeftY();
-//        bot.slides.runToManual(power);
-//    }
 
     private void runSlides() {
         double power = gp2.getLeftY();
+        telemetry.addData("Gamepad Power", power);
+
+        telemetry.addData("Slide Power Given",bot.slides.manualPower);
+//        if(power == 0){
+//            bot.slides.brake();
+//        }
+        telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);
     }
 
