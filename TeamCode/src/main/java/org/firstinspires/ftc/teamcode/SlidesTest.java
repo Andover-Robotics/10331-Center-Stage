@@ -37,11 +37,14 @@ public class SlidesTest extends LinearOpMode {
 
              */
 
+            telemetry.update();
         }
     }
 
     private void runSlides() {
         double power = gp2.getLeftY();
         bot.slides.runToManual(power);
+        telemetry.addData("Motor power is ", power);
+        telemetry.update();
     }
 }
