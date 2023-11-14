@@ -13,7 +13,7 @@ public class Noodles {
         this.opMode = opMode;
         noodleMotor= opMode.hardwareMap.get(DcMotorEx.class, "noodles motor");
         noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        isIntake=false;
+        isIntake = false;
     }
 
     public void intake(){
