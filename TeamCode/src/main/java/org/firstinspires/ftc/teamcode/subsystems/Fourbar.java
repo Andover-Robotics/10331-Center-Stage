@@ -10,7 +10,7 @@ public class Fourbar {
     //values ARE FINALLL DO NOT CHANGE
     private static double outtakeBox=0.7;
     private static double storageBox=0.3;
-    private static double outtake = 0.3;
+    private static double outtake = 0.1;
     public static double storage = 0.9;
     //storage position is GOOOOD
 
