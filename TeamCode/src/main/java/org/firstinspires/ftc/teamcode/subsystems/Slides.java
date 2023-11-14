@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.arcrobotics.ftclib.controller.PIDFController;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 
@@ -92,8 +89,8 @@ public class Slides {
     }
 
     public void runToBottom() {
-        runTo(top);
-        position = slidesPosition.HIGH;
+        runTo(low);
+        position = slidesPosition.LOW;
     }
 
     /*

@@ -6,8 +6,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 @TeleOp
 public class
 SlidesTest extends LinearOpMode {
@@ -50,9 +48,8 @@ SlidesTest extends LinearOpMode {
 
     private void runSlides() {
         double power = gp2.getLeftY();
-        telemetry.addData(
-                "Gamepad Power",power
-        );
+        telemetry.addData("Gamepad Power", power);
+
         telemetry.addData("Slide Power Given",bot.slides.manualPower);
 //        if(power == 0){
 //            bot.slides.brake();
