@@ -34,7 +34,7 @@ public class MainTeleop extends LinearOpMode {
         gp2.readButtons();
         gp1.readButtons();
 
-        telemetry.addData("TeleOp has started","wheeeee");
+        telemetry.addLine("TeleOp has started");
 
         //divetrain movement
         drive();
@@ -44,11 +44,14 @@ public class MainTeleop extends LinearOpMode {
             if(isIntake){
                 bot.stopIntake();
                 isIntake=false;
+                telemetry.addLine("Stopped Intaking");
             }
-            else if(!isIntake){
+            else{
                 bot.intake();
                 isIntake=true;
+                telemetry.addLine("Currently intaking");
             }
+            telemetry.update();
         }
 
         //outtake position (without slide movement)
@@ -61,8 +64,6 @@ public class MainTeleop extends LinearOpMode {
 
         telemetry.addData("box position", bot.fourbar.getBoxPos());
         telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
-        telemetry.update();
-
         telemetry.update();
     }
 
