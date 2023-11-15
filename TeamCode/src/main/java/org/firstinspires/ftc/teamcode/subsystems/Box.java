@@ -14,10 +14,10 @@ public class Box {
     private final Servo wheelServo;
     private final Servo flapServo;
     private int numPixelsDeposited;
-    private final DigitalChannel breakbeamSensor;
+  //  private final DigitalChannel breakbeamSensor;
     private boolean boxFull;
 
-    private int timesBroken;
+    //private int timesBroken;
     private final double flapClosed = 1;
     private final double flapOpen = 0;
     private final double anglePosition=0.5;
@@ -28,8 +28,12 @@ public class Box {
     public Box(OpMode opMode) {
         wheelServo = opMode.hardwareMap.servo.get("wheel servo");
         flapServo = opMode.hardwareMap.servo.get("flap servo");
-        breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
+
+
+       /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
+
+        */
     }
 
     public void depositFirstPixel(){
@@ -40,7 +44,7 @@ public class Box {
 
     public void depositSecondPixel(){
         flapServo.setPosition(flapOpen);
-        runWheel(1);
+        runWheel(10);
         numPixelsDeposited = 2;
     }
 
@@ -53,7 +57,7 @@ public class Box {
     //wheel spins in reverse to keep the pixel from falling out
 // 2 servos - one for wheel, one for flap
     public void resetBox(){
-        timesBroken= 0;
+       // timesBroken= 0;
         numPixelsDeposited = 0;
         flapServo.setPosition(flapClosed);
         wheelServo.setPosition(0);
@@ -67,6 +71,7 @@ public class Box {
         boxFull = isFull;
     }
 
+    /*
     public void checkBeam(){
         boolean isBeamBroken = breakbeamSensor.getState();
         if (isBeamBroken) {
@@ -79,6 +84,8 @@ public class Box {
            setIsFull(true);
         }
     }
+
+     */
 
     public int getNumPixelsDeposited(){
         return numPixelsDeposited;

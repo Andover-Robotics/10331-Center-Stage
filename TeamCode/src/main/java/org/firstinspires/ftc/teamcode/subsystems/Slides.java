@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
-
-
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-
 import org.firstinspires.ftc.teamcode.MotionProfiler;
 
 
@@ -24,14 +19,11 @@ public class Slides {
     public double manualPower;
     public boolean goingDown;
     private final double MIN_POWER = 0.1;
+    
     public static final double MAX_VELOCITY = 1150 * 5.2, MAX_ACCELERATION = 30;
-
     private PIDFController controller;
-    private final PIDCoefficients coeff = new PIDCoefficients(p,i,d);
-    private final PIDFCoefficients pidfcoeff = new PIDFCoefficients(p,i,d,f);
     private MotionProfiler profiler;
     private double profile_init_time = 0;
-
 
     public enum slidesPosition{
         GROUND,
@@ -42,7 +34,6 @@ public class Slides {
     private slidesPosition position = slidesPosition.GROUND;
 
     public static int storage=0, top = 3250, mid = 1700, low = 450;
-    //all these values are probably wrong
 
     private final OpMode opMode;
 
@@ -51,8 +42,6 @@ public class Slides {
         slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
         slidesMotor.setInverted(true);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
-
-
 
         controller = new PIDFController(p,i,d,f);
         controller.setTolerance(tolerance);
@@ -147,6 +136,4 @@ public class Slides {
     public void resetProfiler(){
         profiler = new MotionProfiler(MAX_VELOCITY, MAX_ACCELERATION);
     }
-
-
 }

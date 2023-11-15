@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /*
-test sequential teleop, fine tune if needed
+test sequential teleop, fine tune if needed (it will be needed)
  */
 
 @TeleOp
@@ -24,6 +24,7 @@ public class SequentialTest extends LinearOpMode {
         bot = Bot.getInstance(this);
         gp1 = new GamepadEx(gamepad1);
         gp2 = new GamepadEx(gamepad2);
+        time = new ElapsedTime();
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
         bot.reverseMotors();

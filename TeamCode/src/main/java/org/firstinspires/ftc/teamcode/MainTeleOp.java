@@ -24,8 +24,6 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
-        bot.resetEverything();
-
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -84,11 +82,10 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
         telemetry.update();
     }
-
-
 }
 
     private void drive() {
+
         driveSpeed = 1;
 
         driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
@@ -110,9 +107,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("Gamepad Power", power);
 
         telemetry.addData("Slide Power Given",bot.slides.manualPower);
-//        if(power == 0){
-//            bot.slides.brake();
-//        }
+
         telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);
     }

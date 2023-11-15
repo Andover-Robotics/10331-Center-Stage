@@ -46,6 +46,7 @@ SlidesTest extends LinearOpMode {
     }
 
     private void runSlides() {
+        //manual slides test
         double power = gp2.getLeftY();
         telemetry.addData("Gamepad Power", power);
 
