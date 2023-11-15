@@ -10,12 +10,9 @@ public class Slides {
     public final MotorEx slidesMotor;
 
     private double targetPoint = 0 ;
-
-    //ABSOLUTELY HAVE TO TUNE!!!!
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
     private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1;
     public double power;
-
     public double manualPower;
     public boolean goingDown;
     private final double MIN_POWER = 0.1;
@@ -60,7 +57,8 @@ public class Slides {
         profiler.init(slidesMotor.getCurrentPosition(), target);
         profile_init_time = opMode.time;
 
-        goingDown =  targetPoint > target;
+        //goingDown =  targetPoint > target;
+        goingDown =  target > targetPoint;
         targetPoint = target;
     }
 
@@ -85,7 +83,6 @@ public class Slides {
 
 
     public void runToManual(double power){
-//        slidesMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         if(Math.abs(power) > MIN_POWER) {
             manualPower = power;
         }

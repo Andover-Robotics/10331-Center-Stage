@@ -8,9 +8,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -154,9 +152,9 @@ public class Bot {
 
 */
     public void fixMotors(double velocity) {
-        /*FL.setDirection(DcMotorEx.Direction.REVERSE); //invert
+     /*   FL.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setVelocity(velocity);
-        BL.setDirection(DcMotorEx.Direction.REVERSE); // invert
+        BL.setDirection(DcMotorEx.Direction.REVERSE);
         BR.setVelocity(velocity);
 
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -164,7 +162,7 @@ public class Bot {
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-         */
+      */
     }
 
     public void reverseMotors(){
@@ -233,6 +231,7 @@ public class Bot {
     public void resetEverything(){
         reverseMotors();
         resetEncoder();
+        slides.resetProfiler();
         slides.resetEncoder();
         fourbar.storage();
         slides.runToStorage();
@@ -261,9 +260,9 @@ public class Bot {
         currentState = BotState.STORAGE_FULL;
         noodles.stop();
     }
-    /*
 
-    public void outtakeBox(){
+
+   /* public void outtakeBox(){
         currentState = BotState.OUTTAKE;
         if(box.getNumPixelsDeposited() == 0){
             box.depositFirstPixel();
@@ -272,6 +271,8 @@ public class Bot {
             box.resetBox();
         }
     }
+
+    */
 
     public void outtakeSlides(double target){
         currentState = BotState.OUTTAKE;
@@ -284,7 +285,7 @@ public class Bot {
         }
     }
 
-     */
+
 
 
 
@@ -300,8 +301,7 @@ public class Bot {
 
 
     public void resetProfiler() {
-        //slides.resetProfiler(); code in slides subsystem
-        //figure this out
+        slides.resetProfiler();
 
     }
     public void turn(double power){
@@ -378,7 +378,7 @@ public class Bot {
     }
 
 
-    public void distanceTuning(DistanceSensor sensor){
+   /* public void distanceTuning(DistanceSensor sensor){
         double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
         boolean inRange = Math.abs(diffy) <= 5;
         if(inRange){
@@ -396,6 +396,8 @@ public class Bot {
             distanceTuning(sensor);
         }
     }
+
+    */
 /*
     public void aprilTagTuning(){
         AprilTagsDetection.detectTag();
