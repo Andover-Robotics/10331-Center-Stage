@@ -31,7 +31,7 @@ public class MainTeleOp extends LinearOpMode{
 
     private void drive() {
 
-        driveSpeed = 1;
+        driveSpeed = 0.8;
 
         driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
