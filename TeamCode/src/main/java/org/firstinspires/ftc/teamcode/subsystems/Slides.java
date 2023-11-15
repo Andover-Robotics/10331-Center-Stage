@@ -111,7 +111,9 @@ public class Slides {
                 power = powerDown * controller.calculate(slidesMotor.getCurrentPosition());
             }
             slidesMotor.set(power);
-        } else {
+        }
+
+        else {
             if (profiler.isDone())
                 profiler = new MotionProfiler(30000, 20000);
 
@@ -128,6 +130,8 @@ public class Slides {
                 }
             }
         }
+
+
     }
 
     public void resetProfiler(){
