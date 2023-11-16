@@ -29,7 +29,6 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
         gp2.readButtons();
-        gp1.readButtons();
 
         telemetry.addLine("TeleOp has started");
 
@@ -37,7 +36,7 @@ public class MainTeleOp extends LinearOpMode {
         drive();
 
         //intake
-        if(gp2.wasJustPressed(GamepadKeys.Button.X)){
+        if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
             if(isIntake){
                 bot.stopIntake();
                 isIntake = false;
@@ -45,6 +44,7 @@ public class MainTeleOp extends LinearOpMode {
             }
             else{
                 bot.intake();
+                //note: CRServo is running while intake is running.
                 isIntake = true;
                 telemetry.addLine("Currently intaking");
             }
@@ -52,29 +52,32 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         //fourbar and box position
-        if(gp2.wasJustPressed(GamepadKeys.Button.A)){
+        if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
             bot.fourbar.outtake();
+            bot.box.depositFirstPixel();
+            sleep(1000);
+            bot.box.depositSecondPixel();
         }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.B)){
+        else if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
             bot.fourbar.storage();
         }
 
+        //manual movement of slides
+        runSlides(gp2.getLeftY());
+
         //slide movement to preset values
-        if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
+        if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
                 bot.slides.runToStorage();
         }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
                 bot.slides.runToTop();
         }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
+        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 bot.slides.runToLow();
         }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                bot.slides.runToMid();
+        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                bot.slides.runToMid(1);
         }
-
-        //manual movement of slides
-        runSlides();
 
         bot.slides.periodic();
 
@@ -102,11 +105,10 @@ public class MainTeleOp extends LinearOpMode {
     }
 
 
-    private void runSlides() {
-        double power = gp2.getLeftY();
+    private void runSlides(double power) {
         telemetry.addData("Gamepad Power", power);
 
-        telemetry.addData("Slide Power Given",bot.slides.manualPower);
+        telemetry.addData("Slide Power Given",bot.slides.getManualPower());
 
         telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);

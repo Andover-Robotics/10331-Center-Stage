@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Slides.low;
+import static org.firstinspires.ftc.teamcode.subsystems.Slides.storage;
+import static org.firstinspires.ftc.teamcode.subsystems.Slides.top;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -25,11 +29,11 @@ SlidesTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            gp2.readButtons();
             runSlides();
             telemetry.update();
 
 
+            /*
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
                 bot.slides.runToStorage();
             }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
@@ -39,7 +43,17 @@ SlidesTest extends LinearOpMode {
             }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
                 bot.slides.runToMid();
             }
+             */
 
+            /*
+            Stuff to test immediately after runToManual works
+            1) bot.slides.runTo(top);
+            2) bot.slides.runTo(storage);
+            3) bot.slides.runTo(mid_1); bot.slides.runTo(mid_2)
+            4) bot.slides.runTo(storage);
+            5) bot.slides.runTo(low);
+            6) bot.slides.runTo(storage);
+             */
 
             bot.slides.periodic();
         }
@@ -48,13 +62,11 @@ SlidesTest extends LinearOpMode {
     private void runSlides() {
         //manual slides test
         double power = gp2.getLeftY();
-        telemetry.addData("Gamepad Power", power);
 
-        telemetry.addData("Slide Power Given",bot.slides.manualPower);
-//        if(power == 0){
-//            bot.slides.brake();
-//        }
+        telemetry.addData("Gamepad Power", power);
+        telemetry.addData("Slide Power Given",bot.slides.getManualPower());
         telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
+
         bot.slides.runToManual(power);
     }
 }

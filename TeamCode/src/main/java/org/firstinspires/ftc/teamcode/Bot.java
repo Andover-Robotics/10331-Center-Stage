@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.subsystems.Box;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -38,7 +39,7 @@ public class Bot {
       public Noodles noodles;
      // public Drone drone;
      // public Fourbar fourbar;
-    //  public Box box;
+      public Box box;
 
    // public static DistanceSensor distanceSensor;
 
@@ -91,11 +92,10 @@ public class Bot {
         BL.setMode(RUN_USING_ENCODER);
         BR.setMode(RUN_USING_ENCODER);
 
-
-
         this.slides = new Slides(opMode);
         this.fourbar = new Fourbar(opMode);
         this.noodles = new Noodles(opMode);
+        this.box = new Box(opMode);
 
         /*drone= new Drone(opMode);
         fourbar = new Fourbar(opMode);
@@ -229,13 +229,12 @@ public class Bot {
     */
 
     public void resetEverything(){
+        noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.resetProfiler();
-        slides.resetEncoder();
-        fourbar.storage();
         slides.runToStorage();
-        noodles.stop();
+        fourbar.storage();
+        box.resetBox();
     }
 
     private void enableAutoBulkRead() {
@@ -255,6 +254,7 @@ public class Bot {
     public void intake(){
         currentState = BotState.INTAKE;
         noodles.intake();
+        box.runWheel(false);
     }
     public void stopIntake(){
         currentState = BotState.STORAGE_FULL;
@@ -295,7 +295,6 @@ public class Bot {
         BR.setMode(STOP_AND_RESET_ENCODER);
         BL.setMode(STOP_AND_RESET_ENCODER);
         slides.resetEncoder();
-
     }
 
 

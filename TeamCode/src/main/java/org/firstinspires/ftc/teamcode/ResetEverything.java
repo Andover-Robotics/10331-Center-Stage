@@ -9,11 +9,6 @@ public class ResetEverything extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         bot = bot.getInstance(this);
-
-        waitForStart();
-
-        while (opModeIsActive() && !isStopRequested()) {
-            bot.resetEverything();
-        }
+        bot.resetEverything();
     }
 }

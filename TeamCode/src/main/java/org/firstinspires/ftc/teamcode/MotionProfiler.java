@@ -8,6 +8,8 @@ public class MotionProfiler {
     }
     private final double max_velocity, max_acceleration;
     private boolean isOver = true;
+    //isOver is only false when the motion profile has been created and is not finished.
+    // If we're using manual power in slides then we don't use the motion profiler, so isOver is true.
     private boolean isDone = false;
     private double temp_max_a, temp_max_v;
     private double start_pos, final_pos, distance, acceleration_dt, halfway_distance,
@@ -69,7 +71,7 @@ public class MotionProfiler {
         // if we're accelerating
         if (current_dt < acceleration_dt)
             // use the kinematic equation for acceleration
-            return start_pos + 0.5 * temp_max_a * current_dt * current_dt;
+            return start_pos + 0.5 * temp_max_a * Math.pow(current_dt,2);
 
             // if we're cruising
         else if (current_dt < decel_time) {
@@ -90,15 +92,12 @@ public class MotionProfiler {
             return start_pos + acceleration_distance + cruise_distance + new_max_velocity * decel_time - 0.5 * temp_max_a * decel_time * decel_time;
         }
     }
-    public double getEntire_dt(){
-        return entire_dt;
-    }
 
-    public boolean isOver(){
+    public boolean isOver() {
         return isOver;
     }
 
-    public boolean isDone(){
+    public boolean isDone() {
         return isDone;
     }
 }
