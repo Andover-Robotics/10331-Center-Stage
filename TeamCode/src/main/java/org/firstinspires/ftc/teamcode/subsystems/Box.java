@@ -57,6 +57,7 @@ public class Box {
        // timesBroken= 0;
         numPixelsDeposited = 0;
         flapServo.setPosition(flapClosed);
+        wheelServo.setPower(0);
     }
 
     public boolean getIsFull(){

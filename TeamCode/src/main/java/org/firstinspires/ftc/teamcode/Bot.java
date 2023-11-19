@@ -254,11 +254,12 @@ public class Bot {
     public void intake(){
         currentState = BotState.INTAKE;
         noodles.intake();
-        box.runWheel(false);
+       // box.runWheel(false);
     }
     public void stopIntake(){
         currentState = BotState.STORAGE_FULL;
         noodles.stop();
+      //  box.runWheel(true);
     }
 
 

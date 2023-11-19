@@ -28,64 +28,65 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
 
-        gp2.readButtons();
+            gp2.readButtons();
 
-        telemetry.addLine("TeleOp has started");
+            telemetry.addLine("TeleOp has started");
 
-        //drivetrain movement
-        drive();
+            //drivetrain movement
+            drive();
 
-        //intake
-        if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
-            if(isIntake){
-                bot.stopIntake();
-                isIntake = false;
-                telemetry.addLine("Stopped Intaking");
+            //intake
+            if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
+                if(isIntake){
+                    bot.stopIntake();
+                    isIntake = false;
+                    telemetry.addLine("Stopped Intaking");
+                }
+                else{
+                    bot.intake();
+                    //note: CRServo is running while intake is running.
+                    isIntake = true;
+                    telemetry.addLine("Currently intaking");
+                }
+                telemetry.update();
             }
-            else{
-                bot.intake();
-                //note: CRServo is running while intake is running.
-                isIntake = true;
-                telemetry.addLine("Currently intaking");
+
+            //fourbar and box position
+            if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+                bot.fourbar.outtake();
+                bot.box.depositFirstPixel();
+
             }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
+                bot.box.resetBox();
+                bot.fourbar.storage();
+            }
+
+
+            //manual movement of slides
+            runSlides(gp2.getLeftY());
+
+            //slide movement to preset values
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                bot.slides.runToStorage();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                bot.slides.runToTop();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                bot.slides.runToLow();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                bot.slides.runToMid(1);
+            }
+
+            bot.slides.periodic();
+
+            telemetry.addData("box position", bot.fourbar.getBoxPos());
+            telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
             telemetry.update();
         }
-
-        //fourbar and box position
-        if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
-            bot.fourbar.outtake();
-            bot.box.depositFirstPixel();
-            sleep(1000);
-            bot.box.depositSecondPixel();
-        }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
-            bot.fourbar.storage();
-        }
-
-        //manual movement of slides
-        runSlides(gp2.getLeftY());
-
-        //slide movement to preset values
-        if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToStorage();
-        }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToTop();
-        }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                bot.slides.runToLow();
-        }
-        else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                bot.slides.runToMid(1);
-        }
-
-        bot.slides.periodic();
-
-        telemetry.addData("box position", bot.fourbar.getBoxPos());
-        telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
-        telemetry.update();
     }
-}
 
     private void drive() {
 
@@ -115,4 +116,3 @@ public class MainTeleOp extends LinearOpMode {
     }
 
 }
-

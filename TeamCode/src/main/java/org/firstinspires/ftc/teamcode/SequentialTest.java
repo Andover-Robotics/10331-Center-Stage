@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /*
 test sequential teleop, fine tune if needed (it will be needed)
- */
+
 
 @TeleOp
 public class SequentialTest extends LinearOpMode {
@@ -117,3 +117,5 @@ public class SequentialTest extends LinearOpMode {
 
     }
 }
+
+ */

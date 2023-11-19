@@ -15,7 +15,7 @@ public class Slides {
     private double manualPower;
     public boolean goingDown;
     private final double MIN_POWER = 0.1;
-    
+
     public static final double MAX_VELOCITY = 30000, MAX_ACCELERATION = 20000;
     //tune
     private PIDFController controller;
@@ -40,7 +40,6 @@ public class Slides {
         this.opMode = opMode;
         slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
         slidesMotor.setInverted(true);
-        //could the above line be causing the error?
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
         controller = new PIDFController(p,i,d,f);
@@ -53,6 +52,7 @@ public class Slides {
     public void runTo(double target) {
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
         slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        slidesMotor.setInverted(true);
 
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(tolerance);
@@ -107,7 +107,8 @@ public class Slides {
     }
 
     public void periodic() {
-        slidesMotor.setInverted(false);
+        slidesMotor.setInverted(true);
+        slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
         //if motion profiling is being used i.e, runTo() methods
