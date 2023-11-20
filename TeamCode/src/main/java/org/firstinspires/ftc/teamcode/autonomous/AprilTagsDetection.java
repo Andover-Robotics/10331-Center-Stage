@@ -1,11 +1,9 @@
-/*package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
@@ -115,7 +113,17 @@ public class AprilTagsDetection{
         //telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
         //telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         //telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+        telemetry.update();
     }
+    public static AprilTagDetection getTag(){
+        return tagOfInterest;
+    }
+
+
+
+
+
+
 }
 
 class AprilTagException extends Exception{
@@ -128,4 +136,3 @@ class AprilTagException extends Exception{
     }
 }
 
- */

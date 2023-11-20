@@ -8,6 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
+import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+
 public class Bot {
 
     public enum BotState {
@@ -20,19 +24,22 @@ public class Bot {
     public OpMode opMode;
     public BotState currentState = BotState.STORAGE_NOT_FULL;
     public static Bot instance;
- /*
+
     public OpenCvCamera camera;
     public AprilTagsPipeline aprilTagsPipeline;
 
     public AprilTagsDetection detections;
 
+    /*
     public Slides slides;
     public Noodles noodles;
     public Drone drone;
     public Fourbar fourbar;
     public Box box;
 
- */
+     */
+
+
 
 
     //   public static DistanceSensor distanceSensor;

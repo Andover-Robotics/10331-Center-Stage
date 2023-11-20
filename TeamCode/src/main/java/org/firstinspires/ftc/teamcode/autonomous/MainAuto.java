@@ -62,7 +62,6 @@ public class MainAuto extends LinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
 
-       // Bot.instance = null;
         bot = Bot.getInstance(this);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
