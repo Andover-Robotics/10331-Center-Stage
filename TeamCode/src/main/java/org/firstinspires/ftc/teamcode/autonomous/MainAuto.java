@@ -105,6 +105,7 @@ public class MainAuto extends LinearOpMode{
 
             }
         });
+        should be moved into a method to make it more succinct
 
          */
 
