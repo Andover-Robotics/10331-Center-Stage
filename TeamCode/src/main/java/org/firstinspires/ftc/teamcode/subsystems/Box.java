@@ -1,60 +1,59 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-public class Box {
-    private final Servo wheelServo;
-    private final Servo flapServo;
-    private int numPixelsDeposited;
-    private final DigitalChannel breakbeamSensor;
-    private boolean boxFull;
+//link to intake, comment out breakbeam sensor
 
-    private int timesBroken;
+public class Box {
+    private final CRServo wheelServo;
+    private final Servo flapServo;
+
+    private int numPixelsDeposited;
+    //  private final DigitalChannel breakbeamSensor;
+    private boolean boxFull;
+    //private int timesBroken;
     private final double flapClosed = 1;
     private final double flapOpen = 0;
-    private final double anglePosition=0.5;
 
     //boolean boxFull has to receive input from break beam sensor
 
-
     public Box(OpMode opMode) {
-        wheelServo = opMode.hardwareMap.servo.get("wheel servo");
+        wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
         flapServo = opMode.hardwareMap.servo.get("flap servo");
-        breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
+       /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
+        */
     }
 
-    public void depositFirstPixel(){
+    public void depositFirstPixel() {
         flapServo.setPosition(flapOpen);
-        runWheel(10);
+        runWheel(true);
         numPixelsDeposited = 1;
     }
 
-    public void depositSecondPixel(){
+    public void depositSecondPixel() {
         flapServo.setPosition(flapOpen);
-        runWheel(1);
+        runWheel(false);
         numPixelsDeposited = 2;
     }
 
 
-    public void runWheel(double inc){
-        for(int i = 1; i<=inc; i++){
-            wheelServo.setPosition(i* (1/inc));
-        }
+    public void runWheel(boolean isHolding) {
+        if(!isHolding) wheelServo.setPower(1);
+        else wheelServo.setPower(-1);
     }
+
     //wheel spins in reverse to keep the pixel from falling out
-// 2 servos - one for wheel, one for flap
-    public void resetBox(){
-        timesBroken= 0;
+    // 2 servos - one for wheel, one for flap
+
+    public void resetBox() {
+        // timesBroken= 0;
         numPixelsDeposited = 0;
         flapServo.setPosition(flapClosed);
-        wheelServo.setPosition(0);
+        wheelServo.setPower(0);
     }
 
     public boolean getIsFull(){
@@ -65,6 +64,7 @@ public class Box {
         boxFull = isFull;
     }
 
+    /*
     public void checkBeam(){
         boolean isBeamBroken = breakbeamSensor.getState();
         if (isBeamBroken) {
@@ -77,6 +77,8 @@ public class Box {
            setIsFull(true);
         }
     }
+
+     */
 
     public int getNumPixelsDeposited(){
         return numPixelsDeposited;

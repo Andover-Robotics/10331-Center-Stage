@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
-import org.openftc.easyopencv.OpenCvCamera;
+import org.firstinspires.ftc.teamcode.subsystems.Box;
+import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
+import org.firstinspires.ftc.teamcode.subsystems.Noodles;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
+
 
 public class Bot {
 
@@ -22,34 +25,28 @@ public class Bot {
     }
 
     public OpMode opMode;
-    public BotState currentState = BotState.STORAGE_NOT_FULL;
+    public BotState currentState = STORAGE_NOT_FULL;
     public static Bot instance;
 
-    public OpenCvCamera camera;
-    public AprilTagsPipeline aprilTagsPipeline;
+    //public OpenCvCamera camera;
+    // public AprilTagsPipeline aprilTagsPipeline;
 
-    public AprilTagsDetection detections;
+    // public static AprilTagsDetection detections;
 
-    /*
     public Slides slides;
-    public Noodles noodles;
-    public Drone drone;
     public Fourbar fourbar;
+
+    public Noodles noodles;
+    // public Drone drone;
+    // public Fourbar fourbar;
     public Box box;
 
-     */
-
-
-
-
-    //   public static DistanceSensor distanceSensor;
+    // public static DistanceSensor distanceSensor;
 
     private final DcMotorEx FL, FR, BL, BR;
 
 
     public boolean fieldCentricRunMode = false;
-
-
     private double distanceFromBackdrop;
     private final double optimalDistanceFromBackdrop = 10;
     //arbitrary number for now
@@ -85,7 +82,9 @@ public class Bot {
         BL = opMode.hardwareMap.get(DcMotorEx.class, "bl");
         BR = opMode.hardwareMap.get(DcMotorEx.class, "br");
 
-        //distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
+
+
+        // distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
 
         FL.setMode(RUN_USING_ENCODER);
@@ -93,22 +92,22 @@ public class Bot {
         BL.setMode(RUN_USING_ENCODER);
         BR.setMode(RUN_USING_ENCODER);
 
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.slides = new Slides(opMode);
+        this.fourbar = new Fourbar(opMode);
+        this.noodles = new Noodles(opMode);
+        this.box = new Box(opMode);
 
-
-    /*  slides = new Slides(opMode);
-        noodles = new Noodles(opMode);
-        drone = new Drone(opMode);
+        /*drone= new Drone(opMode);
         fourbar = new Fourbar(opMode);
-        box = new Box(opMode);
-
-      */
-
+        box= new Box(opMode);
+        */
 
     }
 
+
+
     /*
+
     public void prepForOuttake() {
         currentState = BotState.STORAGE_FULL;
         resetOuttake();
@@ -151,20 +150,25 @@ public class Bot {
     }
 
 
-
-
+*/
     public void fixMotors(double velocity) {
-        FL.setDirection(DcMotorEx.Direction.REVERSE); //invert
+     /*   FL.setDirection(DcMotorEx.Direction.REVERSE);
         FR.setVelocity(velocity);
-        BL.setDirection(DcMotorEx.Direction.REVERSE); // invert
+        BL.setDirection(DcMotorEx.Direction.REVERSE);
         BR.setVelocity(velocity);
 
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+      */
     }
 
+    public void reverseMotors(){
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
     public void driveRobotCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed) {
         double[] speeds = {
                 forwardBackSpeed - strafeSpeed - turnSpeed,
@@ -185,7 +189,9 @@ public class Bot {
         FR.setPower(speeds[1]);
         BL.setPower(speeds[2]);
         BR.setPower(speeds[3]);
+
     }
+    /*
 
     //cope no one uses field centric
     public void driveFieldCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed, double heading) {
@@ -220,8 +226,16 @@ public class Bot {
         BL.setPower(speeds[2]);
         BR.setPower(speeds[3]);
     }
+    */
 
-     */
+    public void resetEverything(){
+        noodles.stop();
+        reverseMotors();
+        resetEncoder();
+        slides.runToStorage();
+        fourbar.storage();
+        box.resetBox();
+    }
 
     private void enableAutoBulkRead() {
         for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
@@ -229,7 +243,6 @@ public class Bot {
         }
     }
 
-    /*
 
     public void intake(double power){
         currentState = BotState.INTAKE;
@@ -238,8 +251,19 @@ public class Bot {
             noodles.stop();
         }
     }
+    public void intake(){
+        currentState = BotState.INTAKE;
+        noodles.intake();
+        // box.runWheel(false);
+    }
+    public void stopIntake(){
+        currentState = BotState.STORAGE_FULL;
+        noodles.stop();
+        //  box.runWheel(true);
+    }
 
-    public void outtakeBox(){
+
+   /* public void outtakeBox(){
         currentState = BotState.OUTTAKE;
         if(box.getNumPixelsDeposited() == 0){
             box.depositFirstPixel();
@@ -249,6 +273,7 @@ public class Bot {
         }
     }
 
+    */
 
     public void outtakeSlides(double target){
         currentState = BotState.OUTTAKE;
@@ -261,31 +286,32 @@ public class Bot {
         }
     }
 
+
+
+
+
     public void resetEncoder() {
         FL.setMode(STOP_AND_RESET_ENCODER);
         FR.setMode(STOP_AND_RESET_ENCODER);
         BR.setMode(STOP_AND_RESET_ENCODER);
         BL.setMode(STOP_AND_RESET_ENCODER);
-        //slides.resetEncoder(); code this in slides subsystems
-        //reset encoder in slides
-
+        slides.resetEncoder();
     }
+
+
 
     public void resetProfiler() {
-        //slides.resetProfiler(); code in slides subsystem
-        //figure this out
+        slides.resetProfiler();
 
     }
-
-
     public void turn(double power){
         if(power>0) {
             //turn right
-            FL.setPower(power);
+            //FL.setPower(power);
         }
         if(power<0){
             //turn left
-            FR.setPower(-power);
+            //  FR.setPower(-power);
         }
     }
     public void strafeRight(){
@@ -301,8 +327,10 @@ public class Bot {
         FR.setPower(0);
         BR.setPower(0);
         BL.setPower(0);
+
     }
     public void strafeLeft(){
+
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setPower(0.1);
@@ -315,8 +343,11 @@ public class Bot {
         FR.setPower(0);
         BR.setPower(0);
         BL.setPower(0);
+
+
     }
     public void back(){
+        /*
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -334,16 +365,20 @@ public class Bot {
         BR.setPower(0);
         BL.setPower(0);
 
+         */
+
     }
     public void forward(){
-        FL.setPower(0.1);
+     /*   FL.setPower(0.1);
         FR.setPower(0.1);
         BR.setPower(0.1);
         BL.setPower(0.1);
+
+      */
     }
 
-    /*
-    public void distanceTuning(DistanceSensor sensor){
+
+   /* public void distanceTuning(DistanceSensor sensor){
         double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
         boolean inRange = Math.abs(diffy) <= 5;
         if(inRange){
@@ -362,8 +397,8 @@ public class Bot {
         }
     }
 
-
-
+    */
+/*
     public void aprilTagTuning(){
         AprilTagsDetection.detectTag();
         distanceFromBackdrop = detections.calcDistToTag();
@@ -380,7 +415,8 @@ public class Bot {
             inRange = Math.abs(diffy) <= 5;
         }
     }
-}
 
-     */
+ */
+
+
 }

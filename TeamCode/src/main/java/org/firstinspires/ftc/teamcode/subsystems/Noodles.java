@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -12,11 +13,11 @@ public class Noodles {
     public Noodles(OpMode opMode) {
         this.opMode = opMode;
         noodleMotor= opMode.hardwareMap.get(DcMotorEx.class, "noodles motor");
-        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        isIntake=false;
+        noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        isIntake = false;
     }
 
-    public void Intake(){
+    public void intake(){
         noodleMotor.setPower(0.5);
         isIntake=true;
     }
@@ -33,7 +34,7 @@ public class Noodles {
 
 
     public void reverseIntake(){
-        noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
         noodleMotor.setPower(0.5);
         isIntake=false;
         noodleMotor.setPower(0.5);
@@ -44,5 +45,3 @@ public class Noodles {
     }
 
 }
-
-
