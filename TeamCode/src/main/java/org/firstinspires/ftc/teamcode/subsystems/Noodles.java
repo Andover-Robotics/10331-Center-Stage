@@ -33,7 +33,7 @@ public class Noodles {
 
 
     public void reverseIntake(){
-        noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
         noodleMotor.setPower(0.5);
         isIntake=false;
         noodleMotor.setPower(0.5);

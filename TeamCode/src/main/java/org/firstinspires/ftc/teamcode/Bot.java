@@ -97,10 +97,7 @@ public class Bot {
         this.noodles = new Noodles(opMode);
         this.box = new Box(opMode);
 
-        /*drone= new Drone(opMode);
-        fourbar = new Fourbar(opMode);
-        box= new Box(opMode);
-        */
+        //drone= new Drone(opMode);
 
     }
 
@@ -136,7 +133,6 @@ public class Bot {
             resetOuttake();
         }
     }
-
 
 
     public void storageSlides(){

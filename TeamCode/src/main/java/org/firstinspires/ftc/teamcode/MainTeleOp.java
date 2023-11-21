@@ -13,6 +13,8 @@ public class MainTeleOp extends LinearOpMode {
     private GamepadEx gp1;
     private GamepadEx gp2;
     public boolean isIntake=false;
+    public boolean isOuttakePosition=false;
+    public boolean hasDepositedSecond=false;
 
 
     @Override
@@ -44,24 +46,56 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 else{
                     bot.intake();
-                    //note: CRServo is running while intake is running.
                     isIntake = true;
                     telemetry.addLine("Currently intaking");
                 }
                 telemetry.update();
             }
 
-            //fourbar and box position
+            //reverse intake
+            if(gp2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)){
+                bot.noodles.reverseIntake();
+            }
+
+            //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+                if(isOuttakePosition){
+                    //storage position
+                    bot.box.resetBox();
+                    bot.fourbar.storage();
+                    isOuttakePosition=false;
+                    telemetry.addLine("Currently in storage position");
+                }
+                else{
+                    //outtake position
+                    bot.fourbar.outtake();
+                    bot.box.depositFirstPixel();
+                    bot.box.depositSecondPixel();
+                    isOuttakePosition=true;
+                    telemetry.addLine("Currently in outtake position and deposited two pixels");
+                }
+                telemetry.update();
+            }
+
+            //fourbar and box manual outtake: does not deposit (just goes to position)
+            if(gp2.wasJustPressed(GamepadKeys.Button.B)){
                 bot.fourbar.outtake();
-                bot.box.depositFirstPixel();
-
-            }
-            else if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
-                bot.box.resetBox();
-                bot.fourbar.storage();
+                isOuttakePosition=true;
+                telemetry.addLine("Currently in outtake position");
+                telemetry.update();
             }
 
+            //button just deposits pixel
+            if(gp2.wasJustPressed(GamepadKeys.Button.Y)){
+                if(!hasDepositedSecond){
+                    bot.box.depositSecondPixel();
+                    hasDepositedSecond=true;
+                }
+                else{
+                    bot.box.depositFirstPixel();
+                    hasDepositedSecond=false;
+                }
+            }
 
             //manual movement of slides
             runSlides(gp2.getLeftY());
