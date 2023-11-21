@@ -279,7 +279,6 @@ public class MainAuto extends LinearOpMode{
                     .waitSeconds(1)
                     .splineTo(parkingPosBlue, Math.toRadians(90))
                     .build();
-            //works but its goofy
 
             TrajectorySequence blueAllianceFarNoSense = drive.trajectorySequenceBuilder(startPoseBlueFar)
                     .splineTo(new Vector2d(-34,38), Math.toRadians(-90))
@@ -411,6 +410,7 @@ public class MainAuto extends LinearOpMode{
 
          */
         telemetry.addData("Team prop should be located here",".");
+        telemetry.update();
     }
 
     private void stageScore(){
