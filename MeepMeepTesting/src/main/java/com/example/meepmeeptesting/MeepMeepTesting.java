@@ -24,12 +24,12 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPoseRedClose)
-                                .splineTo(new Vector2d(15,-34),Math.toRadians(90))
+                        drive.trajectorySequenceBuilder(startPoseBlueClose)
+                                .splineTo(new Vector2d(10,38), Math.toRadians(-90))
                                 .waitSeconds(1.5)
-                                .splineTo(scoreRed,Math.toRadians(0))
+                                .splineTo(scoreBlue,Math.toRadians(0))
                                 .waitSeconds(1.5)
-                                .splineTo(parkingPosRed,Math.toRadians(0))
+                                .splineTo(parkingPosBlue,Math.toRadians(0))
                                 .build()
                 );
 

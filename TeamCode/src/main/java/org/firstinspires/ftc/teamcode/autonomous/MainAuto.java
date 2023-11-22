@@ -121,6 +121,14 @@ public class MainAuto extends LinearOpMode{
 
 
             //creating Trajectories/Paths
+
+            TrajectorySequence blueAllianceCloseTest = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .splineTo(new Vector2d(10,38), Math.toRadians(-90))
+                .waitSeconds(1.5)
+                .splineTo(scoreBlue,Math.toRadians(0))
+                .waitSeconds(1.5)
+                .splineTo(parkingPosBlue,Math.toRadians(0))
+                .build();
             TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
                     .splineTo(new Vector2d(-34,38), Math.toRadians(-90))
                     .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
@@ -319,7 +327,9 @@ public class MainAuto extends LinearOpMode{
                     telemetry.addLine("Mode" + autopath);
                     telemetry.update();
 
-                    if (dtb == DistanceToBackdrop.FAR) {
+                    drive.followTrajectorySequence(blueAllianceCloseTest);
+
+                  /*  if (dtb == DistanceToBackdrop.FAR) {
                         //blue side far
                         if (side == Side.BLUE) {
                             if (autopath == AutoPath.OPTIMAL) {
@@ -366,6 +376,8 @@ public class MainAuto extends LinearOpMode{
                             }
                         }
                     }
+
+                   */
                 }
             }
 
