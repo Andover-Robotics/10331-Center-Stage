@@ -28,21 +28,22 @@ public class Bot {
     public BotState currentState = STORAGE_NOT_FULL;
     public static Bot instance;
 
-    //public OpenCvCamera camera;
-    // public AprilTagsPipeline aprilTagsPipeline;
+    /*public OpenCvCamera camera;
+     public AprilTagsPipeline aprilTagsPipeline;
 
-    // public static AprilTagsDetection detections;
+     public static AprilTagsDetection detections;
 
     public Slides slides;
     public Fourbar fourbar;
 
-    public Noodles noodles;
-    // public Drone drone;
-    // public Fourbar fourbar;
+     public Drone drone;
+     public Fourbar fourbar;
     public Box box;
 
-    // public static DistanceSensor distanceSensor;
+     public static DistanceSensor distanceSensor;
 
+    */
+    public Noodles noodles;
     private final DcMotorEx FL, FR, BL, BR;
 
 
@@ -92,16 +93,13 @@ public class Bot {
         BL.setMode(RUN_USING_ENCODER);
         BR.setMode(RUN_USING_ENCODER);
 
-        this.slides = new Slides(opMode);
+       /* this.slides = new Slides(opMode);
         this.fourbar = new Fourbar(opMode);
         this.noodles = new Noodles(opMode);
         this.box = new Box(opMode);
 
-        /*drone= new Drone(opMode);
-        fourbar = new Fourbar(opMode);
-        box= new Box(opMode);
         */
-
+        this.noodles = new Noodles(opMode);
     }
 
 
@@ -229,12 +227,12 @@ public class Bot {
     */
 
     public void resetEverything(){
-        noodles.stop();
+       // noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToStorage();
-        fourbar.storage();
-        box.resetBox();
+      //  slides.runToStorage();
+        //fourbar.storage();
+        //box.resetBox();
     }
 
     private void enableAutoBulkRead() {
@@ -275,7 +273,7 @@ public class Bot {
 
     */
 
-    public void outtakeSlides(double target){
+ /* public void outtakeSlides(double target){
         currentState = BotState.OUTTAKE;
         slides.runTo(target);
     }
@@ -285,6 +283,7 @@ public class Bot {
             fourbar.runManualOuttake(input);
         }
     }
+  */
 
 
 
@@ -295,13 +294,13 @@ public class Bot {
         FR.setMode(STOP_AND_RESET_ENCODER);
         BR.setMode(STOP_AND_RESET_ENCODER);
         BL.setMode(STOP_AND_RESET_ENCODER);
-        slides.resetEncoder();
+      //slides.resetEncoder();
     }
 
 
 
     public void resetProfiler() {
-        slides.resetProfiler();
+      //slides.resetProfiler();
 
     }
     public void turn(double power){
