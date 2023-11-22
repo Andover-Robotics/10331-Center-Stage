@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
+import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,9 +11,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
 import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
+import org.firstinspires.ftc.teamcode.subsystems.Noodles;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.openftc.easyopencv.OpenCvCamera;
 
 public class Bot {
+
 
     public enum BotState {
         INTAKE, // surgical tubing ready to pick up pixel
@@ -30,10 +34,11 @@ public class Bot {
 
     public AprilTagsDetection detections;
 
-    /*
-    public Slides slides;
+
+//    public Slides slides;
     public Noodles noodles;
-    public Drone drone;
+
+   /* public Drone drone;
     public Fourbar fourbar;
     public Box box;
 
@@ -85,6 +90,7 @@ public class Bot {
         BL = opMode.hardwareMap.get(DcMotorEx.class, "bl");
         BR = opMode.hardwareMap.get(DcMotorEx.class, "br");
 
+
         //distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
 
@@ -97,9 +103,9 @@ public class Bot {
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-    /*  slides = new Slides(opMode);
+      //slides = new Slides(opMode);
         noodles = new Noodles(opMode);
-        drone = new Drone(opMode);
+    /*    drone = new Drone(opMode);
         fourbar = new Fourbar(opMode);
         box = new Box(opMode);
 
@@ -107,6 +113,24 @@ public class Bot {
 
 
     }
+
+    public void resetEverything(){
+        noodles.stop();
+        reverseMotors();
+        resetEncoder();
+    }
+    public void reverseMotors(){
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
+
+    public void resetEncoder() {
+        FL.setMode(STOP_AND_RESET_ENCODER);
+        FR.setMode(STOP_AND_RESET_ENCODER);
+        BR.setMode(STOP_AND_RESET_ENCODER);
+        BL.setMode(STOP_AND_RESET_ENCODER);
+    }
+
 
     /*
     public void prepForOuttake() {

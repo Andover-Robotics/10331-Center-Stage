@@ -45,7 +45,7 @@ public class MainAuto extends LinearOpMode{
 
   //  private TeamProp teamPropLocation = TeamProp.NOTDETECTED;
 
-    Side side = Side.RED;
+    Side side = Side.BLUE;
     DistanceToBackdrop dtb= DistanceToBackdrop.CLOSE;
     AutoPath autopath = AutoPath.MECHANICAL_FAILURE;
 
@@ -109,12 +109,6 @@ public class MainAuto extends LinearOpMode{
          */
 
 
-
-      //  while (!isStarted() && !isStopRequested()) {
-            telemetry.addLine("Robot has started");
-            telemetry.update();
-            gp1.readButtons();
-
             /*
             SIDE:
                 b=red
@@ -124,41 +118,6 @@ public class MainAuto extends LinearOpMode{
                 Y= Far
              */
 
-            if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
-                side = Side.RED;
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
-                side = Side.BLUE;
-            }
-            if(gp1.wasJustPressed(GamepadKeys.Button.X)){
-                dtb= DistanceToBackdrop.CLOSE;
-            }
-            if(gp1.wasJustPressed(GamepadKeys.Button.Y)){
-                dtb= DistanceToBackdrop.FAR;
-            }
-            if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                autopath= AutoPath.MECHANICAL_FAILURE;
-            }
-            if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                autopath= AutoPath.NO_SENSE;
-            }
-
-            //Setting start pose based on side and distance to the backdrop
-            if(dtb == DistanceToBackdrop.FAR){
-                //far positions
-                if(side== Side.RED){
-                    drive.setPoseEstimate(startPoseRedFar);
-                }else{
-                    drive.setPoseEstimate(startPoseBlueFar);
-                }
-            }else{
-                //close positions
-                if(side==Side.RED){
-                    drive.setPoseEstimate(startPoseRedClose);
-                }else{
-                    drive.setPoseEstimate(startPoseBlueClose);
-                }
-            }
 
             //creating Trajectories/Paths
             TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
@@ -304,63 +263,111 @@ public class MainAuto extends LinearOpMode{
                     .splineTo(parkingPosRed, Math.toRadians(-90))
                     .build();
 
-            
+            while (!isStarted()) {
+                gp1.readButtons();
+                if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
+                    telemetry.addLine("Alliance: red");
+                    side = Side.RED;
+                    telemetry.update();
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
+                    telemetry.addLine("Alliance: blue");
+                    side = Side.BLUE;
+                    telemetry.update();
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
+                    telemetry.addLine("Distance: close");
+                    dtb = DistanceToBackdrop.CLOSE;
+                    telemetry.update();
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
+                    telemetry.addLine("Distance: far");
+                    dtb = DistanceToBackdrop.FAR;
+                    telemetry.update();
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                    telemetry.addLine("Mode: Mechanical Failure");
+                    autopath = AutoPath.MECHANICAL_FAILURE;
+                    telemetry.update();
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                    telemetry.addLine("Mode: No Sense");
+                    autopath = AutoPath.NO_SENSE;
+                    telemetry.update();
+                }
 
-            //Auto starts
-
-            waitForStart();
-            if (!isStopRequested()) {
-                if(dtb== DistanceToBackdrop.FAR){
-                    //blue side far
-                    if(side==Side.BLUE){
-                        if(autopath==AutoPath.OPTIMAL){
-                            findTeamPropLocation();
-                            drive.followTrajectorySequence(blueAllianceFar);
-                        }else if(autopath == AutoPath.NO_SENSE){
-                            drive.followTrajectorySequence(blueAllianceFarNoSense);
-                        }else{
-                            drive.followTrajectorySequence(blueAllianceFarRobotFail);
-                        }
-                     //red side far
+                if (dtb == DistanceToBackdrop.FAR) {
+                    //far positions
+                    if (side == Side.RED) {
+                        drive.setPoseEstimate(startPoseRedFar);
                     } else {
-                        if(autopath==AutoPath.OPTIMAL){
-                            findTeamPropLocation();
-                            drive.followTrajectorySequence(redAllianceFar);
-                        }else if(autopath == AutoPath.NO_SENSE){
-                            drive.followTrajectorySequence(redAllianceFarNoSense);
-                        }else{
-                            drive.followTrajectorySequence(redAllianceFarRobotFail);
-                        }
+                        drive.setPoseEstimate(startPoseBlueFar);
                     }
-
-                }else if(dtb== DistanceToBackdrop.CLOSE){
-                    //blue side close
-                    if(side==Side.BLUE){
-                        if(autopath==AutoPath.OPTIMAL){
-                            findTeamPropLocation();
-                            drive.followTrajectorySequence(blueAllianceClose);
-                        }else if(autopath==AutoPath.NO_SENSE){
-                            drive.followTrajectorySequence(blueAllianceCloseNoSense);
-                        }else{
-                            drive.followTrajectorySequence(blueAllianceCloseRobotFail);
-                        }
-                     //red side close
-
+                } else {
+                    //close positions
+                    if (side == Side.RED) {
+                        drive.setPoseEstimate(startPoseRedClose);
                     } else {
-                        if(autopath==AutoPath.OPTIMAL){
-                            findTeamPropLocation();
-                            drive.followTrajectorySequence(redAllianceClose);
+                        drive.setPoseEstimate(startPoseBlueClose);
+                    }
+                }
+            }
+                waitForStart();
+                if (opModeIsActive() && !isStopRequested()) {
+                    telemetry.addLine("Distance:" + dtb);
+                    telemetry.addLine("Alliance:" + side);
+                    telemetry.addLine("Mode" + autopath);
+                    telemetry.update();
+
+                    if (dtb == DistanceToBackdrop.FAR) {
+                        //blue side far
+                        if (side == Side.BLUE) {
+                            if (autopath == AutoPath.OPTIMAL) {
+                                findTeamPropLocation();
+                                drive.followTrajectorySequence(blueAllianceFar);
+                            } else if (autopath == AutoPath.NO_SENSE) {
+                                drive.followTrajectorySequence(blueAllianceFarNoSense);
+                            } else {
+                                drive.followTrajectorySequence(blueAllianceFarRobotFail);
+                            }
+                            //red side far
+                        } else {
+                            if (autopath == AutoPath.OPTIMAL) {
+                                findTeamPropLocation();
+                                drive.followTrajectorySequence(redAllianceFar);
+                            } else if (autopath == AutoPath.NO_SENSE) {
+                                drive.followTrajectorySequence(redAllianceFarNoSense);
+                            } else {
+                                drive.followTrajectorySequence(redAllianceFarRobotFail);
+                            }
                         }
-                        else if(autopath==AutoPath.NO_SENSE){
-                            drive.followTrajectorySequence(redAllianceCloseNoSense);
-                        }
-                        else{
-                            drive.followTrajectorySequence(redAllianceCloseRobotFail);
+
+                    } else if (dtb == DistanceToBackdrop.CLOSE) {
+                        //blue side close
+                        if (side == Side.BLUE) {
+                            if (autopath == AutoPath.OPTIMAL) {
+                                findTeamPropLocation();
+                                drive.followTrajectorySequence(blueAllianceClose);
+                            } else if (autopath == AutoPath.NO_SENSE) {
+                                drive.followTrajectorySequence(blueAllianceCloseNoSense);
+                            } else {
+                                drive.followTrajectorySequence(blueAllianceCloseRobotFail);
+                            }
+                            //red side close
+
+                        } else {
+                            if (autopath == AutoPath.OPTIMAL) {
+                                findTeamPropLocation();
+                                drive.followTrajectorySequence(redAllianceClose);
+                            } else if (autopath == AutoPath.NO_SENSE) {
+                                drive.followTrajectorySequence(redAllianceCloseNoSense);
+                            } else {
+                                drive.followTrajectorySequence(redAllianceCloseRobotFail);
+                            }
                         }
                     }
                 }
             }
-    }
 
     private void dropPurplePixel(){
 
