@@ -227,7 +227,7 @@ public class Bot {
     */
 
     public void resetEverything(){
-       // noodles.stop();
+        noodles.stop();
         reverseMotors();
         resetEncoder();
       //  slides.runToStorage();
