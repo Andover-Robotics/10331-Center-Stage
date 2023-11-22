@@ -105,6 +105,7 @@ public class MainAuto extends LinearOpMode{
 
             }
         });
+        should be moved into a method to make it more succinct
 
          */
 
@@ -237,7 +238,6 @@ public class MainAuto extends LinearOpMode{
                     .waitSeconds(1)
                     .splineTo(parkingPosBlue, Math.toRadians(90))
                     .build();
-            //works but its goofy
 
             TrajectorySequence blueAllianceFarNoSense = drive.trajectorySequenceBuilder(startPoseBlueFar)
                     .splineTo(new Vector2d(-34,38), Math.toRadians(-90))
@@ -380,20 +380,21 @@ public class MainAuto extends LinearOpMode{
         else{
             bot.forward();
         }
+        */
+
+        bot.forward();
         bot.noodles.reverseIntake();
         //note: java code execution happens very fast, so having .reverseIntake()
         // immediately followed by .stop() in the same method will not be effective.
 
-         */
 
         telemetry.addData("purple pixel is currently being dropped",".");
         telemetry.update();
     }
 
     public void stopNoodles(){
-       /* bot.noodles.stop();
+        bot.noodles.stop();
 
-        */
         telemetry.addData("noodles are stopped",".");
         telemetry.update();
     }
@@ -416,11 +417,12 @@ public class MainAuto extends LinearOpMode{
 
          */
         telemetry.addData("Team prop should be located here",".");
+        telemetry.update();
     }
 
     private void stageScore(){
         //score in stage area (lit just reversing intake)
-        //bot.noodles.reverseIntake();
+        bot.noodles.reverseIntake();
         telemetry.addData("Scoring in stage area should occur right now",".");
         telemetry.update();
     }

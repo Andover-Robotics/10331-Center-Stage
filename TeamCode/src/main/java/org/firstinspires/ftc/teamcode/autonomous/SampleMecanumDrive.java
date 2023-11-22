@@ -47,6 +47,7 @@ import java.util.List;
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
+
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(7, 0, 0.3);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(3.7, 0, 0);
@@ -96,13 +97,16 @@ public class SampleMecanumDrive extends MecanumDrive {
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+      //  LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
+        /*
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
+
+         */
 
         // TODO: adjust the names of the following hardware devices to match your configuration
        // imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -274,7 +278,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
         return wheelVelocities;
     }
-
+    //aaaaaaaa
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
         leftFront.setPower(v);
