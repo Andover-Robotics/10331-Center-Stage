@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -74,6 +73,7 @@ public class MainAuto extends LinearOpMode{
         Pose2d startPoseBlueClose = new Pose2d(38, 56, -90);
         Pose2d startPoseRedFar = new Pose2d(-52, -48, 0);
         Pose2d startPoseRedClose = new Pose2d(10, -52, 0);
+        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
         //writing variables for Vector2d positions that are reused
         Vector2d parkingPosBlue = new Vector2d(56,56);
@@ -129,7 +129,23 @@ public class MainAuto extends LinearOpMode{
                 .waitSeconds(1.5)
                 .splineTo(parkingPosBlue,Math.toRadians(0))
                 .build();
-            TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
+
+            TrajectorySequence blueAllianceCloseTest2= drive.trajectorySequenceBuilder(startPose)
+                .strafeLeft(28)
+                .turn(Math.toRadians(180))
+                .forward(20)
+                //score purple pixel
+                .turn(Math.toRadians(90))
+                .forward(30)
+                //outtake on backdrop
+                .turn(Math.toRadians(90))
+                .forward(20)
+                .turn(Math.toRadians(-90))
+                .forward(10)
+                //park
+                .build();
+
+       /*     TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
                     .splineTo(new Vector2d(-34,38), Math.toRadians(-90))
                     .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                     .forward(-7)
@@ -271,16 +287,21 @@ public class MainAuto extends LinearOpMode{
                     .splineTo(parkingPosRed, Math.toRadians(-90))
                     .build();
 
+        */
+
             while (!isStarted()) {
                 gp1.readButtons();
-                if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
+                /*if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
                     telemetry.addLine("Alliance: red");
                     side = Side.RED;
+                    teamPropDetectionPipeline.setAlliance(1);
                     telemetry.update();
                 }
+
                 if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
                     telemetry.addLine("Alliance: blue");
                     side = Side.BLUE;
+                    teamPropDetectionPipeline.setAlliance(2);
                     telemetry.update();
                 }
                 if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
@@ -319,15 +340,19 @@ public class MainAuto extends LinearOpMode{
                         drive.setPoseEstimate(startPoseBlueClose);
                     }
                 }
-            }
-                waitForStart();
-                if (opModeIsActive() && !isStopRequested()) {
-                    telemetry.addLine("Distance:" + dtb);
-                    telemetry.addLine("Alliance:" + side);
-                    telemetry.addLine("Mode" + autopath);
-                    telemetry.update();
 
-                    drive.followTrajectorySequence(blueAllianceCloseTest);
+               */
+            }
+            waitForStart();
+            if (opModeIsActive() && !isStopRequested()) {
+                telemetry.addLine("Distance:" + dtb);
+                telemetry.addLine("Alliance:" + side);
+                telemetry.addLine("Mode" + autopath);
+                telemetry.update();
+
+                drive.setPoseEstimate(startPose);
+                drive.followTrajectorySequence(blueAllianceCloseTest2);
+
 
                   /*  if (dtb == DistanceToBackdrop.FAR) {
                         //blue side far

@@ -9,10 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.subsystems.Box;
-import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 
 public class Bot {
@@ -38,7 +35,7 @@ public class Bot {
 
      public Drone drone;
      public Fourbar fourbar;
-    public Box box;
+     public Box box;
 
      public static DistanceSensor distanceSensor;
 
@@ -100,73 +97,17 @@ public class Bot {
 
         */
         this.noodles = new Noodles(opMode);
+       // reverseMotors();
     }
 
 
 
-    /*
-
-    public void prepForOuttake() {
-        currentState = BotState.STORAGE_FULL;
-        resetOuttake();
-    }
-
-    // must be combined with bot.slide.run___() in MainTeleOp
-    public void outtake(int stage, boolean pixelTwo) {
-        currentState = BotState.OUTTAKE;
-        aprilTagTuning();
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
-
-    public void outtake(boolean pixelTwo, int stage){
-        currentState = BotState.OUTTAKE;
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
-
-
-
-    public void storageSlides(){
-        slides.runTo(1);
-    }
-
-    public void resetOuttake(){
-        box.resetBox();
-        storageSlides();
-        fourbar.storage();
-    }
-
-
-*/
-    public void fixMotors(double velocity) {
-     /*   FL.setDirection(DcMotorEx.Direction.REVERSE);
-        FR.setVelocity(velocity);
-        BL.setDirection(DcMotorEx.Direction.REVERSE);
-        BR.setVelocity(velocity);
-
-        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-      */
-    }
 
     public void reverseMotors(){
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
     }
+
     public void driveRobotCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed) {
         double[] speeds = {
                 forwardBackSpeed - strafeSpeed - turnSpeed,
@@ -260,8 +201,67 @@ public class Bot {
         //  box.runWheel(true);
     }
 
+    /*
 
-   /* public void outtakeBox(){
+public void prepForOuttake() {
+    currentState = BotState.STORAGE_FULL;
+    resetOuttake();
+}
+
+// must be combined with bot.slide.run___() in MainTeleOp
+public void outtake(int stage, boolean pixelTwo) {
+    currentState = BotState.OUTTAKE;
+    aprilTagTuning();
+    slides.runTo(stage);
+    fourbar.outtake();
+    box.depositFirstPixel();
+    if(pixelTwo){
+        box.depositSecondPixel();
+        resetOuttake();
+    }
+}
+
+public void outtake(boolean pixelTwo, int stage){
+    currentState = BotState.OUTTAKE;
+    slides.runTo(stage);
+    fourbar.outtake();
+    box.depositFirstPixel();
+    if(pixelTwo){
+        box.depositSecondPixel();
+        resetOuttake();
+    }
+}
+
+
+
+public void storageSlides(){
+    slides.runTo(1);
+}
+
+public void resetOuttake(){
+    box.resetBox();
+    storageSlides();
+    fourbar.storage();
+}
+
+
+
+    public void fixMotors(double velocity) {
+     /*   FL.setDirection(DcMotorEx.Direction.REVERSE);
+        FR.setVelocity(velocity);
+        BL.setDirection(DcMotorEx.Direction.REVERSE);
+        BR.setVelocity(velocity);
+
+        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+
+    }
+
+
+    public void outtakeBox(){
         currentState = BotState.OUTTAKE;
         if(box.getNumPixelsDeposited() == 0){
             box.depositFirstPixel();
@@ -271,9 +271,9 @@ public class Bot {
         }
     }
 
-    */
 
- /* public void outtakeSlides(double target){
+
+  public void outtakeSlides(double target){
         currentState = BotState.OUTTAKE;
         slides.runTo(target);
     }
@@ -346,7 +346,6 @@ public class Bot {
 
     }
     public void back(){
-        /*
         BL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -364,16 +363,12 @@ public class Bot {
         BR.setPower(0);
         BL.setPower(0);
 
-         */
-
     }
     public void forward(){
-     /*   FL.setPower(0.1);
+        FL.setPower(0.1);
         FR.setPower(0.1);
         BR.setPower(0.1);
         BL.setPower(0.1);
-
-      */
     }
 
 

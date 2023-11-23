@@ -20,30 +20,57 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
     Mat HSV = new Mat();
     MatOfPoint biggest;
 
-    public static int minimumWidth = 60;
+    public static final int minimumWidth = 60;
     public static int width = 0;
-    public enum TeamProp{
+    private enum TeamProp{
         ONLEFT,
         ONRIGHT,
         MIDDLE,
         NOTDETECTED
     }
+    private enum Alliance{
+        BLUE,
+        RED,
+    }
     public static TeamProp teamPropLocation= TeamProp.NOTDETECTED;
+    public static Alliance alliance = Alliance.BLUE;
 
 
     //have to change values
-    public static double lowH = 19, lowS = 125, lowV = 100, highH = 28, highS = 255, highV = 255;
+    public static double lowH, lowS, lowV, highH, highS, highV;
 
-    public static Scalar lowHSV= new Scalar(lowH,lowS,lowV);
-    public static Scalar highHSV = new Scalar(highH,highS,highV);
+    public static Scalar lowHSV;
+    public static Scalar highHSV;
 
 
     public TeamPropDetectionPipeline(Telemetry telemetry){
         this.telemetry = telemetry;
     }
 
+
     @Override
     public Mat processFrame(Mat input) {
+
+        if(alliance== Alliance.BLUE){
+            lowH = 180;
+            lowS = 100;
+            lowV = 92;
+            highH =193;
+            highS = 120;
+            highV = 100;
+        }
+        else{
+            //change values
+            lowH = 180;
+            lowS = 100;
+            lowV = 92;
+            highH =193;
+            highS = 120;
+            highV = 100;
+        }
+        lowHSV= new Scalar(lowH, lowS, lowV);
+        highHSV= new Scalar(highH, highS, highV);
+
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
         //have to change values (divide screen into three)
@@ -104,6 +131,14 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
         HSV.release();
         return input;
+    }
+    public void setAlliance(int a){
+        if(a==1){
+            TeamPropDetectionPipeline.alliance = Alliance.RED;
+        }
+        else{
+            TeamPropDetectionPipeline.alliance = Alliance.BLUE;
+        }
     }
 }
 
