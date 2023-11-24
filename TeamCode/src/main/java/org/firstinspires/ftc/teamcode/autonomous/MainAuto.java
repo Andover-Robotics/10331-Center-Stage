@@ -132,8 +132,8 @@ public class MainAuto extends LinearOpMode{
                 .build();
 
             TrajectorySequence blueAllianceCloseTest2= drive.trajectorySequenceBuilder(startPose)
-                .strafeLeft(28)
-                .turn(Math.toRadians(180))
+                //.strafeLeft(28)
+                //.turn(Math.toRadians(180))
                 .forward(20)
                 //score purple pixel
                 .turn(Math.toRadians(90))
@@ -352,7 +352,7 @@ public class MainAuto extends LinearOpMode{
                 telemetry.update();
 
                 drive.setPoseEstimate(startPose);
-                drive.followTrajectorySequence(blueAllianceCloseTest2);
+                drive.followTrajectorySequence(blueAllianceCloseTest);
 
 
                   /*  if (dtb == DistanceToBackdrop.FAR) {
