@@ -70,7 +70,7 @@ public class MainAuto extends LinearOpMode{
 
         //different start positions depending on alliance and distance from backdrop
         Pose2d startPoseBlueFar = new Pose2d(-52, 52, 0);
-        Pose2d startPoseBlueClose = new Pose2d(38, 56, -90);
+        Pose2d startPoseBlueClose = new Pose2d(38, 56, Math.toRadians(-90));
         Pose2d startPoseRedFar = new Pose2d(-52, -48, 0);
         Pose2d startPoseRedClose = new Pose2d(10, -52, 0);
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));

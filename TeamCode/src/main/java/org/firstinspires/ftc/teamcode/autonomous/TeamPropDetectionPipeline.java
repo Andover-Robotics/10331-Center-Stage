@@ -52,21 +52,20 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
 
         if(alliance== Alliance.BLUE){
-            lowH = 180;
-            lowS = 100;
-            lowV = 92;
-            highH =193;
+            lowH = 160;
+            lowS = 80;
+            lowV = 80;
+            highH =200;
             highS = 120;
-            highV = 100;
+            highV = 120;
         }
         else{
-            //change values
-            lowH = 180;
-            lowS = 100;
-            lowV = 92;
-            highH =193;
-            highS = 120;
-            highV = 100;
+            lowH = 280;
+            lowS = 75;
+            lowV = 80;
+            highH =320;
+            highS = 105;
+            highV = 120;
         }
         lowHSV= new Scalar(lowH, lowS, lowV);
         highHSV= new Scalar(highH, highS, highV);
