@@ -39,7 +39,7 @@ public class Slides {
     public Slides(OpMode opMode) {
         this.opMode = opMode;
         slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
-        slidesMotor.setInverted(true);
+        slidesMotor.setInverted(false);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
         controller = new PIDFController(p,i,d,f);
@@ -107,7 +107,7 @@ public class Slides {
     }
 
     public void periodic() {
-        slidesMotor.setInverted(true);
+        slidesMotor.setInverted(false);
         slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;

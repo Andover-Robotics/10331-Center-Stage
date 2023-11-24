@@ -17,7 +17,7 @@ public class Noodles {
     }
 
     public void intake(){
-        noodleMotor.setPower(0.5);
+        noodleMotor.setPower(1);
         isIntake=true;
     }
 
