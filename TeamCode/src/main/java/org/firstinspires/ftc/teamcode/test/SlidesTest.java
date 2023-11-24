@@ -17,6 +17,9 @@ import org.firstinspires.ftc.teamcode.Bot;
 public class SlidesTest extends LinearOpMode {
     Bot bot;
     private GamepadEx gp2;
+    private double doubleClickThreshold, lastMidPress;
+    private boolean midPressed;
+
 
 
 
@@ -26,43 +29,47 @@ public class SlidesTest extends LinearOpMode {
         gp2 = new GamepadEx(gamepad2);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         bot.slides.resetEncoder();
+        doubleClickThreshold = 0.2;
 
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            runSlides();
+            gp2.readButtons();
+            runSlides(gp2.getLeftY());
             telemetry.update();
 
-
-            /*
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
+            //dpad check
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
                 bot.slides.runToStorage();
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                bot.slides.runToTop();
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                bot.slides.runToLow();
-            }else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                bot.slides.runToMid();
             }
-             */
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                bot.slides.runToTop();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                bot.slides.runToLow();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                //change to System.getCurrentTimeMillis if this is buggy
+                double currentTime = 0L;
+                if(!midPressed) {
+                    midPressed = true;
+                    currentTime = bot.opMode.time;
+                }
 
-            /*
-            Stuff to test immediately after runToManual works
-            1) bot.slides.runTo(top);
-            2) bot.slides.runTo(storage);
-            3) bot.slides.runTo(mid_1); bot.slides.runTo(mid_2)
-            4) bot.slides.runTo(storage);
-            5) bot.slides.runTo(low);
-            6) bot.slides.runTo(storage);
-             */
+                if(currentTime - lastMidPress < doubleClickThreshold)
+                    bot.slides.runToMid(2);
+                else
+                    bot.slides.runToMid(1);
+
+                lastMidPress = bot.opMode.time;
+            }
 
             bot.slides.periodic();
         }
     }
 
-    private void runSlides() {
+    private void runSlides(double power) {
         //manual slides test
-        double power = gp2.getLeftY();
 
         telemetry.addData("Gamepad Power", power);
         telemetry.addData("Slide Power Given",bot.slides.getManualPower());

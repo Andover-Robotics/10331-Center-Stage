@@ -14,7 +14,6 @@ public class MainTeleOp extends LinearOpMode {
     private GamepadEx gp2;
     public boolean isIntake=false;
     public boolean isOuttakePosition=false;
-    public boolean hasDepositedSecond=false;
 
 
     @Override
@@ -31,7 +30,6 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             gp2.readButtons();
-
             telemetry.addLine("TeleOp has started");
 
             //drivetrain movement
@@ -85,15 +83,15 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.update();
             }
 
-            //button just deposits pixel
+            //button just deposits pixel, resets after second pixel
             if(gp2.wasJustPressed(GamepadKeys.Button.Y)){
-                if(!hasDepositedSecond){
+                if(bot.box.getNumPixelsDeposited()==1){
                     bot.box.depositSecondPixel();
-                    hasDepositedSecond=true;
+                    sleep(1000);
+                    bot.box.resetBox();
                 }
-                else{
+                else {
                     bot.box.depositFirstPixel();
-                    hasDepositedSecond=false;
                 }
             }
 
@@ -113,6 +111,8 @@ public class MainTeleOp extends LinearOpMode {
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
                 bot.slides.runToMid(1);
             }
+
+            //add drone code here after dronetest works
 
             bot.slides.periodic();
 
