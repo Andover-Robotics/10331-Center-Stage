@@ -26,7 +26,7 @@ public class AprilTagsDetection{
 
     // UNITS ARE METERS
     //might have to change this? not sure what size the tags will be
-    double tagsize = 0.166;
+    public static double tagsize = 0.166;
 
     static int ONE = 1;
     static int TWO = 2;
@@ -102,6 +102,10 @@ public class AprilTagsDetection{
         double distance = (tagsize * Math.sqrt(fx*fy))/(2*tagsize*PIXELS_PER_METER);
         return distance;
     }
+    public static double getTagSize(){
+        return tagsize;
+    }
+
 
 
 
@@ -117,6 +121,7 @@ public class AprilTagsDetection{
         //telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 }
+
 
 class AprilTagException extends Exception{
     public AprilTagException(){

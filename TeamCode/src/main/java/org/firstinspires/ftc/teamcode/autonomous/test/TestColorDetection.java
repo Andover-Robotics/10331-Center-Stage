@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,7 +10,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-
+@Autonomous
 public class TestColorDetection extends LinearOpMode {
     OpenCvWebcam camera;
     TeamPropDetectionPipeline pipeline;
