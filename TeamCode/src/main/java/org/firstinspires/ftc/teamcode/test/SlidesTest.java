@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import static org.firstinspires.ftc.teamcode.subsystems.Slides.low;
 import static org.firstinspires.ftc.teamcode.subsystems.Slides.storage;
@@ -11,9 +11,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
-public class
-SlidesTest extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.Bot;
+
+@TeleOp(group = "test")
+public class SlidesTest extends LinearOpMode {
     Bot bot;
     private GamepadEx gp2;
 

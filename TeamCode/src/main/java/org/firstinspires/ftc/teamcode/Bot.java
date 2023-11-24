@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.subsystems.Box;
+import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -37,8 +38,8 @@ public class Bot {
       public Fourbar fourbar;
 
       public Noodles noodles;
-     // public Drone drone;
-     // public Fourbar fourbar;
+      public Drone drone;
+
       public Box box;
 
    // public static DistanceSensor distanceSensor;
@@ -96,8 +97,7 @@ public class Bot {
         this.fourbar = new Fourbar(opMode);
         this.noodles = new Noodles(opMode);
         this.box = new Box(opMode);
-
-        //drone= new Drone(opMode);
+        this.drone= new Drone(opMode);
 
     }
 
