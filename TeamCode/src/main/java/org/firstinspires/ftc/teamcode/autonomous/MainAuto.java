@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 
 
 /*

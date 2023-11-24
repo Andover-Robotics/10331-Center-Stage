@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.odometry;
+package org.firstinspires.ftc.teamcode.autonomous.tuning.odometry;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.autonomous.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.odometry.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.StandardTrackingWheelLocalizer;
+
 /**
  * Opmode designed to assist the user in tuning the `StandardTrackingWheelLocalizer`'s
  * LATERAL_DISTANCE value. The LATERAL_DISTANCE is the center-to-center distance of the parallel
