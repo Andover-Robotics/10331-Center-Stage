@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.teamcode.subsystems.odometry.StandardTrackingWheelLocalizer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -109,10 +111,12 @@ public class SampleMecanumDrive extends MecanumDrive {
          */
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-       // imu = hardwareMap.get(BNO055IMU.class, "imu");
-      //  BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-      //  parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-      //  imu.initialize(parameters);
+       /* imu = hardwareMap.get(BNO055IMU.class, "imu");
+          BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+          parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
+
+        */
 
 
 
@@ -147,7 +151,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
         // TODO: if desired, use setLocalizer() to change the localization method
-        //setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }

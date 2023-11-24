@@ -1,4 +1,4 @@
-//package org.firstinspires.ftc.teamcode.subsystems.odometry;
+package org.firstinspires.ftc.teamcode.subsystems.odometry;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,8 +17,6 @@ import org.firstinspires.ftc.teamcode.autonomous.SampleMecanumDrive;
 
 
 /*
-
-
 Once you reach the end of your stretch, stop. Measure the distance traveled.
  Then look at the distance reported on the telemetry on the RC.
 
@@ -34,28 +32,13 @@ Set Y_MULTIPLIER to the calculated strafe multiplier.
 
 #
 
-
-
-
-
-
  */
-
-
-
-
-
-
-
-
-
-/*
 
 @TeleOp(group = "drive")
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(this);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -80,5 +63,3 @@ public class LocalizationTest extends LinearOpMode {
         }
     }
 }
-
- */
