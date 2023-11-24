@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 
 
 /*
@@ -16,9 +17,9 @@ To Do:
 
 1) TEST AUTOPATHS AND TELEOP!!!!
     - if splines do not work, switch to forward(), strafeRight(), and strafeLeft()
+    - trust they work
 2) add more autopaths
 3) odometry
-
  */
 
 @Config
@@ -131,8 +132,8 @@ public class MainAuto extends LinearOpMode{
                 .build();
 
             TrajectorySequence blueAllianceCloseTest2= drive.trajectorySequenceBuilder(startPose)
-                .strafeLeft(28)
-                .turn(Math.toRadians(180))
+                //.strafeLeft(28)
+                //.turn(Math.toRadians(180))
                 .forward(20)
                 //score purple pixel
                 .turn(Math.toRadians(90))
@@ -351,7 +352,7 @@ public class MainAuto extends LinearOpMode{
                 telemetry.update();
 
                 drive.setPoseEstimate(startPose);
-                drive.followTrajectorySequence(blueAllianceCloseTest2);
+                drive.followTrajectorySequence(blueAllianceCloseTest);
 
 
                   /*  if (dtb == DistanceToBackdrop.FAR) {

@@ -8,7 +8,7 @@ import org.openftc.apriltag.AprilTagDetection;
 
 import java.util.ArrayList;
 
-@TeleOp
+@TeleOp(name = "AprilTagDetection")
 public class AprilTagsDetection{
 
     static AprilTagsPipeline pipeline;

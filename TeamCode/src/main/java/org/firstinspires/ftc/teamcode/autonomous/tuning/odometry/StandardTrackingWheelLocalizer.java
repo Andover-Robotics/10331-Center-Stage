@@ -1,4 +1,4 @@
-/*package org.firstinspires.ftc.teamcode.subsystems.odometry;
+package org.firstinspires.ftc.teamcode.autonomous.tuning.odometry;
 
 import androidx.annotation.NonNull;
 
@@ -8,14 +8,15 @@ import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.subsystems.odometry.Encoder;
+import org.firstinspires.ftc.teamcode.autonomous.test.Encoder;
 
 import java.util.Arrays;
 import java.util.List;
 
 
 @Config
-public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
+//public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
+public class StandardTrackingWheelLocalizer {
 
     /*
     TICKS_PER_REV is the number of "ticks" the encoders will count per revolution.
@@ -31,26 +32,38 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     FORWARD_OFFSET is the distance from the center of rotation to the middle wheel.
     The FORWARD_OFFSET is positive when in front of the wheels and negative when behind the wheels (closer to the back).
-
-
-
-
-
+*/
 
 
     //values determined via LocalizationTest
-    public static double X_MULTIPLIER = 1; // Multiplier in the X direction
+
+    /*
+    Process for localization test
+    You will begin the physical tuning process. Clear a straight line for your bot to travel in.
+    Set your bot at the beginning of this stretch, facing forward.
+    Run the LocalizationTest opmode. Do not touch the controller.
+    Slowly drag your bot along this stretch. Keep the bot as straight as possible.
+    Once you reach the end of your stretch, stop. Measure the distance traveled. Then look at the distance reported on the telemetry on the RC.
+    Your multiplier will be the Measured Distance / Telemetry Distance Traveled .
+    Repeat process 3 times for the forward direction to get the average multiplier.
+    Then, set the X_MULTIPLIER to this value.
+    Repeat the same process but in the strafing direction.
+    Set Y_MULTIPLIER to the calculated strafe multiplier.
+     */
+
+  /*  public static double X_MULTIPLIER = 1; // Multiplier in the X direction
     public static double Y_MULTIPLIER = 1; // Multiplier in the Y direction
 
 
-    public static double TICKS_PER_REV = 0; //idk
-    public static double WHEEL_RADIUS = 0.75; // done
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed => idk
+    public static double TICKS_PER_REV = 537.7;
+    public static double WHEEL_RADIUS = 0.75;
+    public static double GEAR_RATIO = 1;
 
 
     //tbd
     public static double LATERAL_DISTANCE = 10; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
+    //can measure it at workshop today
 
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
@@ -97,6 +110,6 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
                 encoderTicksToInches(frontEncoder.getCorrectedVelocity()) * Y_MULTIPLIER
         );
     }
-}
 
- */
+   */
+}
