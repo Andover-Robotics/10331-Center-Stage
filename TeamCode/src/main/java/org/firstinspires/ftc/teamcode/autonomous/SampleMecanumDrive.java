@@ -42,6 +42,7 @@ import org.firstinspires.ftc.teamcode.autonomous.test.Encoder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.StandardTrackingWheelLocalizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,7 +150,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
         // TODO: if desired, use setLocalizer() to change the localization method
-       // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -325,7 +326,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
 
-    public void rotateNinety(boolean isClockwise) {
+   /* public void rotateNinety(boolean isClockwise) {
         double error = 90 - getCurrentAngle();
         double proportionalGain=3.7;
 
@@ -348,4 +349,6 @@ public class SampleMecanumDrive extends MecanumDrive {
                 leftRearEncoder.getCurrentPosition() +
                 rightRearEncoder.getCurrentPosition()) / 4.0;
     }
+
+    */
 }
