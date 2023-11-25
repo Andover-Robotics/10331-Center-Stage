@@ -100,17 +100,21 @@ public class MainTeleOp extends LinearOpMode {
 
             //slide movement to preset values
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToStorage();
+                bot.slides.runToNextStageUp();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToTop();
+                bot.slides.runToNextStageDown();
             }
+
+            /*
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 bot.slides.runToLow();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
                 bot.slides.runToMid();
             }
+
+             */
 
             //add drone code here after dronetest works
 
