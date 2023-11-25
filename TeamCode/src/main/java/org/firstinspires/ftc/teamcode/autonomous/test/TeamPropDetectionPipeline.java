@@ -72,13 +72,14 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
+
         //have to change values (divide screen into three)
-        Rect rightRect = new Rect(0, 1, 426, 719);
-        Rect leftRect = new Rect(426, 1, 426, 719);
-        Rect frontRect = new Rect(852,1,426,719);
+        Rect frontRect = new Rect(0, 1, 640, 719);
+    //    Rect leftRect = new Rect(426, 1, 426, 719);
+        Rect rightRect = new Rect(640,1,640,719);
 
         //red
-        Imgproc.rectangle(input, leftRect, new Scalar(255, 0, 0), 5);
+    //    Imgproc.rectangle(input, leftRect, new Scalar(255, 0, 0), 5);
 
         //blue
         Imgproc.rectangle(input, rightRect, new Scalar(0, 0, 255), 5);
@@ -113,26 +114,16 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
                 // checks if contour is within boundaries of any rectangle (left, right, front)
 
-                if (midpointRect > leftRect.tl().x && midpointRect < leftRect.br().x) {
-                    teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.ONLEFT;
-                } else if (midpointRect > rightRect.tl().x && midpointRect < rightRect.br().x) {
+                if (midpointRect > rightRect.tl().x && midpointRect < rightRect.br().x) {
                     teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.ONRIGHT;
                 } else if (midpointRect < frontRect.tl().x && midpointRect > frontRect.br().x){
                     teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.MIDDLE;
                 }
+                else{
+                    teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.ONLEFT;
+                }
 
             }
-            else {
-                teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.NOTDETECTED;
-                telemetry.addLine("TeamProp not detected");
-                telemetry.update();
-            }
-        }
-
-        else {
-            teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.NOTDETECTED;
-            telemetry.addLine("TeamProp not detected");
-            telemetry.update();
         }
 
         HSV.release();
