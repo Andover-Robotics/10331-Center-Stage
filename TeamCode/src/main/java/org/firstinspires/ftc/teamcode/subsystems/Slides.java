@@ -69,7 +69,7 @@ public class Slides {
         current_pos = target;
     }
 
-    public void runToTop() {
+    public void runToNextStageDown() {
         runTo(top);
         position = slidesPosition.HIGH;
     }
@@ -84,7 +84,7 @@ public class Slides {
         runTo(low);
         position = slidesPosition.LOW;
     }
-    public void runToStorage() {
+    public void runToNextStageUp() {
         runTo(storage);
         position = slidesPosition.GROUND;
     }

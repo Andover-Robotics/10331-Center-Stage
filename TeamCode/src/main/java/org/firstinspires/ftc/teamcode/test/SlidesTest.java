@@ -28,11 +28,15 @@ public class SlidesTest extends LinearOpMode {
 
             //dpad check
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToStorage();
+                bot.slides.runToNextStageUp();
+                //goes up
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToTop();
+                bot.slides.runToNextStageDown();
+                //goes down
             }
+
+            /*
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 bot.slides.runToLow();
             }
@@ -40,6 +44,7 @@ public class SlidesTest extends LinearOpMode {
                 //change to System.getCurrentTimeMillis if this is buggy
                 bot.slides.runToMid();
             }
+             */
 
             bot.slides.periodic();
         }
