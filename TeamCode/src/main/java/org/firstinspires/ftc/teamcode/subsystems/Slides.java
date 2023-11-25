@@ -99,13 +99,11 @@ public class Slides {
         }
     }
 
-
     public void resetEncoder() {
         slidesMotor.resetEncoder();
     }
 
     public void periodic() {
-        slidesMotor.setInverted(false);
         slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
@@ -128,14 +126,14 @@ public class Slides {
          */
 
         else {
-            if (profiler.isDone()) profiler = new MotionProfiler(30000, 20000);
+            if (profiler.isDone()) resetProfiler();
             //if we aren't using manual power, but the profile just ended, we should create a new motionprofiler obj to
             //erase previous trajectory data
 
             if (manualPower != 0) {
                 //controller.setSetPoint(slidesMotor.getCurrentPosition());
                 slidesMotor.set(manualPower / manualDivide);
-            } else {
+            } else
                 slidesMotor.set(0);
 
                 //pls work bro :praying:
@@ -150,7 +148,6 @@ public class Slides {
                 if (power < Math.abs(0.1)) slidesMotor.set(0);
                 else slidesMotor.set(power);
                  */
-            }
         }
     }
 
