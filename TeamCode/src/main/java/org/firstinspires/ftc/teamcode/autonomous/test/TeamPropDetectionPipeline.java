@@ -73,13 +73,18 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
         //have to change values (divide screen into three)
-        Rect rightRect = new Rect(750, 1, 529, 719);
-        Rect leftRect = new Rect(1, 1, 479, 719);
-        Rect frontRect = new Rect(1,1,1,1);
+        Rect rightRect = new Rect(0, 1, 426, 719);
+        Rect leftRect = new Rect(426, 1, 426, 719);
+        Rect frontRect = new Rect(852,1,426,719);
 
+        //red
         Imgproc.rectangle(input, leftRect, new Scalar(255, 0, 0), 5);
+
+        //blue
         Imgproc.rectangle(input, rightRect, new Scalar(0, 0, 255), 5);
-        Imgproc.rectangle(input, frontRect, new Scalar(255, 255, 0), 5);
+
+        //green
+        Imgproc.rectangle(input, frontRect, new Scalar(0,255,0), 5);
 
         Core.inRange(HSV, lowHSV, highHSV, HSV);
 
@@ -141,6 +146,10 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
             org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.alliance = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.Alliance.BLUE;
         }
     }
+    public TeamProp getTeamPropLocation(){
+        return teamPropLocation;
+    }
+
 }
 
 class PropException extends Exception{

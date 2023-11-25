@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -92,7 +93,7 @@ public class MainAuto extends LinearOpMode{
         //CAMERA STUFF =====================
 
 
-        WebcamName camName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        WebcamName camName = hardwareMap.get(WebcamName.class, "webcam");
         bot.camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
         TeamPropDetectionPipeline teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
         //  bot.aprilTagsPipeline= new AprilTagsPipeline(tagSize, fx, fy, cx, cy);

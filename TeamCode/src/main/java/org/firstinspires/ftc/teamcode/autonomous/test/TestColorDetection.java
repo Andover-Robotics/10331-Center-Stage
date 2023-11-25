@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous(name="test teamprop")
 public class TestColorDetection extends LinearOpMode {
     OpenCvWebcam camera;
-    TeamPropDetectionPipeline pipeline;
+        TeamPropDetectionPipeline pipeline;
     private final int STREAM_HEIGHT = 720, STREAM_WIDTH = 1280;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,6 +23,7 @@ public class TestColorDetection extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive() && !isStopRequested()) {
+            telemetry.addData("Team prop is in the", pipeline.getTeamPropLocation());
             telemetry.update();
         }
     }

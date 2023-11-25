@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+/*package org.firstinspires.ftc.teamcode.autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
@@ -150,4 +150,6 @@ class PropException extends Exception{
         super(message);
     }
 }
+
+ */
 
