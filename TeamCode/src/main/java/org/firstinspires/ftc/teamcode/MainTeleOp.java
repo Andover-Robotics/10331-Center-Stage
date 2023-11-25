@@ -109,7 +109,7 @@ public class MainTeleOp extends LinearOpMode {
                 bot.slides.runToLow();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                bot.slides.runToMid(1);
+                bot.slides.runToMid();
             }
 
             //add drone code here after dronetest works
