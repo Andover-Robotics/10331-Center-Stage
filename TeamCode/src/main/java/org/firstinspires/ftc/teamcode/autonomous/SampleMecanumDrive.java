@@ -326,16 +326,15 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
     public void rotateNinety(boolean isClockwise) {
-        double error=1;
-        if(isClockwise){
-            error = 90 - getCurrentAngle();
-        }
-        else{
-            error= 270- getCurrentAngle();
+        double error = 90 - getCurrentAngle();
+        double proportionalGain=3.7;
+
+        if(!isClockwise){
+            proportionalGain=-3.7;
         }
 
         // Adjust motor speeds based on the proportional control
-        double correction = 3.7 * error;
+        double correction = proportionalGain * error;
 
         // Set motor speeds for mecanum drive
         setMotorPowers(correction, correction, -correction, -correction);
