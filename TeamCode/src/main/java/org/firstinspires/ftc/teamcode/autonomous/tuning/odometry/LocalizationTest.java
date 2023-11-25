@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.autonomous.SampleMecanumDrive;
 
 /*
 Once you reach the end of your stretch, stop. Measure the distance traveled.
- Then look at the distance reported on the telemetry on the RC.
+Then look at the distance reported on the telemetry on the RC.
 
 Your multiplier will be the Measured Distance / Telemetry Distance Traveled .
 For example, if your telemetry reports 89 inches but your tape measure reports 90 inches,
@@ -33,6 +33,13 @@ Set Y_MULTIPLIER to the calculated strafe multiplier.
 #
 
  */
+
+
+
+    //NOT USING
+
+
+
 
 @TeleOp(group = "drive")
 public class LocalizationTest extends LinearOpMode {

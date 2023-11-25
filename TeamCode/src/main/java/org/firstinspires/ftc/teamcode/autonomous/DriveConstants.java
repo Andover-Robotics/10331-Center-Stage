@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 //aaaaaaaa i hat my life
@@ -14,6 +15,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
  * These are not the only parameters; some are located in the localizer classes, drive base classes,
  * and op modes themselves.
  */
+
+@Config
 public class DriveConstants {
     public static final double TICKS_PER_REV = Motor.GoBILDA.RPM_312.getCPR();
     public static final double MAX_RPM = 312;

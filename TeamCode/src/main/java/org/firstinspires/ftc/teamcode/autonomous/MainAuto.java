@@ -147,7 +147,7 @@ public class MainAuto extends LinearOpMode{
                 //park
                 .build();
 
-        TrajectorySequence blueAllianceCloseTest3= drive.trajectorySequenceBuilder(startPose)
+    /*    TrajectorySequence blueAllianceCloseTest3= drive.trajectorySequenceBuilder(startPose)
                 .forward(20)
                 //score purple pixel
                 .UNSTABLE_addTemporalMarkerOffset(0,this::turnLeft)
@@ -159,6 +159,8 @@ public class MainAuto extends LinearOpMode{
                 .forward(10)
                 //park
                 .build();
+
+     */
 
        /*     TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
                     .splineTo(new Vector2d(-34,38), Math.toRadians(-90))
@@ -531,10 +533,12 @@ public class MainAuto extends LinearOpMode{
         telemetry.update();
     }
 
-    private void turnRight(){
+  /*  private void turnRight(){
         drive.rotateNinety(true);
     }
     private void turnLeft(){
         drive.rotateNinety(false);
     }
+
+   */
 }

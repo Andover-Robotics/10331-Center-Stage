@@ -10,7 +10,6 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-@Config
 @Autonomous(name="test teamprop")
 public class TestColorDetection extends LinearOpMode {
     OpenCvWebcam camera;
