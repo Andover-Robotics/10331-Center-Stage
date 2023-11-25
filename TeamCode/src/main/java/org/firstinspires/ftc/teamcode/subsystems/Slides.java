@@ -3,12 +3,16 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
 
 public class Slides {
     public final MotorEx slidesMotor;
     private double current_pos = 0 ;
+    private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
     private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1;
     public double power;
@@ -25,13 +29,12 @@ public class Slides {
     public enum slidesPosition{
         GROUND,
         LOW,
-        MID_1,
-        MID_2,
+        MID,
         HIGH
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 0, top = 3250, mid_1 = 1700, mid_2 = 1000, low = 450;
+    public static int storage = 0, top = 3250, mid = 1700, low = 450;
     //tune
 
     private final OpMode opMode;
@@ -71,15 +74,10 @@ public class Slides {
         position = slidesPosition.HIGH;
     }
 
-    public void runToMid(int num) {
-        if(num==1){
-            runTo(mid_1);
-            position = slidesPosition.MID_1;
-        }
-        else {
-            runTo(mid_2);
-            position = slidesPosition.MID_2;
-        }
+    public void runToMid() {
+        runTo(mid);
+        position = slidesPosition.MID;
+
     }
 
     public void runToLow() {
@@ -154,6 +152,16 @@ public class Slides {
                  */
             }
         }
+    }
+
+    public void operateSlides() {
+        if(position.equals(slidesPosition.GROUND)) {
+            slidesMotor.setTargetPosition(slidesMotor.getCurrentPosition() + encoderTickPerLevel);
+        //    slidesMotor.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //last resort: convert motor back to DcMotorEx and try using this method
+          //  slidesMotor.setPower(0.5);
+        }
+        //else if(position.equals(slidesPosition.LOW))
     }
 
     public void resetProfiler(){
