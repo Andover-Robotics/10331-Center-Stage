@@ -38,10 +38,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.teamcode.autonomous.test.Encoder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.StandardTrackingWheelLocalizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,22 +78,12 @@ public class SampleMecanumDrive extends MecanumDrive {
    // private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
-   /* public static SampleMecanumDrive getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("tried to getInstance of Bot when uninitialized");
-        }
-        return instance;
-    }
 
-    public static SampleMecanumDrive getInstance(OpMode opMode) {
-        if (instance == null) {
-            return instance = new SampleMecanumDrive(opMode);
-        }
-        instance.opMode = opMode;
-        return instance;
-    }
+    private Encoder leftFrontEncoder;
+    private Encoder rightFrontEncoder;
+    private Encoder leftRearEncoder;
+    private Encoder rightRearEncoder;
 
-    */
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -113,6 +103,7 @@ public class SampleMecanumDrive extends MecanumDrive {
          */
 
         // TODO: adjust the names of the following hardware devices to match your configuration
+
        /* imu = hardwareMap.get(BNO055IMU.class, "imu");
           BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
           parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
@@ -126,6 +117,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "bl");
         rightRear = hardwareMap.get(DcMotorEx.class, "br");
         rightFront = hardwareMap.get(DcMotorEx.class, "fr");
+
+        leftFrontEncoder= new Encoder(leftFront);
+        rightFrontEncoder= new Encoder(rightFront);
+        leftRearEncoder= new Encoder(leftRear);
+        rightRearEncoder= new Encoder(rightRear);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -325,5 +321,32 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
         return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+    }
+
+
+
+    public void rotateNinety(boolean isClockwise) {
+        double error=1;
+        if(isClockwise){
+            error = 90 - getCurrentAngle();
+        }
+        else{
+            error= 270- getCurrentAngle();
+        }
+
+        // Adjust motor speeds based on the proportional control
+        double correction = 3.7 * error;
+
+        // Set motor speeds for mecanum drive
+        setMotorPowers(correction, correction, -correction, -correction);
+    }
+
+    private double getCurrentAngle() {
+
+        // Use the average of the four wheel encoders for heading calculation
+        return (leftFrontEncoder.getCurrentPosition() +
+                rightFrontEncoder.getCurrentPosition() +
+                leftRearEncoder.getCurrentPosition() +
+                rightRearEncoder.getCurrentPosition()) / 4.0;
     }
 }

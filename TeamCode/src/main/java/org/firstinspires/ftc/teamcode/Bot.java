@@ -9,7 +9,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.subsystems.Box;
+import org.firstinspires.ftc.teamcode.subsystems.Drone;
+import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.openftc.easyopencv.OpenCvCamera;
 
 
 public class Bot {
@@ -25,29 +30,20 @@ public class Bot {
     public BotState currentState = STORAGE_NOT_FULL;
     public static Bot instance;
 
-    /*public OpenCvCamera camera;
-     public AprilTagsPipeline aprilTagsPipeline;
-
-     public static AprilTagsDetection detections;
+    public OpenCvCamera camera;
+   //  public AprilTagsPipeline aprilTagsPipeline;
+   //  public static AprilTagsDetection detections;
 
     public Slides slides;
     public Fourbar fourbar;
-
-     public Drone drone;
-     public Fourbar fourbar;
-     public Box box;
-
-     public static DistanceSensor distanceSensor;
-
-    */
+    public Drone drone;
+    public Box box;
     public Noodles noodles;
     private final DcMotorEx FL, FR, BL, BR;
 
 
     public boolean fieldCentricRunMode = false;
-    private double distanceFromBackdrop;
-    private final double optimalDistanceFromBackdrop = 10;
-    //arbitrary number for now
+
 
     public static Bot getInstance() {
         if (instance == null) {
@@ -67,7 +63,6 @@ public class Bot {
     private Bot(OpMode opMode) {
         this.opMode = opMode;
         enableAutoBulkRead();
-        //what is this
         try {
             fieldCentricRunMode = false;
         } catch (Exception e) {
@@ -90,14 +85,12 @@ public class Bot {
         BL.setMode(RUN_USING_ENCODER);
         BR.setMode(RUN_USING_ENCODER);
 
-       /* this.slides = new Slides(opMode);
+        this.slides = new Slides(opMode);
         this.fourbar = new Fourbar(opMode);
         this.noodles = new Noodles(opMode);
         this.box = new Box(opMode);
 
-        */
         this.noodles = new Noodles(opMode);
-       // reverseMotors();
     }
 
 
@@ -130,50 +123,15 @@ public class Bot {
         BR.setPower(speeds[3]);
 
     }
-    /*
 
-    //cope no one uses field centric
-    public void driveFieldCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed, double heading) {
-        double magnitude = Math.sqrt(strafeSpeed * strafeSpeed + forwardBackSpeed * forwardBackSpeed);
-        double theta = (Math.atan2(forwardBackSpeed, strafeSpeed) - heading) % (2 * Math.PI);
-        double[] speeds = {
-                magnitude * Math.sin(theta + Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) - turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta + Math.PI / 4) - turnSpeed
-        };
-
-        double maxSpeed = 0;
-
-        for (int i = 0; i < 4; i++) {
-            maxSpeed = Math.max(maxSpeed, speeds[i]);
-        }
-
-        if (maxSpeed > 1) {
-            for (int i = 0; i < 4; i++) {
-                speeds[i] /= maxSpeed;
-            }
-        }
-
-        //        for (int i = 0; i < 4; i++) {
-        //            driveTrainMotors[i].set(speeds[i]);
-        //        }
-        // manually invert the left side
-
-        FL.setPower(speeds[0]);
-        FR.setPower(speeds[1]);
-        BL.setPower(speeds[2]);
-        BR.setPower(speeds[3]);
-    }
-    */
 
     public void resetEverything(){
         noodles.stop();
         reverseMotors();
         resetEncoder();
-      //  slides.runToStorage();
-        //fourbar.storage();
-        //box.resetBox();
+        slides.runToStorage();
+        fourbar.storage();
+        box.resetBox();
     }
 
     private void enableAutoBulkRead() {
@@ -193,12 +151,10 @@ public class Bot {
     public void intake(){
         currentState = BotState.INTAKE;
         noodles.intake();
-        // box.runWheel(false);
     }
     public void stopIntake(){
         currentState = BotState.STORAGE_FULL;
         noodles.stop();
-        //  box.runWheel(true);
     }
 
     /*
@@ -294,13 +250,13 @@ public void resetOuttake(){
         FR.setMode(STOP_AND_RESET_ENCODER);
         BR.setMode(STOP_AND_RESET_ENCODER);
         BL.setMode(STOP_AND_RESET_ENCODER);
-      //slides.resetEncoder();
+        slides.resetEncoder();
     }
 
 
 
     public void resetProfiler() {
-      //slides.resetProfiler();
+      slides.resetProfiler();
 
     }
     public void turn(double power){
@@ -313,6 +269,7 @@ public void resetOuttake(){
             //  FR.setPower(-power);
         }
     }
+
     public void strafeRight(){
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -372,26 +329,6 @@ public void resetOuttake(){
     }
 
 
-   /* public void distanceTuning(DistanceSensor sensor){
-        double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
-        boolean inRange = Math.abs(diffy) <= 5;
-        if(inRange){
-            return;
-        }
-        while(!inRange){
-            if(diffy<0){
-                back();
-            }else{
-                forward();
-            }
-            distanceFromBackdrop = sensor.getDistance(DistanceUnit.CM);
-            diffy = distanceFromBackdrop - optimalDistanceFromBackdrop;
-            inRange = Math.abs(diffy) <= 5;
-            distanceTuning(sensor);
-        }
-    }
-
-    */
 /*
     public void aprilTagTuning(){
         AprilTagsDetection.detectTag();

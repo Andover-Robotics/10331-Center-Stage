@@ -8,8 +8,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 
 /*
@@ -58,13 +62,14 @@ public class MainAuto extends LinearOpMode{
     // UNITS ARE METERS
     public static double tagSize = 0.032;
 
+    SampleMecanumDrive drive;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         bot = Bot.getInstance(this);
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         GamepadEx gp1 = new GamepadEx(gamepad1);
@@ -86,11 +91,11 @@ public class MainAuto extends LinearOpMode{
 
         //CAMERA STUFF =====================
 
-        /*
+
         WebcamName camName = hardwareMap.get(WebcamName.class, "Webcam 1");
         bot.camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
         TeamPropDetectionPipeline teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
-        bot.aprilTagsPipeline= new AprilTagsPipeline(tagSize, fx, fy, cx, cy);
+        //  bot.aprilTagsPipeline= new AprilTagsPipeline(tagSize, fx, fy, cx, cy);
 
 
         bot.camera.setPipeline(teamPropDetectionPipeline);
@@ -106,9 +111,6 @@ public class MainAuto extends LinearOpMode{
 
             }
         });
-        should be moved into a method to make it more succinct
-
-         */
 
 
             /*
@@ -132,8 +134,6 @@ public class MainAuto extends LinearOpMode{
                 .build();
 
             TrajectorySequence blueAllianceCloseTest2= drive.trajectorySequenceBuilder(startPose)
-                //.strafeLeft(28)
-                //.turn(Math.toRadians(180))
                 .forward(20)
                 //score purple pixel
                 .turn(Math.toRadians(90))
@@ -142,6 +142,19 @@ public class MainAuto extends LinearOpMode{
                 .turn(Math.toRadians(90))
                 .forward(20)
                 .turn(Math.toRadians(-90))
+                .forward(10)
+                //park
+                .build();
+
+        TrajectorySequence blueAllianceCloseTest3= drive.trajectorySequenceBuilder(startPose)
+                .forward(20)
+                //score purple pixel
+                .UNSTABLE_addTemporalMarkerOffset(0,this::turnLeft)
+                .forward(30)
+                //outtake on backdrop
+                .UNSTABLE_addTemporalMarkerOffset(0,this::turnLeft)
+                .forward(20)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::turnRight)
                 .forward(10)
                 //park
                 .build();
@@ -515,5 +528,12 @@ public class MainAuto extends LinearOpMode{
         //bot.outtake(true,1);
         telemetry.addData("Scoring with no sensing should occur right now",".");
         telemetry.update();
+    }
+
+    private void turnRight(){
+        drive.rotateNinety(true);
+    }
+    private void turnLeft(){
+        drive.rotateNinety(false);
     }
 }
