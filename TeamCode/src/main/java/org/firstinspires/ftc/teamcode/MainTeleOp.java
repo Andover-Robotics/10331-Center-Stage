@@ -55,7 +55,7 @@ public class MainTeleOp extends LinearOpMode {
                 bot.noodles.reverseIntake();
             }
 
-            //fourbar and box (automatic deposit): deposits both pixels at same time
+            //fourbar and box outtake/storage position
             if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 if(isOuttakePosition){
                     //storage position
@@ -67,20 +67,20 @@ public class MainTeleOp extends LinearOpMode {
                 else{
                     //outtake position
                     bot.fourbar.outtake();
-                    bot.box.depositFirstPixel();
-                    bot.box.depositSecondPixel();
                     isOuttakePosition=true;
-                    telemetry.addLine("Currently in outtake position and deposited two pixels");
+                    telemetry.addLine("Currently in outtake position");
+                    telemetry.update();
                 }
                 telemetry.update();
             }
 
-            //fourbar and box manual outtake: does not deposit (just goes to position)
+            //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.B)){
                 bot.fourbar.outtake();
+                bot.box.depositFirstPixel();
+                bot.box.depositSecondPixel();
                 isOuttakePosition=true;
-                telemetry.addLine("Currently in outtake position");
-                telemetry.update();
+                telemetry.addLine("Currently in outtake position and deposited two pixels");
             }
 
             //button just deposits pixel, resets after second pixel
