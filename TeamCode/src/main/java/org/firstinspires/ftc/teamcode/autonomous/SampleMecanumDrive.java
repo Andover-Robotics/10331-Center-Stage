@@ -38,11 +38,9 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import org.firstinspires.ftc.teamcode.autonomous.test.Encoder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.StandardTrackingWheelLocalizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,10 +78,12 @@ public class SampleMecanumDrive extends MecanumDrive {
     private VoltageSensor batteryVoltageSensor;
 
 
-    private Encoder leftFrontEncoder;
+    /*private Encoder leftFrontEncoder;
     private Encoder rightFrontEncoder;
     private Encoder leftRearEncoder;
     private Encoder rightRearEncoder;
+
+     */
 
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
@@ -119,10 +119,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear = hardwareMap.get(DcMotorEx.class, "br");
         rightFront = hardwareMap.get(DcMotorEx.class, "fr");
 
-        leftFrontEncoder= new Encoder(leftFront);
+      /*  leftFrontEncoder= new Encoder(leftFront);
         rightFrontEncoder= new Encoder(rightFront);
         leftRearEncoder= new Encoder(leftRear);
         rightRearEncoder= new Encoder(rightRear);
+
+       */
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -150,7 +152,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
         // TODO: if desired, use setLocalizer() to change the localization method
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+       // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -281,7 +283,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
         return wheelVelocities;
     }
-    //aaaaaaaa
+
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
         leftFront.setPower(v);
@@ -324,31 +326,4 @@ public class SampleMecanumDrive extends MecanumDrive {
         return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
-
-
-   /* public void rotateNinety(boolean isClockwise) {
-        double error = 90 - getCurrentAngle();
-        double proportionalGain=3.7;
-
-        if(!isClockwise){
-            proportionalGain=-3.7;
-        }
-
-        // Adjust motor speeds based on the proportional control
-        double correction = proportionalGain * error;
-
-        // Set motor speeds for mecanum drive
-        setMotorPowers(correction, correction, -correction, -correction);
-    }
-
-    private double getCurrentAngle() {
-
-        // Use the average of the four wheel encoders for heading calculation
-        return (leftFrontEncoder.getCurrentPosition() +
-                rightFrontEncoder.getCurrentPosition() +
-                leftRearEncoder.getCurrentPosition() +
-                rightRearEncoder.getCurrentPosition()) / 4.0;
-    }
-
-    */
 }

@@ -21,7 +21,7 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
     public static final int minimumWidth = 60;
     public static int width = 0;
-    private enum TeamProp{
+    public enum TeamProp{
         ONLEFT,
         ONRIGHT,
         MIDDLE,
@@ -31,8 +31,9 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
         BLUE,
         RED,
     }
-    public static org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp teamPropLocation= org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.NOTDETECTED;
-    public static org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.Alliance alliance = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.Alliance.BLUE;
+
+    private static TeamProp teamPropLocation= TeamProp.NOTDETECTED;
+    private static Alliance alliance = Alliance.BLUE;
 
 
     //have to change values
@@ -115,12 +116,12 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
                 // checks if contour is within boundaries of any rectangle (left, right, front)
 
                 if (midpointRect > rightRect.tl().x && midpointRect < rightRect.br().x) {
-                    teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.ONRIGHT;
+                    teamPropLocation = TeamProp.ONRIGHT;
                 } else if (midpointRect < frontRect.tl().x && midpointRect > frontRect.br().x){
-                    teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.MIDDLE;
+                    teamPropLocation = TeamProp.MIDDLE;
                 }
                 else{
-                    teamPropLocation = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.TeamProp.ONLEFT;
+                    teamPropLocation = TeamProp.ONLEFT;
                 }
 
             }
@@ -131,10 +132,10 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
     }
     public void setAlliance(int a){
         if(a==1){
-            org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.alliance = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.Alliance.RED;
+            alliance = Alliance.RED;
         }
         else{
-            org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.alliance = org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline.Alliance.BLUE;
+            alliance = Alliance.BLUE;
         }
     }
     public TeamProp getTeamPropLocation(){
