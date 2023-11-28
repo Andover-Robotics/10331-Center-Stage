@@ -56,9 +56,11 @@ Series of triangles- > increase DISTANCE
 7. Goal: poseVelocity should match targetVelocity
 
 Recommended Tuning Process:
-kV should initially be set to 1 / max velocity. The poseVelocity line should be touching the top of the targetVelocity plateau. If not, increase kV.
+kV should initially be set to 1 / max velocity.
+The poseVelocity line should be touching the top of the targetVelocity plateau.
+If not, increase kV.
 
-Increase kAto try and get the slope of the poseVelocity line to match targetVelocity.
+Increase kA to try and get the slope of the poseVelocity line to match targetVelocity.
  */
 
 //VERY IMPORTANT NOTE: Any changes made to kV, kStatic, and kA HAVE TO copied over to DriveConstants.java
