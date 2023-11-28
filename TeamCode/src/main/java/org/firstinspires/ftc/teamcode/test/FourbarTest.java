@@ -34,6 +34,28 @@ public class FourbarTest extends LinearOpMode {
                 bot.fourbar.outtake();
                 telemetry.addLine("Currently in outtake position");
             }
+
+
+/*
+            if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
+                bot.fourbar.incrementBoxAnglePosition();
+                telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
+            }
+            if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
+                bot.fourbar.decrementBoxAnglePosition();
+                telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
+            }
+            if (gp2.wasJustPressed(GamepadKeys.Button.X)) {
+                bot.fourbar.incrementFourbarPosition();
+                telemetry.addLine("Fourbar position is " + bot.fourbar.getFourbarPos());
+            }
+            if(gp2.wasJustPressed(GamepadKeys.Button.Y)) {
+                bot.fourbar.decrementFourbarPosition();
+                telemetry.addLine("Fourbar position is " + bot.fourbar.getFourbarPos());
+            }
+            telemetry.update();
+
+ */
         }
     }
 }

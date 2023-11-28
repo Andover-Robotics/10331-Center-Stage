@@ -90,9 +90,11 @@ public class MainTeleOp extends LinearOpMode {
             //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
                 bot.fourbar.outtake();
-                isOuttakePosition = true;
-                bot.box.depositFirstPixel();
-                bot.box.depositSecondPixel();
+                if(bot.fourbar.getIsOuttakePos()) {
+                    isOuttakePosition = true;
+                    bot.box.depositFirstPixel();
+                    bot.box.depositSecondPixel();
+                }
                 telemetry.addLine("Currently in outtake position and deposited two pixels");
             }
 

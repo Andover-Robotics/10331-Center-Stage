@@ -8,15 +8,17 @@ public class Fourbar {
     private final Servo angleBoxServo;
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.7;
-    private static double storageBox=0.3;
-    private static double outtake = 0.1;
-    public static double storage = 0.9;
+    private static double outtakeBox=0.5;
+
+    private static double boxAngleReadyForStorage=1.0;
+    private static double storageBox=0.2;
+    private static double outtake = 1.0;
+    public static double storage = 0.0;
     //storage position is GOOOOD
 
-    public static double fourbarPos=0.6;
+    public static double fourbarPos=1.0;
 
-    public static double boxInitialPos=0.6;
+    public static double boxInitialPos=0.5;
     public static boolean isOuttakePosition;
 
 
@@ -28,8 +30,9 @@ public class Fourbar {
     }
 
     public void outtake(){
-        angleBoxServo.setPosition(outtakeBox);
+     //   angleBoxServo.setPosition(boxAngleReadyForStorage);
         fourbar.setPosition(outtake);
+        angleBoxServo.setPosition(outtakeBox);
         isOuttakePosition = true;
     }
     public void outtakeTest(){
@@ -50,8 +53,9 @@ public class Fourbar {
     }
 
     public void storage(){
-        angleBoxServo.setPosition(storageBox);
+        angleBoxServo.setPosition(boxAngleReadyForStorage);
         fourbar.setPosition(storage);
+        angleBoxServo.setPosition(storageBox);
         isOuttakePosition = false;
     }
 

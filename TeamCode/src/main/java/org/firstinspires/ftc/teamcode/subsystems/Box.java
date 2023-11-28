@@ -19,8 +19,8 @@ public class Box {
   //  private final DigitalChannel breakbeamSensor;
     private boolean boxFull;
     //private int timesBroken;
-    private final double flapClosed = 1;
-    private final double flapOpen = 0;
+    private final double flapClosed = 0;
+    private final double flapOpen = 1;
 
     //boolean boxFull has to receive input from break beam sensor
 
@@ -34,7 +34,7 @@ public class Box {
 
     public void depositFirstPixel() {
         flapServo.setPosition(flapOpen);
-        runWheel(true);
+        wheelServo.setPower(0);
         numPixelsDeposited = 1;
     }
 
