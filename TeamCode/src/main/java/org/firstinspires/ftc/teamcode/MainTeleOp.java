@@ -115,16 +115,6 @@ public class MainTeleOp extends LinearOpMode {
             } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 bot.slides.runToMid();
             }
-
-            if (gp1.wasJustPressed(GamepadKeys.Button.B)){
-                bot.drone.shoot();
-                telemetry.addLine("Drone shooting");
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.A)){
-                bot.drone.reset();
-                telemetry.addLine("Drone resetting");
-            }
-
             bot.slides.periodic();
 
             telemetry.addData("box position", bot.fourbar.getBoxPos());
