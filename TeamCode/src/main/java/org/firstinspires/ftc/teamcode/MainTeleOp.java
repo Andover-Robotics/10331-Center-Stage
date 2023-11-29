@@ -32,23 +32,24 @@ public class MainTeleOp extends LinearOpMode {
             gp2.readButtons();
             telemetry.addLine("TeleOp has started");
 
-            //drivetrain movement
+            //drivetrain movement works
             drive();
 
-            //intake
+            //intake works
             if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
                 if(isIntake){
                     bot.stopIntake();
                     isIntake = false;
                     telemetry.addLine("Stopped Intaking");
                 }
-                else{
+                else {
                     bot.intake();
                     isIntake = true;
                     telemetry.addLine("Currently intaking");
                 }
                 telemetry.update();
             }
+            //consider doing while x is pressed
 
             //reverse intake
             if(gp2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)){
@@ -57,14 +58,14 @@ public class MainTeleOp extends LinearOpMode {
 
             //fourbar and box outtake/storage position
             if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
-                if(isOuttakePosition){
+                if(isOuttakePosition) {
                     //storage position
                     bot.box.resetBox();
                     bot.fourbar.storage();
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
                 }
-                else{
+                else {
                     //outtake position
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
@@ -72,15 +73,6 @@ public class MainTeleOp extends LinearOpMode {
                     telemetry.update();
                 }
                 telemetry.update();
-            }
-
-            //fourbar and box (automatic deposit): deposits both pixels at same time
-            if(gp2.wasJustPressed(GamepadKeys.Button.B)){
-                bot.fourbar.outtake();
-                bot.box.depositFirstPixel();
-                bot.box.depositSecondPixel();
-                isOuttakePosition=true;
-                telemetry.addLine("Currently in outtake position and deposited two pixels");
             }
 
             //button just deposits pixel, resets after second pixel
@@ -95,25 +87,27 @@ public class MainTeleOp extends LinearOpMode {
                 }
             }
 
+            //fourbar and box (automatic deposit): deposits both pixels at same time
+            if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
+                bot.fourbar.outtake();
+                if(bot.fourbar.getIsOuttakePos()) {
+                    isOuttakePosition = true;
+                    bot.box.depositFirstPixel();
+                    bot.box.depositSecondPixel();
+                }
+                telemetry.addLine("Currently in outtake position and deposited two pixels");
+            }
+
             //manual movement of slides
             runSlides(gp2.getLeftY());
 
             //slide movement to preset values
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToStorage();
-                //goes up
+                bot.slides.runToNextStageUp();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToTop();
-                //goes down
-            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                bot.slides.runToLow();
-
-            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                bot.slides.runToMid();
+                bot.slides.runToNextStageDown();
             }
-
-            //add drone code here after dronetest works
 
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 bot.drone.shoot();
@@ -123,7 +117,6 @@ public class MainTeleOp extends LinearOpMode {
                 bot.drone.reset();
                 telemetry.addLine("Drone resetting");
             }
-
 
             bot.slides.periodic();
 
@@ -152,11 +145,6 @@ public class MainTeleOp extends LinearOpMode {
 
 
     private void runSlides(double power) {
-        telemetry.addData("Gamepad Power", power);
-
-        telemetry.addData("Slide Power Given",bot.slides.getManualPower());
-
-        telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);
     }
 
