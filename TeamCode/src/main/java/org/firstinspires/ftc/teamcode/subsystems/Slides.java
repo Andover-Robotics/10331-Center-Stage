@@ -42,7 +42,6 @@ public class Slides {
     public Slides(OpMode opMode) {
         this.opMode = opMode;
         slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
-        slidesMotor.setInverted(false);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
         controller = new PIDFController(p,i,d,f);
@@ -69,22 +68,26 @@ public class Slides {
         current_pos = target;
     }
 
-    public void runToNextStageDown() {
+    public void runToTop() {
+        if(position.equals(slidesPosition.HIGH)) return;
         runTo(top);
         position = slidesPosition.HIGH;
     }
 
     public void runToMid() {
+        if(position.equals(slidesPosition.MID)) return;
         runTo(mid);
         position = slidesPosition.MID;
 
     }
 
     public void runToLow() {
+        if(position.equals(slidesPosition.LOW)) return;
         runTo(low);
         position = slidesPosition.LOW;
     }
-    public void runToNextStageUp() {
+    public void runToStorage() {
+        if(position.equals(slidesPosition.GROUND)) return;
         runTo(storage);
         position = slidesPosition.GROUND;
     }

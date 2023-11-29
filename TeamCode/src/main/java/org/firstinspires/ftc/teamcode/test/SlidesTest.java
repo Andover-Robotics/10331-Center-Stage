@@ -28,12 +28,17 @@ public class SlidesTest extends LinearOpMode {
 
             //dpad check
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToNextStageDown();
+                bot.slides.runToStorage();
                 //goes up
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToNextStageUp();
+                bot.slides.runToTop();
                 //goes down
+            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                bot.slides.runToLow();
+
+            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                bot.slides.runToMid();
             }
 
             /*
