@@ -21,7 +21,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Config
 @Autonomous(name = "MainAutonomous")
 
-public class MainAuto extends LinearOpMode{
+public class MainAuto extends LinearOpMode {
 
 
     Bot bot;
@@ -30,7 +30,7 @@ public class MainAuto extends LinearOpMode{
     enum Side {
         RED, BLUE,
     }
-    enum DistanceToBackdrop{
+    enum DistanceToBackdrop {
         CLOSE, FAR,
     }
 
@@ -66,13 +66,13 @@ public class MainAuto extends LinearOpMode{
 
         GamepadEx gp1 = new GamepadEx(gamepad1);
 
-       /* //different start positions depending on alliance and distance from backdrop
-        Pose2d startPoseBlueFar = new Pose2d(-52, 52, 0);
-        Pose2d startPoseBlueClose = new Pose2d(38, 56, Math.toRadians(-90));
-        Pose2d startPoseRedFar = new Pose2d(-52, -48, 0);
-        Pose2d startPoseRedClose = new Pose2d(10, -52, 0);
+       // different start positions depending on alliance and distance from backdrop
+        Pose2d startPoseBlueFar = new Pose2d(-36, 52, Math.toRadians(-90));
+        Pose2d startPoseBlueClose = new Pose2d(10, 56, Math.toRadians(-90));
+        Pose2d startPoseRedClose = new Pose2d(10, -52, Math.toRadians(90));
+        Pose2d startPoseRedFar = new Pose2d(-34, -48, Math.toRadians(90));
 
-        */
+
 
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
@@ -124,7 +124,7 @@ public class MainAuto extends LinearOpMode{
         //optimal outtakes on the backdrop
 
 
-        TrajectorySequence blueAllianceClose = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence blueAllianceClose = drive.trajectorySequenceBuilder(startPoseBlueClose)
                 .forward(20)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                 .waitSeconds(1.5)
@@ -138,7 +138,7 @@ public class MainAuto extends LinearOpMode{
                 .waitSeconds(1)
                 .build();
 
-        TrajectorySequence blueAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence blueAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseBlueClose)
                 .forward(20)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                 .waitSeconds(1.5)
@@ -154,7 +154,7 @@ public class MainAuto extends LinearOpMode{
                 .build();
 
 
-        TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
                 .forward(18)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                 .waitSeconds(1.5)
@@ -170,7 +170,7 @@ public class MainAuto extends LinearOpMode{
                 .build();
 
 
-        TrajectorySequence blueAllianceFar = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence blueAllianceFar = drive.trajectorySequenceBuilder(startPoseBlueFar)
                 .forward(18)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                 .waitSeconds(1.5)
@@ -185,34 +185,29 @@ public class MainAuto extends LinearOpMode{
                 .build();
 
 
-            TrajectorySequence redAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPose)
-                    .splineTo(new Vector2d(-34,-34), Math.toRadians(90))
-                    .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
-                    .waitSeconds(1.5)
-                    .forward(-10)
-                    .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                    .splineTo(scoreRed,Math.toRadians(180))
-                    .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+            TrajectorySequence redAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseRedFar)
+                    .forward(13)
+                    .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
                     .waitSeconds(1.5)
                     .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                    .splineTo(parkingPosRed,Math.toRadians(-90))
+                    .turn(Math.toRadians(-90))
+                    .forward(80)
+                    .strafeRight(25)
+                    .forward(10)
                     .build();
 
             TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPose)
-                    .splineTo(new Vector2d(15,-34),Math.toRadians(90))
-                    .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                    .forward(20)
+                    .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
                     .waitSeconds(1.5)
                     .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                    .splineTo(scoreRed,Math.toRadians(0))
-                    .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
-                    .waitSeconds(1.5)
-                    .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                    .splineTo(parkingPosRed,Math.toRadians(0))
+                    .turn(Math.toRadians(-90))
+                    .forward(36)
+                    .strafeRight(27)
+                    .forward(20)
                     .build();
 
-
-
-            TrajectorySequence redAllianceFar= drive.trajectorySequenceBuilder(startPose)
+            TrajectorySequence redAllianceFar= drive.trajectorySequenceBuilder(startPoseRedFar)
                     .splineTo(new Vector2d(-34,-34), Math.toRadians(90))
                     .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                     .waitSeconds(1.5)
