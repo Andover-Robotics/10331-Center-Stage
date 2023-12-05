@@ -67,6 +67,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 else {
                     //outtake position
+                    bot.box.secure();
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
                     telemetry.addLine("Currently in outtake position");
@@ -89,6 +90,7 @@ public class MainTeleOp extends LinearOpMode {
 
             //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
+                bot.box.secure();
                 bot.fourbar.outtake();
                 if(bot.fourbar.getIsOuttakePos()) {
                     isOuttakePosition = true;

@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
@@ -42,6 +38,11 @@ public class Box {
         flapServo.setPosition(flapOpen);
         runWheel(false);
         numPixelsDeposited = 2;
+    }
+    public void secure() throws InterruptedException {
+        wheelServo.setPower(-0.2);
+        wait(100);
+        wheelServo.setPower(0);
     }
 
 
