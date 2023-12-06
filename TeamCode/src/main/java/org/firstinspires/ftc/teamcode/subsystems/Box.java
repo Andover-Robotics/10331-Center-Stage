@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,17 +19,18 @@ public class Box {
     //private int timesBroken;
     private final double flapClosed = 0;
     private final double flapOpen = 1;
-    private ElapsedTime time;
+   // private ElapsedTime time;
 
     //boolean boxFull has to receive input from break beam sensor
 
     public Box(OpMode opMode) {
         wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
+        wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
         flapServo = opMode.hardwareMap.servo.get("flap servo");
        /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
         */
-        time = new ElapsedTime();
+       // time = new ElapsedTime();
     }
 
     public void depositFirstPixel() {
@@ -43,10 +45,8 @@ public class Box {
         numPixelsDeposited = 2;
     }
     public void secure() throws InterruptedException {
-        time.reset();
-        while(time.seconds() < 2) {
-            wheelServo.setPower(-0.2);
-        }
+        //time.reset();
+        wheelServo.setPower(-0.2);
         wheelServo.setPower(0);
     }
 
