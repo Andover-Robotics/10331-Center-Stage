@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 //link to intake, comment out breakbeam sensor
@@ -17,6 +18,7 @@ public class Box {
     //private int timesBroken;
     private final double flapClosed = 0;
     private final double flapOpen = 1;
+    private ElapsedTime time;
 
     //boolean boxFull has to receive input from break beam sensor
 
@@ -26,6 +28,7 @@ public class Box {
        /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
         */
+        time = new ElapsedTime();
     }
 
     public void depositFirstPixel() {
@@ -40,8 +43,10 @@ public class Box {
         numPixelsDeposited = 2;
     }
     public void secure() throws InterruptedException {
-        wheelServo.setPower(-0.2);
-        wait(100);
+        time.reset();
+        while(time.seconds() < 2) {
+            wheelServo.setPower(-0.2);
+        }
         wheelServo.setPower(0);
     }
 
