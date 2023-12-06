@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
+
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
@@ -42,6 +41,7 @@ public class Slides {
     public Slides(OpMode opMode) {
         this.opMode = opMode;
         slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
+        slidesMotor.setInverted(false);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
         controller = new PIDFController(p,i,d,f);
@@ -68,26 +68,22 @@ public class Slides {
         current_pos = target;
     }
 
-    public void runToTop() {
-        if(position.equals(slidesPosition.HIGH)) return;
+    public void runToNextStageDown() {
         runTo(top);
         position = slidesPosition.HIGH;
     }
 
     public void runToMid() {
-        if(position.equals(slidesPosition.MID)) return;
         runTo(mid);
         position = slidesPosition.MID;
 
     }
 
     public void runToLow() {
-        if(position.equals(slidesPosition.LOW)) return;
         runTo(low);
         position = slidesPosition.LOW;
     }
-    public void runToStorage() {
-        if(position.equals(slidesPosition.GROUND)) return;
+    public void runToNextStageUp() {
         runTo(storage);
         position = slidesPosition.GROUND;
     }
@@ -139,13 +135,13 @@ public class Slides {
             } else
                 slidesMotor.set(0);
 
-                //pls work bro :praying:
+            //pls work bro :praying:
                 /*
                 power = staticF * controller.calculate(slidesMotor.getCurrentPosition());
                 slidesMotor.set(power);
                  */
-                //THIS IS WHY it's going back to original position after we let go of the joystick
-                //the setPoint was set to the position BEFORE it moved manually.
+            //THIS IS WHY it's going back to original position after we let go of the joystick
+            //the setPoint was set to the position BEFORE it moved manually.
 
                 /*
                 if (power < Math.abs(0.1)) slidesMotor.set(0);
@@ -157,9 +153,9 @@ public class Slides {
     public void operateSlides() {
         if(position.equals(slidesPosition.GROUND)) {
             slidesMotor.setTargetPosition(slidesMotor.getCurrentPosition() + encoderTickPerLevel);
-        //    slidesMotor.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //    slidesMotor.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
             //last resort: convert motor back to DcMotorEx and try using this method
-          //  slidesMotor.setPower(0.5);
+            //  slidesMotor.setPower(0.5);
         }
         //else if(position.equals(slidesPosition.LOW))
     }
