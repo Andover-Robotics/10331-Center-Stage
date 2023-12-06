@@ -26,6 +26,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
         waitForStart();
+        bot.reverseMotors();
 
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -136,6 +137,7 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void drive() {
+        gp1.readButtons();
 
         driveSpeed = 1;
 
@@ -147,14 +149,15 @@ public class MainTeleOp extends LinearOpMode {
                         gp1.getRightX(), 0);
 
         bot.driveRobotCentric(-driveVector.getX() * driveSpeed,
-                -driveVector.getY() * driveSpeed,
+                driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
         );
     }
-
-
     private void runSlides(double power) {
         bot.slides.runToManual(power);
     }
-
 }
+
+
+
+

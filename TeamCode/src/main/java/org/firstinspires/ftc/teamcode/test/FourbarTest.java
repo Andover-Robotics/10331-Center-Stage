@@ -26,6 +26,8 @@ public class FourbarTest extends LinearOpMode {
             gp2.readButtons();
             telemetry.update();
 
+
+            /*
             if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 bot.fourbar.storage();
                 telemetry.addLine("Currently in storage position");
@@ -35,8 +37,10 @@ public class FourbarTest extends LinearOpMode {
                 telemetry.addLine("Currently in outtake position");
             }
 
+             */
 
-/*
+
+
             if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 bot.fourbar.incrementBoxAnglePosition();
                 telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
@@ -55,7 +59,6 @@ public class FourbarTest extends LinearOpMode {
             }
             telemetry.update();
 
- */
         }
     }
 }

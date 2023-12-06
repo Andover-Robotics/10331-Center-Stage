@@ -19,7 +19,7 @@ public class Box {
     //private int timesBroken;
     private final double flapClosed = 0;
     private final double flapOpen = 1;
-   // private ElapsedTime time;
+   private ElapsedTime time;
 
     //boolean boxFull has to receive input from break beam sensor
 
@@ -30,7 +30,7 @@ public class Box {
        /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
         */
-       // time = new ElapsedTime();
+        time = new ElapsedTime();
     }
 
     public void depositFirstPixel() {
@@ -41,12 +41,13 @@ public class Box {
 
     public void depositSecondPixel() {
         flapServo.setPosition(flapOpen);
-        runWheel(false);
+        runWheel(true);
         numPixelsDeposited = 2;
     }
-    public void secure() throws InterruptedException {
-        //time.reset();
-        wheelServo.setPower(-0.2);
+    public void secure() {
+        time.reset();
+        while(time.seconds() < 2)
+            wheelServo.setPower(-0.2);
         wheelServo.setPower(0);
     }
 
