@@ -13,7 +13,7 @@ public class Box {
     private final CRServo wheelServo;
     private final Servo flapServo;
 
-    private int numPixelsDeposited;
+    private int numPixelsDeposited=0;
   //  private final DigitalChannel breakbeamSensor;
     private boolean boxFull;
     //private int timesBroken;
@@ -35,26 +35,32 @@ public class Box {
 
     public void depositFirstPixel() {
         flapServo.setPosition(flapOpen);
-        wheelServo.setPower(0);
+       // runWheel(true);
         numPixelsDeposited = 1;
     }
 
     public void depositSecondPixel() {
         flapServo.setPosition(flapOpen);
-        runWheel(true);
-        numPixelsDeposited = 2;
+        runWheel(false);
+        numPixelsDeposited = 0;
     }
     public void secure() {
         time.reset();
-        while(time.seconds() < 2)
-            wheelServo.setPower(-0.2);
+        while(time.seconds() < 0.5) {
+            runWheel(true);
+        }
         wheelServo.setPower(0);
     }
 
 
     public void runWheel(boolean isHolding) {
-        if(!isHolding) wheelServo.setPower(1);
-        else wheelServo.setPower(-1);
+        wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        if(!isHolding){
+            wheelServo.setPower(1);
+        }
+        else {
+            wheelServo.setPower(-1);
+        }
     }
 
     //wheel spins in reverse to keep the pixel from falling out

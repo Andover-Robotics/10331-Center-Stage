@@ -22,10 +22,10 @@ public class Noodles {
     }
 
     public void intake(){
-      counterRoller.setDirection(CRServo.Direction.FORWARD);
+        counterRoller.setDirection(CRServo.Direction.FORWARD);
         noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
         noodleMotor.setPower(1);
-     counterRoller.setPower(1);
+       counterRoller.setPower(1);
         isIntake=true;
     }
 

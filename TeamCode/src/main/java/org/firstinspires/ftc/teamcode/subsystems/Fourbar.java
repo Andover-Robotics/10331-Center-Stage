@@ -11,10 +11,10 @@ public class Fourbar {
     private static double outtakeBox=0.5;
 
     private static double boxAngleReadyForStorage=1.0;
-    private static double storageBox=0.2;
+    private static double storageBox=0.1;
     private static double outtake = 1.0;
-    public static double storage = 0.0;
-    //storage position is GOOOOD
+    public static double storage = 0.1;
+    //storage position is 0,1
 
     public static double fourbarPos=1.0;
 

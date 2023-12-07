@@ -229,7 +229,7 @@ public class BotTest {
         noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToStorage();
+        slides.runToLow();
         fourbar.storage();
         box.resetBox();
     }

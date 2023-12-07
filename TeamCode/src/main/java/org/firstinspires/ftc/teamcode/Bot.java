@@ -228,7 +228,7 @@ public class Bot {
         noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToStorage();
+        slides.runToLow();
         fourbar.storage();
         box.resetBox();
     }
@@ -238,24 +238,16 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
-
-
-    public void intake(double power){
-        currentState = BotState.INTAKE;
-        noodles.intake(power);
-        if(power<=0.1){
-            noodles.stop();
-        }
-    }
     public void intake(){
         currentState = BotState.INTAKE;
+        //box.resetBox();
+        box.runWheel(false);
         noodles.intake();
-        box.runWheel(true);
     }
     public void stopIntake(){
         currentState = BotState.STORAGE_FULL;
-        noodles.stop();
         box.secure();
+        noodles.stop();
     }
 
 

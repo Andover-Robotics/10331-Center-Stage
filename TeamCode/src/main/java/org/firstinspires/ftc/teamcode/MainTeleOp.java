@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class MainTeleOp extends LinearOpMode {
@@ -12,8 +13,10 @@ public class MainTeleOp extends LinearOpMode {
     private double driveSpeed = 1;
     private GamepadEx gp1;
     private GamepadEx gp2;
-    public boolean isIntake=false;
+    public boolean isIntake=true;
     public boolean isOuttakePosition=false;
+
+    private ElapsedTime time = new ElapsedTime();
 
 
     @Override
@@ -41,12 +44,13 @@ public class MainTeleOp extends LinearOpMode {
                 if(isIntake){
                     bot.stopIntake();
                     isIntake = false;
-                    telemetry.addLine("Stopped Intaking");
+                    telemetry.addData("Stopped Intaking", isIntake);
                 }
                 else {
+                    bot.box.resetBox();
                     bot.intake();
                     isIntake = true;
-                    telemetry.addLine("Currently intaking");
+                    telemetry.addData("Currently Intaking", isIntake);
                 }
                 telemetry.update();
             }
@@ -67,8 +71,11 @@ public class MainTeleOp extends LinearOpMode {
                     telemetry.addLine("Currently in storage position");
                 }
                 else {
+                    if(isIntake){
+                        isIntake = false;
+                        bot.stopIntake();
+                    }
                     //outtake position
-                    bot.box.secure();
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
                     telemetry.addLine("Currently in outtake position");
@@ -91,11 +98,18 @@ public class MainTeleOp extends LinearOpMode {
 
             //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
-                bot.box.secure();
+                time.reset();
                 bot.fourbar.outtake();
                 if(bot.fourbar.getIsOuttakePos()) {
+                    if(isIntake){
+                        isIntake = false;
+                        bot.stopIntake();
+                    }
+                    while(time.seconds() < 2) {
+                        telemetry.addData("waiting...", time.seconds());
+                        telemetry.update();
+                    }
                     isOuttakePosition = true;
-                    bot.box.depositFirstPixel();
                     bot.box.depositSecondPixel();
                 }
                 telemetry.addLine("Currently in outtake position and deposited two pixels");
@@ -105,7 +119,7 @@ public class MainTeleOp extends LinearOpMode {
             runSlides(gp2.getLeftY());
 
             //slide movement to preset values
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+          /*  if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
                 bot.slides.runToStorage();
                 //goes up
             }
@@ -118,6 +132,16 @@ public class MainTeleOp extends LinearOpMode {
             } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 bot.slides.runToMid();
             }
+
+           */
+
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                bot.slides.runToNextStageUp();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                bot.slides.runToNextStageDown();
+            }
+
 
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 bot.drone.shoot();
