@@ -19,6 +19,7 @@ public class SlidesTest extends LinearOpMode {
         gp2 = new GamepadEx(gamepad2);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         bot.slides.resetEncoder();
+        bot.slides.runToStorage();
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -27,24 +28,23 @@ public class SlidesTest extends LinearOpMode {
             telemetry.update();
 
             //dpad check
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToNextStageUp();
-                //goes up
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                bot.slides.periodic();
+                bot.slides.runToTop();
+                //dont question why the commands seem upside down... idk why
             }
-            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToNextStageDown();
-                //goes down
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                bot.slides.periodic();
+                bot.slides.runToStorage();
             }
-
-            /*
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                bot.slides.periodic();
                 bot.slides.runToLow();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                //change to System.getCurrentTimeMillis if this is buggy
+                bot.slides.periodic();
                 bot.slides.runToMid();
             }
-             */
 
             bot.slides.periodic();
         }
@@ -55,7 +55,8 @@ public class SlidesTest extends LinearOpMode {
         telemetry.addData("Gamepad Power", power);
         telemetry.addData("Slide Power Given",bot.slides.getManualPower());
         telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
-
+        bot.slides.periodic();
         bot.slides.runToManual(power);
+
     }
 }

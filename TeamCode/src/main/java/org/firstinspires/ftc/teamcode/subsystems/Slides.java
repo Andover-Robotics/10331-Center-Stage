@@ -20,7 +20,7 @@ public class Slides {
     public boolean goingDown;
     private final double MIN_POWER = 0.1;
 
-    public static final double MAX_VELOCITY = 30000, MAX_ACCELERATION = 20000;
+    public static final double MAX_VELOCITY = 500, MAX_ACCELERATION = 500;
     //tune
     private PIDFController controller;
     private MotionProfiler profiler;
@@ -34,7 +34,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 0, top = 3250, mid = 1700, low = 450;
+    public static int storage = 0, top = 1500, mid = 1000, low = 450;
     //tune
 
     private final OpMode opMode;
@@ -42,7 +42,7 @@ public class Slides {
     public Slides(OpMode opMode) {
         this.opMode = opMode;
         slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
-        slidesMotor.setInverted(false);
+        slidesMotor.setInverted(true);
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
 
         controller = new PIDFController(p,i,d,f);
@@ -67,9 +67,16 @@ public class Slides {
         //goingDown =  targetPoint > target;
         goingDown =  target > current_pos;
         current_pos = target;
+        if(current_pos<storage){
+            current_pos=storage;
+        }
+        if(current_pos>top){
+            current_pos=top;
+        }
+
     }
 
-    public void runToNextStageDown() {
+    public void runToTop() {
         runTo(top);
         position = slidesPosition.HIGH;
     }
@@ -84,7 +91,7 @@ public class Slides {
         runTo(low);
         position = slidesPosition.LOW;
     }
-    public void runToNextStageUp() {
+    public void runToStorage() {
         runTo(storage);
         position = slidesPosition.GROUND;
     }
@@ -104,6 +111,7 @@ public class Slides {
     }
 
     public void periodic() {
+        slidesMotor.setInverted(true);
         slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
@@ -126,15 +134,25 @@ public class Slides {
          */
 
         else {
-            if (profiler.isDone()) resetProfiler();
+            if (profiler.isDone()) {
+                profiler = new MotionProfiler(MAX_VELOCITY, MAX_ACCELERATION);
+            }
             //if we aren't using manual power, but the profile just ended, we should create a new motionprofiler obj to
             //erase previous trajectory data
 
             if (manualPower != 0) {
-                //controller.setSetPoint(slidesMotor.getCurrentPosition());
+                controller.setSetPoint(slidesMotor.getCurrentPosition());
                 slidesMotor.set(manualPower / manualDivide);
-            } else
-                slidesMotor.set(0);
+            } else {
+                power = staticF * controller.calculate(slidesMotor.getCurrentPosition());
+                slidesMotor.set(power);
+              //   slidesMotor.set(0);
+                if (power < Math.abs(0.1)) {
+                    slidesMotor.set(0);
+                } else {
+                    slidesMotor.set(power);
+                }
+            }
 
             //pls work bro :praying:
                 /*
