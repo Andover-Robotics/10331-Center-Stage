@@ -18,7 +18,7 @@ public class Box {
     private boolean boxFull;
     //private int timesBroken;
     private final double flapClosed = 0;
-    private final double flapOpen = 1;
+    private final double flapOpen = 0.5;
    private ElapsedTime time;
 
     //boolean boxFull has to receive input from break beam sensor

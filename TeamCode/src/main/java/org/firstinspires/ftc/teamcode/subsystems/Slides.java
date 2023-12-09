@@ -146,7 +146,7 @@ public class Slides {
             } else {
                 power = staticF * controller.calculate(slidesMotor.getCurrentPosition());
                 slidesMotor.set(power);
-              //   slidesMotor.set(0);
+                //   slidesMotor.set(0);
                 if (power < Math.abs(0.1)) {
                     slidesMotor.set(0);
                 } else {

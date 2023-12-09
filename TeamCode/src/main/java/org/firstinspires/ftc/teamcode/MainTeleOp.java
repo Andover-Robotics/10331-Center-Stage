@@ -13,7 +13,7 @@ public class MainTeleOp extends LinearOpMode {
     private double driveSpeed = 1;
     private GamepadEx gp1;
     private GamepadEx gp2;
-    public boolean isIntake=true;
+    public boolean isIntake=false;
     public boolean isOuttakePosition=false;
 
     private ElapsedTime time = new ElapsedTime();
@@ -38,6 +38,10 @@ public class MainTeleOp extends LinearOpMode {
 
             //drivetrain movement works
             drive();
+
+            if(gp1.wasJustPressed(GamepadKeys.Button.START)) {
+                bot.resetEverything();
+            }
 
             //intake works
             if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
@@ -67,6 +71,7 @@ public class MainTeleOp extends LinearOpMode {
                     //storage position
                     bot.box.resetBox();
                     bot.fourbar.storage();
+                    bot.noodles.intake(10);
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
                 }
@@ -172,7 +177,7 @@ public class MainTeleOp extends LinearOpMode {
 
         driveSpeed = 1;
 
-        driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+        driveSpeed *= 1 - 0.9 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
 
         Vector2d driveVector = new Vector2d(gp1.getLeftX(), -gp1.getLeftY()),

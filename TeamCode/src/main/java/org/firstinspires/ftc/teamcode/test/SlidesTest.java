@@ -29,22 +29,23 @@ public class SlidesTest extends LinearOpMode {
 
             //dpad check
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.periodic();
+             //   bot.slides.periodic();
                 bot.slides.runToTop();
                 //dont question why the commands seem upside down... idk why
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.periodic();
+             //   bot.slides.periodic();
                 bot.slides.runToStorage();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                bot.slides.periodic();
+              //  bot.slides.periodic();
                 bot.slides.runToLow();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                bot.slides.periodic();
+               // bot.slides.periodic();
                 bot.slides.runToMid();
             }
+
 
             bot.slides.periodic();
         }
