@@ -120,6 +120,15 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addLine("Currently in outtake position and deposited two pixels");
             }
 
+            if(gp2.wasJustPressed(GamepadKeys.Button.START)){
+                bot.noodles.reverseIntake();
+                time.reset();
+                while(time.seconds() < 5) {
+                    bot.box.runWheel(true);
+                }
+                bot.box.runWheel(false);
+            }
+
             //manual movement of slides
             runSlides(gp2.getLeftY());
 
