@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
-import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
+
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -14,11 +14,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.util.AprilTagsDetection;
 
 
-public class Bot {
+public class BotTest {
 
-    public enum BotState {
+    public enum BotTestState {
         INTAKE, // surgical tubing ready to pick up pixel
         STORAGE_FULL, // 2 pixels in storage
         STORAGE_NOT_FULL, //1 or 0 pixels in storage
@@ -26,23 +27,23 @@ public class Bot {
     }
 
     public OpMode opMode;
-    public BotState currentState = STORAGE_NOT_FULL;
-    public static Bot instance;
+    public BotTestState currentState = BotTestState.STORAGE_NOT_FULL;
+    public static BotTest instance;
 
     //public OpenCvCamera camera;
-    // public AprilTagsPipeline aprilTagsPipeline;
+   // public AprilTagsPipeline aprilTagsPipeline;
 
-    // public static AprilTagsDetection detections;
+    public static AprilTagsDetection detections;
 
-    public Slides slides;
-    public Fourbar fourbar;
+      public Slides slides;
+      public Fourbar fourbar;
 
-    public Noodles noodles;
-    public Drone drone;
+      public Noodles noodles;
+      public Drone drone;
 
-    public Box box;
+      public Box box;
 
-    // public static DistanceSensor distanceSensor;
+   // public static DistanceSensor distanceSensor;
 
     private final DcMotorEx FL, FR, BL, BR;
 
@@ -52,22 +53,22 @@ public class Bot {
     private final double optimalDistanceFromBackdrop = 10;
     //arbitrary number for now
 
-    public static Bot getInstance() {
+    public static BotTest getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("tried to getInstance of Bot when uninitialized");
+            throw new IllegalStateException("tried to getInstance of BotTest when uninitialized");
         }
         return instance;
     }
 
-    public static Bot getInstance(OpMode opMode) {
+    public static BotTest getInstance(OpMode opMode) {
         if (instance == null) {
-            return instance = new Bot(opMode);
+            return instance = new BotTest(opMode);
         }
         instance.opMode = opMode;
         return instance;
     }
 
-    private Bot(OpMode opMode) {
+    private BotTest(OpMode opMode) {
         this.opMode = opMode;
         enableAutoBulkRead();
         //what is this
@@ -83,12 +84,9 @@ public class Bot {
         BL = opMode.hardwareMap.get(DcMotorEx.class, "bl");
         BR = opMode.hardwareMap.get(DcMotorEx.class, "br");
 
-        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        // distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
+
+       // distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
 
         FL.setMode(RUN_USING_ENCODER);
@@ -231,7 +229,7 @@ public class Bot {
         noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToLow();
+        slides.runToStorage();
         fourbar.storage();
         box.resetBox();
     }
@@ -241,16 +239,24 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
+
+
+    public void intake(double power){
+        currentState = BotTestState.INTAKE;
+        noodles.intake(power);
+        if(power<=0.1){
+            noodles.stop();
+        }
+    }
     public void intake(){
-        currentState = BotState.INTAKE;
-        //box.resetBox();
-        box.runWheel(false);
+        currentState = BotTestState.INTAKE;
         noodles.intake();
+       // box.runWheel(false);
     }
     public void stopIntake(){
-        currentState = BotState.STORAGE_FULL;
-        box.secure();
+        currentState = BotTestState.STORAGE_FULL;
         noodles.stop();
+      //  box.runWheel(true);
     }
 
 
@@ -267,7 +273,7 @@ public class Bot {
     */
 
     public void outtakeSlides(double target){
-        currentState = BotState.OUTTAKE;
+        currentState = BotTestState.OUTTAKE;
         slides.runTo(target);
     }
 
@@ -302,7 +308,7 @@ public class Bot {
         }
         if(power<0){
             //turn left
-            //  FR.setPower(-power);
+          //  FR.setPower(-power);
         }
     }
     public void strafeRight(){
@@ -389,7 +395,7 @@ public class Bot {
     }
 
     */
-/*
+
     public void aprilTagTuning(){
         AprilTagsDetection.detectTag();
         distanceFromBackdrop = detections.calcDistToTag();
@@ -407,7 +413,7 @@ public class Bot {
         }
     }
 
- */
+ 
 
 
 }

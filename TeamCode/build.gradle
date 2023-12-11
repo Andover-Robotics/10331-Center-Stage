@@ -17,14 +17,9 @@ apply from: '../build.dependencies.gradle'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
-    androidResources {
-        noCompress 'tflite'
-    }
+
 
     packagingOptions {
-        jniLibs {
-            pickFirsts += ['**/*.so']
-        }
         jniLibs.useLegacyPackaging true
     }
 }
@@ -32,7 +27,8 @@ android {
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
-
+    implementation 'org.openftc:easyopencv:1.7.0'
+    implementation 'org.openftc:apriltag:2.0.0'
 }
 dependencies {
     implementation 'org.ftclib.ftclib:core:2.1.1'
@@ -49,6 +45,5 @@ dependencies {
     implementation 'org.ftclib.ftclib:core:2.1.1'
     // the following is optional if you want vision
     implementation 'org.ftclib.ftclib:vision:2.1.0'
-    implementation 'com.acmerobotics.roadrunner:core:0.5.6'
-}
 
+}
