@@ -422,7 +422,7 @@ public class MainAuto extends LinearOpMode {
         //based on where team prop is, move to the corresponding position on the backdrop
 
         try{
-            if(teamPropLocation== TeamProp.ONLEFT){
+            if(prop== TeamProp.ONLEFT){
                 //keep strafing left until robot detects AprilTag or if you have run loop over 5 times
                 while(AprilTagsDetection.tagOfInterest.id!= 1 && counter<5){
                     AprilTagsDetection.detectTag();
@@ -433,7 +433,7 @@ public class MainAuto extends LinearOpMode {
                     }
                 }
             }
-            else if(teamPropLocation== TeamProp.ONRIGHT){
+            else if(prop== TeamProp.ONRIGHT){
 
                 while(AprilTagsDetection.tagOfInterest.id!=3 && counter<5){
                     AprilTagsDetection.detectTag();
@@ -443,7 +443,7 @@ public class MainAuto extends LinearOpMode {
                         throw new AprilTagException("april tag could not be located");
                     }
                 }
-            }else if(teamPropLocation != TeamProp.NOTDETECTED){
+            }else if(prop != TeamProp.NOTDETECTED){
                 throw new PropException("the prop wasn't detected");
             }
             bot.outtake(1,true);
