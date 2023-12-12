@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bot;
@@ -44,6 +45,7 @@ public class MainAuto extends LinearOpMode {
     DistanceToBackdrop dtb= DistanceToBackdrop.CLOSE;
     AutoPath autopath = AutoPath.OPTIMAL;
     TeamPropDetectionPipeline.TeamProp prop;
+    private ElapsedTime time = new ElapsedTime();
 
 
     public static double fx = 1078.03779;
@@ -231,7 +233,7 @@ public class MainAuto extends LinearOpMode {
                     .splineTo(parkingPosRed, Math.toRadians(0))
                     .build();
 
-   /*         TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
+            TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
                     .splineTo(new Vector2d(15,-34), Math.toRadians(90))
                     .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                     .waitSeconds(1.5)
@@ -277,7 +279,6 @@ public class MainAuto extends LinearOpMode {
                     .splineTo(parkingPosRed, Math.toRadians(-90))
                     .build();
 
-    */
 
 
 
@@ -401,6 +402,11 @@ public class MainAuto extends LinearOpMode {
 
     private void stageScore(){
         bot.noodles.reverseIntake();
+        time.reset();
+        while(time.seconds() < 5) {
+            bot.box.runWheel(true);
+        }
+        bot.box.runWheel(false);
         telemetry.addData("Scoring in stage area should occur right now",".");
         telemetry.update();
     }

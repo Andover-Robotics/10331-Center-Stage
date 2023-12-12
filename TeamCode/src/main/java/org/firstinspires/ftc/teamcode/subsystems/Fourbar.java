@@ -8,15 +8,17 @@ public class Fourbar {
     private final Servo angleBoxServo;
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.7;
-    private static double storageBox=0.3;
-    private static double outtake = 0.1;
-    public static double storage = 0.9;
-    //storage position is GOOOOD
+    private static double outtakeBox=0.67;
 
-    public static double fourbarPos=0.6;
+    private static double boxAngleReadyForStorage=1.0;
+    private static double storageBox=0.37;
+    private static double outtake = 0.819;
+    public static double storage = 0.1;
+    //storage position is 0,1
 
-    public static double boxInitialPos=0.6;
+    public static double fourbarPos=1.0;
+
+    public static double boxInitialPos=0.5;
     public static boolean isOuttakePosition;
 
 
@@ -28,8 +30,8 @@ public class Fourbar {
     }
 
     public void outtake(){
-        angleBoxServo.setPosition(outtakeBox);
         fourbar.setPosition(outtake);
+        angleBoxServo.setPosition(outtakeBox);
         isOuttakePosition = true;
     }
     public void outtakeTest(){
@@ -50,8 +52,9 @@ public class Fourbar {
     }
 
     public void storage(){
-        angleBoxServo.setPosition(storageBox);
+        angleBoxServo.setPosition(boxAngleReadyForStorage);
         fourbar.setPosition(storage);
+        angleBoxServo.setPosition(storageBox);
         isOuttakePosition = false;
     }
 
@@ -66,28 +69,28 @@ public class Fourbar {
         fourbar.setPosition(position);
     }
     public void incrementBoxAnglePosition(){
-        boxInitialPos+=0.1;
+        boxInitialPos+=0.01;
         if(boxInitialPos>=1){
             boxInitialPos=1;
         }
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void decrementBoxAnglePosition(){
-        boxInitialPos-=0.1;
+        boxInitialPos-=0.01;
         if(boxInitialPos<=0){
             boxInitialPos=0;
         }
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void incrementFourbarPosition(){
-        fourbarPos+=0.1;
+        fourbarPos+=0.01;
         if(fourbarPos>=1){
             fourbarPos=1;
         }
         fourbar.setPosition(fourbarPos);
     }
     public void decrementFourbarPosition(){
-        fourbarPos-=0.1;
+        fourbarPos-=0.01;
         if(fourbarPos<=0){
             fourbarPos=0;
         }
