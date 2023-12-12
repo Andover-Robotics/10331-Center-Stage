@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.util.AprilTagsPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
 
 
 public class Bot {
@@ -29,10 +31,10 @@ public class Bot {
     public BotState currentState = STORAGE_NOT_FULL;
     public static Bot instance;
 
-    //public OpenCvCamera camera;
-    // public AprilTagsPipeline aprilTagsPipeline;
+    public OpenCvCamera camera;
+    public AprilTagsPipeline aprilTagsPipeline;
 
-    // public static AprilTagsDetection detections;
+   // public static AprilTagsDetection detections;
 
     public Slides slides;
     public Fourbar fourbar;
@@ -70,7 +72,6 @@ public class Bot {
     private Bot(OpMode opMode) {
         this.opMode = opMode;
         enableAutoBulkRead();
-        //what is this
         try {
             fieldCentricRunMode = false;
         } catch (Exception e) {
@@ -106,25 +107,7 @@ public class Bot {
 
 
 
-    /*
 
-    public void prepForOuttake() {
-        currentState = BotState.STORAGE_FULL;
-        resetOuttake();
-    }
-
-    // must be combined with bot.slide.run___() in MainTeleOp
-    public void outtake(int stage, boolean pixelTwo) {
-        currentState = BotState.OUTTAKE;
-        aprilTagTuning();
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
 
     public void outtake(boolean pixelTwo, int stage){
         currentState = BotState.OUTTAKE;
@@ -148,21 +131,6 @@ public class Bot {
         fourbar.storage();
     }
 
-
-*/
-    public void fixMotors(double velocity) {
-     /*   FL.setDirection(DcMotorEx.Direction.REVERSE);
-        FR.setVelocity(velocity);
-        BL.setDirection(DcMotorEx.Direction.REVERSE);
-        BR.setVelocity(velocity);
-
-        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-      */
-    }
 
     public void reverseMotors(){
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -190,42 +158,6 @@ public class Bot {
         BR.setPower(speeds[3]);
 
     }
-    /*
-
-    //cope no one uses field centric
-    public void driveFieldCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed, double heading) {
-        double magnitude = Math.sqrt(strafeSpeed * strafeSpeed + forwardBackSpeed * forwardBackSpeed);
-        double theta = (Math.atan2(forwardBackSpeed, strafeSpeed) - heading) % (2 * Math.PI);
-        double[] speeds = {
-                magnitude * Math.sin(theta + Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) - turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta + Math.PI / 4) - turnSpeed
-        };
-
-        double maxSpeed = 0;
-
-        for (int i = 0; i < 4; i++) {
-            maxSpeed = Math.max(maxSpeed, speeds[i]);
-        }
-
-        if (maxSpeed > 1) {
-            for (int i = 0; i < 4; i++) {
-                speeds[i] /= maxSpeed;
-            }
-        }
-
-        //        for (int i = 0; i < 4; i++) {
-        //            driveTrainMotors[i].set(speeds[i]);
-        //        }
-        // manually invert the left side
-
-        FL.setPower(speeds[0]);
-        FR.setPower(speeds[1]);
-        BL.setPower(speeds[2]);
-        BR.setPower(speeds[3]);
-    }
-    */
 
     public void resetEverything(){
         noodles.stop();
@@ -254,29 +186,6 @@ public class Bot {
     }
 
 
-   /* public void outtakeBox(){
-        currentState = BotState.OUTTAKE;
-        if(box.getNumPixelsDeposited() == 0){
-            box.depositFirstPixel();
-        }else if(box.getNumPixelsDeposited()==1){
-            box.depositSecondPixel();
-            box.resetBox();
-        }
-    }
-
-    */
-
-    public void outtakeSlides(double target){
-        currentState = BotState.OUTTAKE;
-        slides.runTo(target);
-    }
-
-    public void outtakeFourbar(double input){
-        if(!fourbar.getIsOuttakePos()){
-            fourbar.runManualOuttake(input);
-        }
-    }
-
 
 
 
@@ -291,82 +200,6 @@ public class Bot {
 
 
 
-    public void resetProfiler() {
-        slides.resetProfiler();
-
-    }
-    public void turn(double power){
-        if(power>0) {
-            //turn right
-            //FL.setPower(power);
-        }
-        if(power<0){
-            //turn left
-            //  FR.setPower(-power);
-        }
-    }
-    public void strafeRight(){
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setPower(0);
-        FR.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-
-    }
-    public void strafeLeft(){
-
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
-        FR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setPower(0);
-        FR.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-
-
-    }
-    public void back(){
-        /*
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
-        FR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setPower(0);
-        FR.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-
-         */
-
-    }
-    public void forward(){
-     /*   FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-
-      */
-    }
 
 
    /* public void distanceTuning(DistanceSensor sensor){

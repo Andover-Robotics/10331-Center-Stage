@@ -14,28 +14,20 @@ public class Box {
     private final Servo flapServo;
 
     private int numPixelsDeposited=0;
-  //  private final DigitalChannel breakbeamSensor;
     private boolean boxFull;
-    //private int timesBroken;
     private final double flapClosed = 0;
     private final double flapOpen = 0.5;
    private ElapsedTime time;
-
-    //boolean boxFull has to receive input from break beam sensor
 
     public Box(OpMode opMode) {
         wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
         wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
         flapServo = opMode.hardwareMap.servo.get("flap servo");
-       /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
-        breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
-        */
         time = new ElapsedTime();
     }
 
     public void depositFirstPixel() {
         flapServo.setPosition(flapOpen);
-       // runWheel(true);
         numPixelsDeposited = 1;
     }
 
@@ -67,7 +59,6 @@ public class Box {
     // 2 servos - one for wheel, one for flap
 
     public void resetBox() {
-       // timesBroken= 0;
         numPixelsDeposited = 0;
         flapServo.setPosition(flapClosed);
         wheelServo.setPower(0);
@@ -81,21 +72,6 @@ public class Box {
         boxFull = isFull;
     }
 
-    /*
-    public void checkBeam(){
-        boolean isBeamBroken = breakbeamSensor.getState();
-        if (isBeamBroken) {
-            telemetry.addData("Status", "Object detected!");
-            timesBroken++;
-        } else {
-            telemetry.addData("Status", "No object detected");
-        }
-        if(timesBroken ==2){
-           setIsFull(true);
-        }
-    }
-
-     */
 
     public int getNumPixelsDeposited(){
         return numPixelsDeposited;

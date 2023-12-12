@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
+
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
@@ -64,7 +63,6 @@ public class Slides {
         profiler.init(slidesMotor.getCurrentPosition(), target);
         profile_init_time = opMode.time;
 
-        //goingDown =  targetPoint > target;
         goingDown =  target > current_pos;
         current_pos = target;
         if(current_pos<storage){
@@ -153,19 +151,6 @@ public class Slides {
                     slidesMotor.set(power);
                 }
             }
-
-            //pls work bro :praying:
-                /*
-                power = staticF * controller.calculate(slidesMotor.getCurrentPosition());
-                slidesMotor.set(power);
-                 */
-            //THIS IS WHY it's going back to original position after we let go of the joystick
-            //the setPoint was set to the position BEFORE it moved manually.
-
-                /*
-                if (power < Math.abs(0.1)) slidesMotor.set(0);
-                else slidesMotor.set(power);
-                 */
         }
     }
 
