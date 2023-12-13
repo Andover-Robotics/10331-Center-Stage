@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 
 
@@ -30,6 +30,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+
+import org.firstinspires.ftc.teamcode.util.trajectorySequences.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.util.trajectorySequences.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.util.trajectorySequences.TrajectorySequenceRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;

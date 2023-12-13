@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.util.trajectorySequences;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 

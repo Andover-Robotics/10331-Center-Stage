@@ -1,20 +1,16 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
-import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
+import static org.firstinspires.ftc.teamcode.subsystems.Bot.BotState.STORAGE_NOT_FULL;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.subsystems.Box;
-import org.firstinspires.ftc.teamcode.subsystems.Drone;
-import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
-import org.firstinspires.ftc.teamcode.subsystems.Noodles;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.firstinspires.ftc.teamcode.util.AprilTagsPipeline;
+import org.firstinspires.ftc.teamcode.util.sensing.AprilTagsDetection;
+import org.firstinspires.ftc.teamcode.util.sensing.AprilTagsPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 
 
@@ -34,7 +30,7 @@ public class Bot {
     public OpenCvCamera camera;
     public AprilTagsPipeline aprilTagsPipeline;
 
-   // public static AprilTagsDetection detections;
+    public static AprilTagsDetection detections;
 
     public Slides slides;
     public Fourbar fourbar;
@@ -44,15 +40,14 @@ public class Bot {
 
     public Box box;
 
-    // public static DistanceSensor distanceSensor;
 
     private final DcMotorEx FL, FR, BL, BR;
 
 
-    public boolean fieldCentricRunMode = false;
+    public boolean fieldCentricRunMode;
+
     private double distanceFromBackdrop;
     private final double optimalDistanceFromBackdrop = 10;
-    //arbitrary number for now
 
     public static Bot getInstance() {
         if (instance == null) {
@@ -88,8 +83,6 @@ public class Bot {
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        // distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
 
         FL.setMode(RUN_USING_ENCODER);
@@ -175,7 +168,6 @@ public class Bot {
     }
     public void intake(){
         currentState = BotState.INTAKE;
-        //box.resetBox();
         box.runWheel(false);
         noodles.intake();
     }
@@ -184,10 +176,6 @@ public class Bot {
         box.secure();
         noodles.stop();
     }
-
-
-
-
 
 
     public void resetEncoder() {

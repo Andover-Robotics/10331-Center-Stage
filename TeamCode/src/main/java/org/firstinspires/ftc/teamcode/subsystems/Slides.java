@@ -52,6 +52,7 @@ public class Slides {
     }
 
     public void runTo(double target) {
+
         slidesMotor.setRunMode(Motor.RunMode.RawPower);
         slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         slidesMotor.setInverted(true);
@@ -96,6 +97,8 @@ public class Slides {
 
 
     public void runToManual(double power){
+
+
         if(Math.abs(power) > MIN_POWER) {
             manualPower = power;
         }
@@ -105,7 +108,7 @@ public class Slides {
     }
 
     public void resetEncoder() {
-        slidesMotor.resetEncoder();
+        slidesMotor.stopAndResetEncoder();
     }
 
     public void periodic() {

@@ -1,18 +1,8 @@
 package org.firstinspires.ftc.teamcode.test;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Slides.low;
-import static org.firstinspires.ftc.teamcode.subsystems.Slides.storage;
-import static org.firstinspires.ftc.teamcode.subsystems.Slides.top;
-
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.Bot;
 
 //Important note: When running this opmode, the bot should already be close to the backboard (not too close)
 //experiment with changing optimalDistanceFromBackdrop

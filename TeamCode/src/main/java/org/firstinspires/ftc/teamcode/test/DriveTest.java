@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Bot;
+import org.firstinspires.ftc.teamcode.subsystems.Bot;
 
 @TeleOp(group = "test")
 public class DriveTest extends LinearOpMode{

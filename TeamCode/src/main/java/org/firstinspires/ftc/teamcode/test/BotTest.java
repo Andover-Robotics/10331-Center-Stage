@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.test;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.RUN_USING_ENCODER;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 
-
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -14,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.firstinspires.ftc.teamcode.util.AprilTagsDetection;
+import org.firstinspires.ftc.teamcode.util.sensing.AprilTagsDetection;
 
 
 public class BotTest {
@@ -188,42 +187,7 @@ public class BotTest {
         BR.setPower(speeds[3]);
 
     }
-    /*
 
-    //cope no one uses field centric
-    public void driveFieldCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed, double heading) {
-        double magnitude = Math.sqrt(strafeSpeed * strafeSpeed + forwardBackSpeed * forwardBackSpeed);
-        double theta = (Math.atan2(forwardBackSpeed, strafeSpeed) - heading) % (2 * Math.PI);
-        double[] speeds = {
-                magnitude * Math.sin(theta + Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) - turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta + Math.PI / 4) - turnSpeed
-        };
-
-        double maxSpeed = 0;
-
-        for (int i = 0; i < 4; i++) {
-            maxSpeed = Math.max(maxSpeed, speeds[i]);
-        }
-
-        if (maxSpeed > 1) {
-            for (int i = 0; i < 4; i++) {
-                speeds[i] /= maxSpeed;
-            }
-        }
-
-        //        for (int i = 0; i < 4; i++) {
-        //            driveTrainMotors[i].set(speeds[i]);
-        //        }
-        // manually invert the left side
-
-        FL.setPower(speeds[0]);
-        FR.setPower(speeds[1]);
-        BL.setPower(speeds[2]);
-        BR.setPower(speeds[3]);
-    }
-    */
 
     public void resetEverything(){
         noodles.stop();

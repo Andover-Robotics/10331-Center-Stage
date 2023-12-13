@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.subsystems.Bot;
+
 @TeleOp
 public class MainTeleOp extends LinearOpMode {
     Bot bot;
@@ -29,6 +31,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
         waitForStart();
+        bot.resetEncoder();
         bot.reverseMotors();
 
         while (opModeIsActive() && !isStopRequested()) {

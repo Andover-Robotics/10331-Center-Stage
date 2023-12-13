@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.util.sensing;
 /*
  * Copyright (c) 2021 OpenFTC Team
  *

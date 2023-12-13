@@ -11,9 +11,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.util.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.util.TeamPropDetectionPipeline;
-import org.firstinspires.ftc.teamcode.util.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.subsystems.Bot;
+import org.firstinspires.ftc.teamcode.subsystems.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.sensing.TeamPropDetectionPipeline;
+import org.firstinspires.ftc.teamcode.util.trajectorySequences.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -46,9 +47,6 @@ public class MainAuto extends LinearOpMode {
     AutoPath autopath = AutoPath.OPTIMAL;
     TeamPropDetectionPipeline.TeamProp prop;
 
-    private ElapsedTime time = new ElapsedTime();
-
-
     public static double fx = 1078.03779;
     public static double fy = 1084.50988;
     public static double cx = 580.850545;
@@ -56,6 +54,9 @@ public class MainAuto extends LinearOpMode {
 
     // UNITS ARE METERS
     public static double tagSize = 0.032;
+
+
+    private ElapsedTime time = new ElapsedTime();
 
     SampleMecanumDrive drive;
 
