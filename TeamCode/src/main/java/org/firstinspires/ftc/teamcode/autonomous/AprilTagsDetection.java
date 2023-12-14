@@ -31,7 +31,7 @@ public class AprilTagsDetection{
     static int THREE = 3;
 
 
-    static AprilTagDetection tagOfInterest = null;
+    private static AprilTagDetection tagOfInterest = null;
 
     public static void detectTag(){
 
@@ -93,6 +93,10 @@ public class AprilTagsDetection{
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
+    }
+    public static AprilTagDetection getTagOfInterest(){
+        detectTag();
+        return tagOfInterest;
     }
 
      public double calcDistToTag(){

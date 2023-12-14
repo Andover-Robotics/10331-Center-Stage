@@ -26,6 +26,8 @@ public class MainAuto extends LinearOpMode {
 
 
     Bot bot;
+
+
     double distanceFromObject;
 
     enum Side {

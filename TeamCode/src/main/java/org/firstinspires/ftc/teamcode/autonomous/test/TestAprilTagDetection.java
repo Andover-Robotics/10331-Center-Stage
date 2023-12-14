@@ -4,13 +4,13 @@ import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.cx;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.cy;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fx;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fy;
-import static org.firstinspires.ftc.teamcode.autonomous.test.AprilTagsDetection.tagsize;
+import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.tagSize;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -29,13 +29,14 @@ public class TestAprilTagDetection extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive() && !isStopRequested()) {
+            telemetry.addData("The tag detected is:", pipeline.getLatestDetections());
             telemetry.update();
         }
     }
     private void cameraInit(){
         WebcamName camName = hardwareMap.get(WebcamName.class, "webcam");
         camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
-        pipeline = new AprilTagsPipeline(tagsize,fx,fy,cx,cy);
+        pipeline = new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
         camera.setPipeline(pipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
