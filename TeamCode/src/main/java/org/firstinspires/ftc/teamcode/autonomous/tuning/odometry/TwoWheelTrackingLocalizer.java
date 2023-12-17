@@ -35,10 +35,8 @@ import java.util.List;
  */
 public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
-    //are we sure that the ticks_per_rev and wheel_radius are correct??
-
     //The REV Through Bore Encoder has a TICKS_PER_REV of 8192
-    public static double TICKS_PER_REV = 537.7;
+    public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.75; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
@@ -48,6 +46,7 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     public static double PERPENDICULAR_X = -1;
     public static double PERPENDICULAR_Y = 2;
 
+    //VALUES NEED TO BE FIXED
     public static double X_MULTIPLIER = 12.2513194;
     public static double Y_MULTIPLIER = 12.1565972;
 
@@ -107,8 +106,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getRawVelocity()) * X_MULTIPLIER,
-                encoderTicksToInches(perpendicularEncoder.getRawVelocity()) * Y_MULTIPLIER
+                encoderTicksToInches(parallelEncoder.getCorrectedVelocity()) * X_MULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getCorrectedVelocity()) * Y_MULTIPLIER
         );
     }
 }
