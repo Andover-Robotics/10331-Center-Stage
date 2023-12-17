@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.autonomous.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.Encoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,10 +34,13 @@ import java.util.List;
  *
  */
 public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 537.7; //thisi s correct trust
+
+    //are we sure that the ticks_per_rev and wheel_radius are correct??
+
+    //The REV Through Bore Encoder has a TICKS_PER_REV of 8192
+    public static double TICKS_PER_REV = 537.7;
     public static double WHEEL_RADIUS = 0.75; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
-    //urmom
 
     public static double PARALLEL_X = 3.5; // X is the up and down direction, parallel wheel
     public static double PARALLEL_Y = -4.5; // Y is the strafe direction
