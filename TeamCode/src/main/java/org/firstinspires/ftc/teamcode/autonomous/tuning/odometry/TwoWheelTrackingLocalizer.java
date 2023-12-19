@@ -37,7 +37,7 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
     //The REV Through Bore Encoder has a TICKS_PER_REV of 8192
     public static double TICKS_PER_REV = 8192;
-    public static double WHEEL_RADIUS = 0.75; // in
+    public static double WHEEL_RADIUS = 0.689; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
     public static double PARALLEL_X = 3.5; // X is the up and down direction, parallel wheel
@@ -46,9 +46,9 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     public static double PERPENDICULAR_X = -1;
     public static double PERPENDICULAR_Y = 2;
 
-    //VALUES NEED TO BE FIXED
-    public static double X_MULTIPLIER = 12.2513194;
-    public static double Y_MULTIPLIER = 12.1565972;
+
+    public static double X_MULTIPLIER = 1.10743;
+    public static double Y_MULTIPLIER = 1.1283;
 
 
     // Parallel/Perpendicular to the forward axis
