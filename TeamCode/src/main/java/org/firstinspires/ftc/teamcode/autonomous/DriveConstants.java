@@ -88,7 +88,7 @@ public class DriveConstants {
   //  public static double MAX_VEL=0.5;
 
     /*
-    public static double MAX_VEL = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.75;
+    public static double MAX_VEL = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85;
     public static double MAX_ACCEL = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.55;
     public static double MAX_ANG_VEL = Math.toRadians(60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
@@ -96,11 +96,13 @@ public class DriveConstants {
      */
 
     public static double MAX_VEL = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85;
+    //52.4829190833
     public static double MAX_ACCEL = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.55;
-   //public static double MAX_ANG_VEL = Math.toRadians(38.37343888888889);
+    //33.9595358774
    public static double MAX_ANG_VEL = Math.toRadians(132.46784704269953);
+   //2.312000083917605
     public static double MAX_ANG_ACCEL = Math.toRadians(38.37343888888889);
-
+//0.6697428539222843
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
             RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
