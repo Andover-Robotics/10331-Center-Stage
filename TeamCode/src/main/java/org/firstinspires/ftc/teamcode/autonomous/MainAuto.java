@@ -55,6 +55,12 @@ public class MainAuto extends LinearOpMode {
     public static double cx = 580.850545;
     public static double cy = 245.959325;
 
+    TrajectorySequence strafeLeft;
+    TrajectorySequence strafeRight;
+    TrajectorySequence forward;
+
+    Pose2d currentPose;
+
     // UNITS ARE METERS
     public static double tagSize = 0.032;
 
@@ -135,7 +141,7 @@ public class MainAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
                 .turn(Math.toRadians(90))
                 .forward(30)
-                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::scoreNoSense)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
                 .waitSeconds(1)
                 .strafeLeft(24)
                 .forward(20)
@@ -152,6 +158,20 @@ public class MainAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeLeft(24)
+                .forward(20)
+                .waitSeconds(1)
+                .build();
+
+        TrajectorySequence blueAllianceFar = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .forward(18)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeLeft(80)
+                .turn(Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
+                .waitSeconds(1)
                 .strafeLeft(24)
                 .forward(20)
                 .waitSeconds(1)
@@ -174,44 +194,75 @@ public class MainAuto extends LinearOpMode {
                 .build();
 
 
-        TrajectorySequence blueAllianceFar = drive.trajectorySequenceBuilder(startPoseBlueFar)
-                .forward(18)
-                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+        TrajectorySequence redAllianceFar = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .forward(13)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                .strafeLeft(80)
-                .turn(Math.toRadians(90))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::scoreNoSense)
+                .turn(Math.toRadians(-90))
+                .forward(80)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
                 .waitSeconds(1)
-                .strafeLeft(24)
-                .forward(20)
-                .waitSeconds(1)
+                .strafeRight(25)
+                .forward(10)
                 .build();
 
 
-            TrajectorySequence redAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseRedFar)
-                    .forward(13)
-                    .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
-                    .waitSeconds(1.5)
-                    .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                    .turn(Math.toRadians(-90))
-                    .forward(80)
-                    .strafeRight(25)
-                    .forward(10)
-                    .build();
+        TrajectorySequence redAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .forward(13)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .turn(Math.toRadians(-90))
+                .forward(80)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeRight(25)
+                .forward(10)
+                .build();
 
-            TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPose)
-                    .forward(20)
-                    .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
-                    .waitSeconds(1.5)
-                    .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                    .turn(Math.toRadians(-90))
-                    .forward(36)
-                    .strafeRight(27)
-                    .forward(20)
-                    .build();
 
-            TrajectorySequence redAllianceFar= drive.trajectorySequenceBuilder(startPoseRedFar)
+        TrajectorySequence redAllianceClose = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .forward(20)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .turn(Math.toRadians(-90))
+                .forward(36)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
+                .waitSeconds(1)
+                .strafeRight(27)
+                .forward(20)
+                .build();
+
+
+        TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .forward(20)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .turn(Math.toRadians(-90))
+                .forward(36)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeRight(27)
+                .forward(20)
+                .build();
+
+        strafeLeft = drive.trajectorySequenceBuilder(startPose)
+                .strafeLeft(5)
+                .build();
+        strafeRight = drive.trajectorySequenceBuilder(startPose)
+                .strafeRight(5)
+                .build();
+        forward = drive.trajectorySequenceBuilder(startPose)
+                .forward(2)
+                .build();
+
+
+       /*     TrajectorySequence redAllianceFar= drive.trajectorySequenceBuilder(startPoseRedFar)
                     .splineTo(new Vector2d(-34,-34), Math.toRadians(90))
                     .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                     .waitSeconds(1.5)
@@ -281,6 +332,8 @@ public class MainAuto extends LinearOpMode {
                     .splineTo(parkingPosRed, Math.toRadians(-90))
                     .build();
 
+        */
+
 
 
 
@@ -318,18 +371,17 @@ public class MainAuto extends LinearOpMode {
 
             }
             waitForStart();
+
             if (opModeIsActive() && !isStopRequested()) {
                 telemetry.addLine("Distance:" + dtb);
                 telemetry.addLine("Alliance:" + side);
                 telemetry.addLine("Mode" + autopath);
                 telemetry.update();
 
-                drive.setPoseEstimate(startPose);
-                drive.followTrajectorySequence(blueAllianceClose);
-
 
                     if (dtb == DistanceToBackdrop.FAR) {
                         if (side == Side.BLUE) {
+                            drive.setPoseEstimate(startPoseBlueFar);
                             if (autopath == AutoPath.OPTIMAL) {
                                 drive.followTrajectorySequence(blueAllianceFar);
                             }
@@ -338,6 +390,7 @@ public class MainAuto extends LinearOpMode {
                             }
                         }
                         else {
+                            drive.setPoseEstimate(startPoseRedFar);
                             if (autopath == AutoPath.OPTIMAL) {
                                 drive.followTrajectorySequence(redAllianceFar);
                             }
@@ -349,6 +402,7 @@ public class MainAuto extends LinearOpMode {
                     }
                     else if (dtb == DistanceToBackdrop.CLOSE) {
                         if (side == Side.BLUE) {
+                            drive.setPoseEstimate(startPoseBlueClose);
                             if (autopath == AutoPath.OPTIMAL) {
                                 drive.followTrajectorySequence(blueAllianceClose);
                             }
@@ -358,6 +412,7 @@ public class MainAuto extends LinearOpMode {
 
                         }
                         else {
+                            drive.setPoseEstimate(startPoseRedClose);
                             if (autopath == AutoPath.OPTIMAL) {
                                 drive.followTrajectorySequence(redAllianceClose);
                             }
@@ -372,20 +427,22 @@ public class MainAuto extends LinearOpMode {
             }
 
     private void dropPurplePixel(){
-
+        currentPose= drive.getPoseEstimate();
         if(prop== TeamPropDetectionPipeline.TeamProp.ONLEFT){
-            drive.turnAsync(Math.toRadians(90));
+            drive.turn(Math.toRadians(90));
             bot.noodles.reverseIntake();
-            drive.turnAsync(Math.toRadians(-90));
+            drive.turn(Math.toRadians(-90));
         }
         else if(prop== TeamPropDetectionPipeline.TeamProp.ONRIGHT){
-            drive.turnAsync(Math.toRadians(-90));
+            drive.turn(Math.toRadians(-90));
             bot.noodles.reverseIntake();
-            drive.turnAsync(Math.toRadians(90));
+            drive.turn(Math.toRadians(90));
         }
         else {
             bot.noodles.reverseIntake();
         }
+
+        drive.setPoseEstimate(currentPose);
 
         //note: java code execution happens very fast, so having .reverseIntake()
         // immediately followed by .stop() in the same method will not be effective.
@@ -405,7 +462,7 @@ public class MainAuto extends LinearOpMode {
     private void stageScore(){
         bot.noodles.reverseIntake();
         time.reset();
-        while(time.seconds() < 5) {
+        while(time.seconds() < 7) {
             bot.box.runWheel(true);
         }
         bot.box.runWheel(false);
@@ -414,41 +471,47 @@ public class MainAuto extends LinearOpMode {
     }
 
 
-  /*  private void senseAndScore(){
+    private void senseAndScore(){
         //locates and moves to corresponding position on Backdrop based on april tags
-        //switch to aprilTagsPipeline => looking for AprilTags
 
         bot.camera.setPipeline(bot.aprilTagsPipeline);
+        currentPose= drive.getPoseEstimate();
         int counter=0;
-
-        //based on where team prop is, move to the corresponding position on the backdrop
+        AprilTagsDetection.detectTag();
 
         try{
-            if(prop== TeamProp.ONLEFT){
-                //keep strafing left until robot detects AprilTag or if you have run loop over 5 times
-                while(AprilTagsDetection.tagOfInterest.id!= 1 && counter<5){
-                    AprilTagsDetection.detectTag();
-                    bot.strafeLeft();
-                    counter++;
-                    if(counter==4){
-                        throw new AprilTagException("april tag could not be located");
-                    }
-                }
-            }
-            else if(prop== TeamProp.ONRIGHT){
+            if(prop== TeamPropDetectionPipeline.TeamProp.ONLEFT){
 
-                while(AprilTagsDetection.tagOfInterest.id!=3 && counter<5){
+                //keep strafing left until robot detects AprilTag or if you have run loop over 5 times
+                while(AprilTagsDetection.getTagOfInterest().id!= 1 && counter<5){
                     AprilTagsDetection.detectTag();
-                    bot.strafeRight();
+                    drive.followTrajectorySequence(strafeLeft);
                     counter++;
                     if(counter==4){
                         throw new AprilTagException("april tag could not be located");
                     }
                 }
-            }else if(prop != TeamProp.NOTDETECTED){
-                throw new PropException("the prop wasn't detected");
             }
-            bot.outtake(1,true);
+
+            else if(prop== TeamPropDetectionPipeline.TeamProp.ONRIGHT){
+
+                while(AprilTagsDetection.getTagOfInterest().id!=3 && counter<5){
+                    AprilTagsDetection.detectTag();
+                    drive.followTrajectorySequence(strafeRight);
+                    counter++;
+                    if(counter==4){
+                        throw new AprilTagException("april tag could not be located");
+                    }
+                }
+            }
+
+            else if(prop != TeamPropDetectionPipeline.TeamProp.NOTDETECTED){
+                telemetry.addLine("the prop wasn't detected");
+            }
+
+            drive.followTrajectorySequence(forward);
+            score();
+            drive.setPoseEstimate(currentPose);
 
         }catch(Exception e){
             e.printStackTrace();
@@ -459,10 +522,8 @@ public class MainAuto extends LinearOpMode {
         telemetry.update();
     }
 
-   */
 
-
-    private void scoreNoSense(){
+    private void score(){
         bot.fourbar.outtake();
         bot.box.depositFirstPixel();
         bot.resetEverything();

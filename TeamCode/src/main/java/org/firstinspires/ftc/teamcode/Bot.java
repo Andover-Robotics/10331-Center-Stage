@@ -311,6 +311,7 @@ public class Bot {
     public void strafeRight(){
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
+
         FL.setPower(0.1);
         FR.setPower(0.1);
         BR.setPower(0.1);

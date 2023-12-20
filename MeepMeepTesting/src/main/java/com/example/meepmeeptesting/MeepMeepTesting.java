@@ -25,15 +25,13 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPoseRedFar)
+                        drive.trajectorySequenceBuilder(startPoseRedClose)
+                                .forward(20)
                                 .waitSeconds(1.5)
-                                .forward(10)
-                             //   .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
-
-                             //   .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                             //   .splineTo(scoreRed, Math.toRadians(180))
-                            //    .UNSTABLE_addTemporalMarkerOffset(-0.5,this::scoreNoSense)
-                             //   .splineTo(parkingPosRed, Math.toRadians(-90))
+                                .turn(Math.toRadians(-90))
+                                .forward(36)
+                                .strafeRight(27)
+                                .forward(20)
                                 .build()
                 );
 

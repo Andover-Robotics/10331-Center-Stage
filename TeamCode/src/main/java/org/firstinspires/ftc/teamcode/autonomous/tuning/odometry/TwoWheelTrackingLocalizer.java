@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.autonomous.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.Encoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,10 +34,11 @@ import java.util.List;
  *
  */
 public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 537.7; //thisi s correct trust
-    public static double WHEEL_RADIUS = 0.75; // in
+
+    //The REV Through Bore Encoder has a TICKS_PER_REV of 8192
+    public static double TICKS_PER_REV = 8192;
+    public static double WHEEL_RADIUS = 0.689; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
-    //urmom
 
     public static double PARALLEL_X = 3.5; // X is the up and down direction, parallel wheel
     public static double PARALLEL_Y = -4.5; // Y is the strafe direction
@@ -46,8 +46,9 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     public static double PERPENDICULAR_X = -1;
     public static double PERPENDICULAR_Y = 2;
 
-    public static double X_MULTIPLIER = 12.2513194;
-    public static double Y_MULTIPLIER = 12.1565972;
+
+    public static double X_MULTIPLIER = 1.10743;
+    public static double Y_MULTIPLIER = 1.1283;
 
 
     // Parallel/Perpendicular to the forward axis
@@ -105,8 +106,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getRawVelocity()) * X_MULTIPLIER,
-                encoderTicksToInches(perpendicularEncoder.getRawVelocity()) * Y_MULTIPLIER
+                encoderTicksToInches(parallelEncoder.getCorrectedVelocity()) * X_MULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getCorrectedVelocity()) * Y_MULTIPLIER
         );
     }
 }

@@ -133,9 +133,6 @@ public class AprilTagsDetection{
 
 
 
-
-
-
 }
 
 class AprilTagException extends Exception{

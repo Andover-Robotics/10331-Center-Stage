@@ -70,6 +70,8 @@ public class AprilTagsPipeline extends OpenCvPipeline
     private boolean needToSetDecimation;
     private final Object decimationSync = new Object();
 
+
+
     public AprilTagsPipeline(double tagsize, double fx, double fy, double cx, double cy)
     {
         this.tagsize = tagsize;
@@ -250,6 +252,9 @@ public class AprilTagsPipeline extends OpenCvPipeline
 
         return pose;
     }
+
+
+
 
     class Pose
     {
