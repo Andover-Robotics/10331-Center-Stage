@@ -26,9 +26,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 1) Why is it stopping after reaching spike mark and turning (running intake whole time)
         - possible error in DropPurplePixel() when detecting team prop
-2) To Do: Create another trajectory for NO SENSE
-3) Go further in first movement
-4) Test all auto positions
+2) Go further in first movement
+3) Test all auto positions
+
  */
 
 public class MainAuto extends LinearOpMode {
@@ -48,7 +48,7 @@ public class MainAuto extends LinearOpMode {
 
     //different paths to follow depending on driver input before match
     enum AutoPath{
-        MECHANICAL_FAILURE, OPTIMAL
+        MECHANICAL_FAILURE, OPTIMAL, NO_SENSE
     }
 
 
@@ -376,6 +376,16 @@ public class MainAuto extends LinearOpMode {
                     autopath = AutoPath.MECHANICAL_FAILURE;
                     telemetry.update();
                 }
+                if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
+                    telemetry.addLine("Mode: No Sense");
+                    autopath = AutoPath.NO_SENSE;
+                    telemetry.update();
+                }
+                if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+                    telemetry.addLine("Mode: Optimal");
+                    autopath = AutoPath.OPTIMAL;
+                    telemetry.update();
+                }
 
 
             }
@@ -436,26 +446,24 @@ public class MainAuto extends LinearOpMode {
             }
 
     private void dropPurplePixel(){
-        currentPose= drive.getPoseEstimate();
-        if(prop== TeamPropDetectionPipeline.TeamProp.ONLEFT){
-            drive.turn(Math.toRadians(90));
+        if(autopath==AutoPath.NO_SENSE){
             bot.noodles.reverseIntake();
-            drive.turn(Math.toRadians(-90));
-        }
-        else if(prop== TeamPropDetectionPipeline.TeamProp.ONRIGHT){
-            drive.turn(Math.toRadians(-90));
-            bot.noodles.reverseIntake();
-            drive.turn(Math.toRadians(90));
         }
         else {
-            bot.noodles.reverseIntake();
+            currentPose = drive.getPoseEstimate();
+            if (prop == TeamPropDetectionPipeline.TeamProp.ONLEFT) {
+                drive.turn(Math.toRadians(90));
+                bot.noodles.reverseIntake();
+                drive.turn(Math.toRadians(-90));
+            } else if (prop == TeamPropDetectionPipeline.TeamProp.ONRIGHT) {
+                drive.turn(Math.toRadians(-90));
+                bot.noodles.reverseIntake();
+                drive.turn(Math.toRadians(90));
+            } else {
+                bot.noodles.reverseIntake();
+            }
+            drive.setPoseEstimate(currentPose);
         }
-
-        drive.setPoseEstimate(currentPose);
-
-        //note: java code execution happens very fast, so having .reverseIntake()
-        // immediately followed by .stop() in the same method will not be effective.
-
 
         telemetry.addData("purple pixel is currently being dropped",".");
         telemetry.update();
