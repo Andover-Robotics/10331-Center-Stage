@@ -6,10 +6,12 @@ import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fx;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fy;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.tagSize;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
 import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -21,15 +23,19 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class TestAprilTagDetection extends LinearOpMode {
     OpenCvWebcam camera;
     AprilTagsPipeline pipeline;
+    AprilTagsDetection detection = new AprilTagsDetection();
     private final int STREAM_HEIGHT = 720, STREAM_WIDTH = 1280;
     @Override
     public void runOpMode() throws InterruptedException {
         //initialize camera and pipeline
+
         cameraInit();
         waitForStart();
+        telemetry = new MultipleTelemetry();
 
         while(opModeIsActive() && !isStopRequested()) {
-            telemetry.addData("The tag detected is:", pipeline.getLatestDetections());
+            detection.detectTag();
+            telemetry.addData("The tag detected is:", detection.getTagOfInterest());
             telemetry.update();
         }
     }
