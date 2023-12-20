@@ -22,6 +22,15 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Config
 @Autonomous(name = "MainAutonomous")
 
+/*
+
+1) Why is it stopping after reaching spike mark and turning (running intake whole time)
+        - possible error in DropPurplePixel() when detecting team prop
+2) To Do: Create another trajectory for NO SENSE
+3) Go further in first movement
+4) Test all auto positions
+ */
+
 public class MainAuto extends LinearOpMode {
 
 
