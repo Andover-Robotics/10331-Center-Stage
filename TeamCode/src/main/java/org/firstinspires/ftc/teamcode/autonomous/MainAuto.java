@@ -40,6 +40,7 @@ public class MainAuto extends LinearOpMode {
 
 
     double distanceFromObject;
+    boolean wait=false;
 
     enum Side {
         RED, BLUE,
@@ -415,6 +416,12 @@ public class MainAuto extends LinearOpMode {
                 autopath = AutoPath.JUST_PARK;
                 telemetry.update();
             }
+            if(gp1.wasJustPressed(GamepadKeys.Button.START)){
+                telemetry.addLine("wait for 15 seconds before outtaking");
+                wait=true;
+                telemetry.update();
+            }
+
 
 
         }
@@ -582,11 +589,12 @@ public class MainAuto extends LinearOpMode {
         telemetry.update();
     }
 
-    private void waitForPartner() throws InterruptedException {
-        boolean wait=true;
+   /* private void waitForPartner() throws InterruptedException {
         if(wait){
-            wait(100000);
+            wait(15000);
         }
     }
+
+    */
 
 }
