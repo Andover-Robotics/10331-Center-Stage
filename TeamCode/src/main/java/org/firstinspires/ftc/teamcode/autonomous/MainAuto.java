@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -79,6 +81,8 @@ public class MainAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         bot = Bot.getInstance(this);
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -392,11 +396,6 @@ public class MainAuto extends LinearOpMode {
             waitForStart();
 
             if (opModeIsActive() && !isStopRequested()) {
-                telemetry.addLine("Distance:" + dtb);
-                telemetry.addLine("Alliance:" + side);
-                telemetry.addLine("Mode" + autopath);
-                telemetry.update();
-
 
                     if (dtb == DistanceToBackdrop.FAR) {
                         if (side == Side.BLUE) {
@@ -440,8 +439,6 @@ public class MainAuto extends LinearOpMode {
                             }
                         }
                     }
-
-
                 }
             }
 
@@ -471,6 +468,7 @@ public class MainAuto extends LinearOpMode {
 
     public void stopNoodles(){
         bot.noodles.stop();
+        bot.box.resetBox();
         telemetry.addData("noodles are stopped",".");
         telemetry.update();
     }

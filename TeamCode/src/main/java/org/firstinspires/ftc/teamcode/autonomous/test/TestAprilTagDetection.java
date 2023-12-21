@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fx;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fy;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.tagSize;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -31,13 +32,15 @@ public class TestAprilTagDetection extends LinearOpMode {
 
         cameraInit();
         waitForStart();
-        telemetry = new MultipleTelemetry();
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         while(opModeIsActive() && !isStopRequested()) {
+            telemetry.update();
             detection.detectTag();
-            telemetry.addData("The tag detected is:", detection.getTagOfInterest());
+            telemetry.addLine("The tag detected is:" + detection.getTagOfInterest());
             telemetry.update();
         }
+
     }
     private void cameraInit(){
         WebcamName camName = hardwareMap.get(WebcamName.class, "webcam");
