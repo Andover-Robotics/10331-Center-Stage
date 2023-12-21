@@ -582,4 +582,11 @@ public class MainAuto extends LinearOpMode {
         telemetry.update();
     }
 
+    private void waitForPartner() throws InterruptedException {
+        boolean wait=true;
+        if(wait){
+            wait(100000);
+        }
+    }
+
 }
