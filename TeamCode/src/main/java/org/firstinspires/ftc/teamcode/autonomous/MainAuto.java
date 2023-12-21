@@ -50,7 +50,7 @@ public class MainAuto extends LinearOpMode {
 
     //different paths to follow depending on driver input before match
     enum AutoPath{
-        MECHANICAL_FAILURE, OPTIMAL, NO_SENSE
+        MECHANICAL_FAILURE, OPTIMAL, NO_SENSE, JUST_PARK
     }
 
 
@@ -176,6 +176,10 @@ public class MainAuto extends LinearOpMode {
                 .waitSeconds(1)
                 .build();
 
+        TrajectorySequence blueAllianceCloseJustPark = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .strafeLeft(42)
+                .build();
+
         TrajectorySequence blueAllianceFar = drive.trajectorySequenceBuilder(startPoseBlueFar)
                 .forward(18)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
@@ -204,6 +208,13 @@ public class MainAuto extends LinearOpMode {
                 .strafeLeft(24)
                 .forward(20)
                 .waitSeconds(1)
+                .build();
+
+        TrajectorySequence blueAllianceFarJustPark = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .forward(18)
+                .strafeLeft(80)
+                .back(24)
+                .strafeLeft(20)
                 .build();
 
 
@@ -235,6 +246,13 @@ public class MainAuto extends LinearOpMode {
                 .forward(10)
                 .build();
 
+        TrajectorySequence redAllianceFarJustPark = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .forward(18)
+                .strafeRight(80)
+                .back(24)
+                .strafeRight(20)
+                .build();
+
 
         TrajectorySequence redAllianceClose = drive.trajectorySequenceBuilder(startPoseRedClose)
                 .forward(20)
@@ -262,6 +280,10 @@ public class MainAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
                 .strafeRight(27)
                 .forward(20)
+                .build();
+
+        TrajectorySequence redAllianceCloseJustPark = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .strafeRight(42)
                 .build();
 
         strafeLeft = drive.trajectorySequenceBuilder(startPose)
@@ -348,99 +370,113 @@ public class MainAuto extends LinearOpMode {
         */
 
 
-
-
-            while (!isStarted()) {
-                gp1.readButtons();
-                if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
-                    telemetry.addLine("Alliance: red");
-                    side = Side.RED;
-                    teamPropDetectionPipeline.setAlliance(1);
-                    telemetry.update();
-                }
-
-                if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
-                    telemetry.addLine("Alliance: blue");
-                    side = Side.BLUE;
-                    teamPropDetectionPipeline.setAlliance(2);
-                    telemetry.update();
-                }
-                if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
-                    telemetry.addLine("Distance: close");
-                    dtb = DistanceToBackdrop.CLOSE;
-                    telemetry.update();
-                }
-                if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
-                    telemetry.addLine("Distance: far");
-                    dtb = DistanceToBackdrop.FAR;
-                    telemetry.update();
-                }
-                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                    telemetry.addLine("Mode: Mechanical Failure");
-                    autopath = AutoPath.MECHANICAL_FAILURE;
-                    telemetry.update();
-                }
-                if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                    telemetry.addLine("Mode: No Sense");
-                    autopath = AutoPath.NO_SENSE;
-                    telemetry.update();
-                }
-                if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                    telemetry.addLine("Mode: Optimal");
-                    autopath = AutoPath.OPTIMAL;
-                    telemetry.update();
-                }
-
-
+        while (!isStarted()) {
+            gp1.readButtons();
+            if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
+                telemetry.addLine("Alliance: red");
+                side = Side.RED;
+                teamPropDetectionPipeline.setAlliance(1);
+                telemetry.update();
             }
-            waitForStart();
 
-            if (opModeIsActive() && !isStopRequested()) {
+            if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
+                telemetry.addLine("Alliance: blue");
+                side = Side.BLUE;
+                teamPropDetectionPipeline.setAlliance(2);
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
+                telemetry.addLine("Distance: close");
+                dtb = DistanceToBackdrop.CLOSE;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
+                telemetry.addLine("Distance: far");
+                dtb = DistanceToBackdrop.FAR;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                telemetry.addLine("Mode: Mechanical Failure");
+                autopath = AutoPath.MECHANICAL_FAILURE;
+                telemetry.update();
+            }
+            if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
+                telemetry.addLine("Mode: No Sense");
+                autopath = AutoPath.NO_SENSE;
+                telemetry.update();
+            }
+            if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
+                telemetry.addLine("Mode: Optimal");
+                autopath = AutoPath.OPTIMAL;
+                telemetry.update();
+            }
+            if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
+                telemetry.addLine("Mode: Just Park");
+                autopath = AutoPath.JUST_PARK;
+                telemetry.update();
+            }
 
-                    if (dtb == DistanceToBackdrop.FAR) {
-                        if (side == Side.BLUE) {
-                            drive.setPoseEstimate(startPoseBlueFar);
-                            if (autopath == AutoPath.OPTIMAL) {
-                                drive.followTrajectorySequence(blueAllianceFar);
-                            }
-                            else {
-                                drive.followTrajectorySequence(blueAllianceFarRobotFail);
-                            }
-                        }
-                        else {
-                            drive.setPoseEstimate(startPoseRedFar);
-                            if (autopath == AutoPath.OPTIMAL) {
-                                drive.followTrajectorySequence(redAllianceFar);
-                            }
-                            else {
-                                drive.followTrajectorySequence(redAllianceFarRobotFail);
-                            }
-                        }
 
+        }
+        waitForStart();
+
+        if (opModeIsActive() && !isStopRequested()) {
+
+            if (dtb == DistanceToBackdrop.FAR) {
+                if (side == Side.BLUE) {
+                    drive.setPoseEstimate(startPoseBlueFar);
+                    if (autopath == AutoPath.OPTIMAL) {
+                        drive.followTrajectorySequence(blueAllianceFar);
                     }
-                    else if (dtb == DistanceToBackdrop.CLOSE) {
-                        if (side == Side.BLUE) {
-                            drive.setPoseEstimate(startPoseBlueClose);
-                            if (autopath == AutoPath.OPTIMAL) {
-                                drive.followTrajectorySequence(blueAllianceClose);
-                            }
-                            else {
-                                drive.followTrajectorySequence(blueAllianceCloseRobotFail);
-                            }
-
-                        }
-                        else {
-                            drive.setPoseEstimate(startPoseRedClose);
-                            if (autopath == AutoPath.OPTIMAL) {
-                                drive.followTrajectorySequence(redAllianceClose);
-                            }
-                            else {
-                                drive.followTrajectorySequence(redAllianceCloseRobotFail);
-                            }
-                        }
+                    else if(autopath== AutoPath.JUST_PARK){
+                        drive.followTrajectorySequence(blueAllianceFarJustPark);
+                    }
+                    else {
+                        drive.followTrajectorySequence(blueAllianceFarRobotFail);
+                    }
+                }
+                else {
+                    drive.setPoseEstimate(startPoseRedFar);
+                    if (autopath == AutoPath.OPTIMAL) {
+                        drive.followTrajectorySequence(redAllianceFar);
+                    }
+                    else if(autopath== AutoPath.JUST_PARK){
+                        drive.followTrajectorySequence(redAllianceFarJustPark);
+                    }
+                    else {
+                        drive.followTrajectorySequence(redAllianceFarRobotFail);
                     }
                 }
             }
+            else if (dtb == DistanceToBackdrop.CLOSE) {
+                if (side == Side.BLUE) {
+                    drive.setPoseEstimate(startPoseBlueClose);
+                    if (autopath == AutoPath.OPTIMAL) {
+                        drive.followTrajectorySequence(blueAllianceClose);
+                    }
+                    else if(autopath== AutoPath.JUST_PARK){
+                        drive.followTrajectorySequence(blueAllianceCloseJustPark);
+                    }
+                    else {
+                        drive.followTrajectorySequence(blueAllianceCloseRobotFail);
+                    }
+
+                }
+                else {
+                    drive.setPoseEstimate(startPoseRedClose);
+                    if (autopath == AutoPath.OPTIMAL) {
+                        drive.followTrajectorySequence(redAllianceClose);
+                    }
+                    else if(autopath== AutoPath.JUST_PARK){
+                        drive.followTrajectorySequence(redAllianceCloseJustPark);
+                    }
+                    else {
+                        drive.followTrajectorySequence(redAllianceCloseRobotFail);
+                    }
+                }
+            }
+        }
+    }
 
     private void dropPurplePixel(){
         if(autopath==AutoPath.NO_SENSE){
@@ -540,7 +576,7 @@ public class MainAuto extends LinearOpMode {
 
     private void score(){
         bot.fourbar.outtake();
-        bot.box.depositFirstPixel();
+        bot.box.depositSecondPixel();
         bot.resetEverything();
         telemetry.addData("Scoring with no sensing should occur right now",".");
         telemetry.update();
