@@ -1,5 +1,4 @@
-/*package org.firstinspires.ftc.teamcode.autonomous;
-
+package org.firstinspires.ftc.teamcode.autonomous;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -22,7 +21,7 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
     public static final int minimumWidth = 60;
     public static int width = 0;
-    private enum TeamProp{
+    public enum TeamProp{
         ONLEFT,
         ONRIGHT,
         MIDDLE,
@@ -32,8 +31,9 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
         BLUE,
         RED,
     }
-    public static TeamProp teamPropLocation= TeamProp.NOTDETECTED;
-    public static Alliance alliance = Alliance.BLUE;
+
+    private static TeamProp teamPropLocation= TeamProp.NOTDETECTED;
+    private static Alliance alliance = Alliance.BLUE;
 
 
     //have to change values
@@ -51,35 +51,42 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
 
-        if(alliance== Alliance.BLUE){
-            lowH = 160;
-            lowS = 80;
-            lowV = 80;
-            highH =200;
-            highS = 120;
-            highV = 120;
+
+        if(alliance== TeamPropDetectionPipeline.Alliance.BLUE){
+        lowH = 75;
+        lowS = 110;
+        lowV = 150;
+        highH = 181;
+        highS = 255;
+        highV = 255;
         }
         else{
-            lowH = 280;
-            lowS = 75;
-            lowV = 80;
-            highH =320;
-            highS = 105;
-            highV = 120;
+           lowH = 105;
+           lowS = 20;
+           lowV = 86;
+           highH = 247;
+           highS = 151;
+           highV = 220;
         }
         lowHSV= new Scalar(lowH, lowS, lowV);
         highHSV= new Scalar(highH, highS, highV);
 
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
-        //have to change values (divide screen into three)
-        Rect rightRect = new Rect(750, 1, 529, 719);
-        Rect leftRect = new Rect(1, 1, 479, 719);
-        Rect frontRect = new Rect(1,1,1,1);
 
-        Imgproc.rectangle(input, leftRect, new Scalar(255, 0, 0), 5);
+        //have to change values (divide screen into three)
+        Rect frontRect = new Rect(0, 1, 640, 719);
+    //    Rect leftRect = new Rect(426, 1, 426, 719);
+        Rect rightRect = new Rect(640,1,640,719);
+
+        //red
+    //    Imgproc.rectangle(input, leftRect, new Scalar(255, 0, 0), 5);
+
+        //blue
         Imgproc.rectangle(input, rightRect, new Scalar(0, 0, 255), 5);
-        Imgproc.rectangle(input, frontRect, new Scalar(255, 255, 0), 5);
+
+        //green
+        Imgproc.rectangle(input, frontRect, new Scalar(0,255,0), 5);
 
         Core.inRange(HSV, lowHSV, highHSV, HSV);
 
@@ -108,24 +115,16 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
                 // checks if contour is within boundaries of any rectangle (left, right, front)
 
-                if (midpointRect > leftRect.tl().x && midpointRect < leftRect.br().x) {
-                    teamPropLocation = TeamProp.ONLEFT;
-                } else if (midpointRect > rightRect.tl().x && midpointRect < rightRect.br().x) {
+                if (midpointRect > rightRect.tl().x && midpointRect < rightRect.br().x) {
                     teamPropLocation = TeamProp.ONRIGHT;
                 } else if (midpointRect < frontRect.tl().x && midpointRect > frontRect.br().x){
                     teamPropLocation = TeamProp.MIDDLE;
                 }
+                else{
+                    teamPropLocation = TeamProp.ONLEFT;
+                }
 
             }
-            else {
-                teamPropLocation = TeamProp.NOTDETECTED;
-                telemetry.addLine("TeamProp not detected");
-            }
-        }
-
-        else {
-            teamPropLocation = TeamProp.NOTDETECTED;
-            telemetry.addLine("TeamProp not detected");
         }
 
         HSV.release();
@@ -133,12 +132,16 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
     }
     public void setAlliance(int a){
         if(a==1){
-            TeamPropDetectionPipeline.alliance = Alliance.RED;
+            alliance = Alliance.RED;
         }
         else{
-            TeamPropDetectionPipeline.alliance = Alliance.BLUE;
+            alliance = Alliance.BLUE;
         }
     }
+    public TeamProp getTeamPropLocation(){
+        return teamPropLocation;
+    }
+
 }
 
 class PropException extends Exception{
@@ -150,6 +153,3 @@ class PropException extends Exception{
         super(message);
     }
 }
-
- */
-

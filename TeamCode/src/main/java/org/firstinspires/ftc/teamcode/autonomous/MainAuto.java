@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bot;
-import org.firstinspires.ftc.teamcode.autonomous.test.TeamPropDetectionPipeline;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -632,7 +631,8 @@ public class MainAuto extends LinearOpMode {
     private void senseAndScore(){
         //locates and moves to corresponding position on Backdrop based on april tags
 
-        bot.camera.setPipeline(bot.aprilTagsPipeline);
+        AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
+        bot.camera.setPipeline(aprilTagsPipeline);
         AprilTagsDetection detection= new AprilTagsDetection();
         currentPose= drive.getPoseEstimate();
         int counter=0;

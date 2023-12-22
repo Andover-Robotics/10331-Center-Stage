@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
-import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.Box;
 import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
@@ -33,9 +31,9 @@ public class Bot {
     public static Bot instance;
 
     public OpenCvWebcam camera;
-     public AprilTagsPipeline aprilTagsPipeline;
+  //  public AprilTagsPipeline aprilTagsPipeline;
 
-     public static AprilTagsDetection detections;
+   // private static AprilTagsDetection detections;
 
     public Slides slides;
     public Fourbar fourbar;
@@ -393,7 +391,7 @@ public class Bot {
     }
 
     */
-
+/*
     public void aprilTagTuning(){
         detections.detectTag();
         distanceFromBackdrop = detections.calcDistToTag();
@@ -410,6 +408,8 @@ public class Bot {
             inRange = Math.abs(diffy) <= 5;
         }
     }
+
+ */
 
 
 
