@@ -38,7 +38,7 @@ public class TestAprilTagDetection extends LinearOpMode {
             telemetry.update();
             detection.detectTag();
             telemetry.addLine("The tag detected is:" + detection.getTagOfInterest());
-            telemetry.addLine("the distance to tag is " + detection.calcDistToTag());
+            telemetry.addLine("the distance to tag is " + detection.calcDistToTag(detection.getTagOfInterest()));
             telemetry.update();
         }
 
