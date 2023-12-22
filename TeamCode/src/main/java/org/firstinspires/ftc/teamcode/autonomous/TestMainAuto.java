@@ -57,25 +57,45 @@ public class TestMainAuto extends LinearOpMode {
         Vector2d parkingPosRed = new Vector2d(56,-56);
 
         Vector2d scoreBlue = new Vector2d(42,38);
-        Vector2d scoreRed = new Vector2d(42,-20);
+        Vector2d scoreRed = new Vector2d(40,-25);
 
 
         TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
-                .splineTo(new Vector2d(10,-20), Math.toRadians(90))
-                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .splineTo(new Vector2d(10,-17 ), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-1, this::dropPurplePixel)
                 .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                .splineTo(scoreRed, Math.toRadians(18 0))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
-                .waitSeconds(1)
+                .back(7)
+                .splineTo(scoreRed, Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.1, this::score)
+                .waitSeconds(2)
+                .back(2)
+                .UNSTABLE_addTemporalMarkerOffset(1,this::reset)
+                .waitSeconds(5)
+                .back(5)
+                //fix with MeepMeep
                 .splineTo(parkingPosRed, Math.toRadians(90))
+                .build();
+
+        TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .forward(20)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .turn(Math.toRadians(-90))
+                .forward(36)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeRight(27)
+                .forward(20)
                 .build();
 
         waitForStart();
 
         if (opModeIsActive() && !isStopRequested()) {
             drive.setPoseEstimate(startPoseRedClose);
-            drive.followTrajectorySequence(redAllianceCloseNoSense);
+            drive.followTrajectorySequence(redAllianceCloseRobotFail);
         }
 
 
@@ -157,7 +177,12 @@ public class TestMainAuto extends LinearOpMode {
     private void score(){
         bot.fourbar.outtake();
         bot.box.depositSecondPixel();
-        bot.resetEverything();
+        telemetry.addData("Scoring with no sensing should occur right now",".");
+        telemetry.update();
+    }
+    private void reset(){
+        bot.box.resetBox();
+        bot.fourbar.storage();
         telemetry.addData("Scoring with no sensing should occur right now",".");
         telemetry.update();
     }
