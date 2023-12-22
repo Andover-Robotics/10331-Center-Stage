@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.openftc.apriltag.AprilTagDetection;
 
@@ -39,7 +38,7 @@ public class AprilTagsDetection{
 
     private static AprilTagDetection tagOfInterest = null;
 
-    public static void detectTag(){
+    public void detectTag(){
 
         //telemetry.setMsTransmissionInterval(50);
         telemetry = new MultipleTelemetry();
@@ -101,7 +100,7 @@ public class AprilTagsDetection{
             telemetry.update();
         }
     }
-    public static AprilTagDetection getTagOfInterest(){
+    public AprilTagDetection getTagOfInterest(){
         detectTag();
         return tagOfInterest;
     }

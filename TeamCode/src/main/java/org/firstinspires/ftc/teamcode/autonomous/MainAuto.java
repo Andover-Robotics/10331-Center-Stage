@@ -35,6 +35,16 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class MainAuto extends LinearOpMode {
 
+    //optimal has 3 diff paths
+    // optimal through middle has 3 diff paths
+    // robot fail has 3 diff paths
+    // robot fail through middle has 3 paths
+    // no sense has 1 path
+    // just park has 1 path
+
+    // total => 14 x 4 = 56 paths
+
+
 
     Bot bot;
 
@@ -623,16 +633,17 @@ public class MainAuto extends LinearOpMode {
         //locates and moves to corresponding position on Backdrop based on april tags
 
         bot.camera.setPipeline(bot.aprilTagsPipeline);
+        AprilTagsDetection detection= new AprilTagsDetection();
         currentPose= drive.getPoseEstimate();
         int counter=0;
-        AprilTagsDetection.detectTag();
+        detection.detectTag();
 
         try{
             if(prop== TeamPropDetectionPipeline.TeamProp.ONLEFT){
 
                 //keep strafing left until robot detects AprilTag or if you have run loop over 5 times
-                while(AprilTagsDetection.getTagOfInterest().id!= 1 && counter<5){
-                    AprilTagsDetection.detectTag();
+                while(detection.getTagOfInterest().id!= 1 && counter<5){
+                    detection.detectTag();
                     drive.followTrajectorySequence(strafeLeft);
                     counter++;
                     if(counter==4){
@@ -643,8 +654,8 @@ public class MainAuto extends LinearOpMode {
 
             else if(prop== TeamPropDetectionPipeline.TeamProp.ONRIGHT){
 
-                while(AprilTagsDetection.getTagOfInterest().id!=3 && counter<5){
-                    AprilTagsDetection.detectTag();
+                while(detection.getTagOfInterest().id!=3 && counter<5){
+                    detection.detectTag();
                     drive.followTrajectorySequence(strafeRight);
                     counter++;
                     if(counter==4){

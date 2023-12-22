@@ -395,7 +395,7 @@ public class Bot {
     */
 
     public void aprilTagTuning(){
-        AprilTagsDetection.detectTag();
+        detections.detectTag();
         distanceFromBackdrop = detections.calcDistToTag();
         double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
         boolean inRange = Math.abs(diffy) <= 5;
