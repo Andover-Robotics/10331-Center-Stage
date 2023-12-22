@@ -372,6 +372,56 @@ public class MainAuto extends LinearOpMode {
                 .build();
 
 
+        TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .splineTo(new Vector2d(10,-34), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .splineTo(scoreRed, Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                .waitSeconds(1)
+                .lineTo(parkingPosRed)
+                .build();
+
+        TrajectorySequence blueAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .splineTo(new Vector2d(10,38), Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .splineTo(scoreBlue, Math.toRadians(0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                .waitSeconds(1)
+                .lineTo(parkingPosBlue)
+                .build();
+
+        TrajectorySequence blueAllianceFarNoSense = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .splineTo(new Vector2d(-36,34), Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .forward(20)
+                .lineTo(new Vector2d(-16,10))
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeLeft(30)
+                .splineTo(scoreBlue, Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                .waitSeconds(1)
+                .lineTo(parkingPosBlue)
+                .build();
+
+        TrajectorySequence redAllianceFarNoSense= drive.trajectorySequenceBuilder(startPoseRedFar)
+                .splineTo(new Vector2d(-34,-34), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .splineTo(new Vector2d(-34,-10), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .strafeRight(30)
+                .splineTo(scoreRed, Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                .waitSeconds(1)
+                .lineTo(parkingPosRed)
+                .build();
+
+
        /*     TrajectorySequence redAllianceFar= drive.trajectorySequenceBuilder(startPoseRedFar)
                     .splineTo(new Vector2d(-34,-34), Math.toRadians(90))
                     .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
