@@ -25,13 +25,14 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPoseRedClose)
-                                .strafeRight(42)
+                        drive.trajectorySequenceBuilder(startPoseBlueFar)
+                                .forward(48)
+                                .strafeLeft(80)
+                                .back(54)
+                                .strafeLeft(20)
                                 .build()
                 );
 
-        //blue close is done
-        //blue far is done
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)

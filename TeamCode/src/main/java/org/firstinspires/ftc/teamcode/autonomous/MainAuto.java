@@ -41,6 +41,7 @@ public class MainAuto extends LinearOpMode {
 
     double distanceFromObject;
     boolean wait=false;
+    boolean throughMiddle= true;
 
     enum Side {
         RED, BLUE,
@@ -146,6 +147,7 @@ public class MainAuto extends LinearOpMode {
 
         //robot fail has no outtake
         //optimal outtakes on the backdrop
+        // no sense does not involve team prop sensing or april tag sensing (still outtakes)
 
 
         TrajectorySequence blueAllianceClose = drive.trajectorySequenceBuilder(startPoseBlueClose)
@@ -195,6 +197,22 @@ public class MainAuto extends LinearOpMode {
                 .waitSeconds(1)
                 .build();
 
+        TrajectorySequence blueAllianceFarThroughMiddle = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .forward(18)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .forward(30)
+                .strafeLeft(80)
+                .turn(Math.toRadians(90))
+                .strafeLeft(30)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
+                .waitSeconds(1)
+                .strafeLeft(24)
+                .forward(20)
+                .waitSeconds(1)
+                .build();
+
 
         TrajectorySequence blueAllianceFarRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
                 .forward(18)
@@ -211,10 +229,26 @@ public class MainAuto extends LinearOpMode {
                 .waitSeconds(1)
                 .build();
 
-        TrajectorySequence blueAllianceFarJustPark = drive.trajectorySequenceBuilder(startPoseBlueFar)
+        TrajectorySequence blueAllianceFarThroughMiddleRobotFail = drive.trajectorySequenceBuilder(startPoseBlueFar)
                 .forward(18)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .forward(30)
                 .strafeLeft(80)
-                .back(24)
+                .turn(Math.toRadians(90))
+                .strafeLeft(30)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::stageScore)
+                .waitSeconds(1)
+                .strafeLeft(24)
+                .forward(20)
+                .waitSeconds(1)
+                .build();
+
+        TrajectorySequence blueAllianceFarJustPark = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .forward(48)
+                .strafeLeft(80)
+                .back(54)
                 .strafeLeft(20)
                 .build();
 
@@ -226,6 +260,21 @@ public class MainAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
                 .turn(Math.toRadians(-90))
                 .forward(80)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
+                .waitSeconds(1)
+                .strafeRight(25)
+                .forward(10)
+                .build();
+
+        TrajectorySequence redAllianceFarThroughMiddle = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .forward(18)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .forward(30)
+                .strafeRight(80)
+                .turn(Math.toRadians(-90))
+                .strafeRight(30)
                 .UNSTABLE_addTemporalMarkerOffset(-0.5,this::senseAndScore)
                 .waitSeconds(1)
                 .strafeRight(25)
@@ -247,10 +296,26 @@ public class MainAuto extends LinearOpMode {
                 .forward(10)
                 .build();
 
-        TrajectorySequence redAllianceFarJustPark = drive.trajectorySequenceBuilder(startPoseRedFar)
+        TrajectorySequence redAllianceFarThroughMiddleRobotFail = drive.trajectorySequenceBuilder(startPoseRedFar)
                 .forward(18)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .forward(30)
                 .strafeRight(80)
-                .back(24)
+                .turn(Math.toRadians(-90))
+                .strafeRight(30)
+                .UNSTABLE_addTemporalMarkerOffset(-0.5,this::stageScore)
+                .waitSeconds(1)
+                .strafeRight(25)
+                .forward(10)
+                .build();
+
+
+        TrajectorySequence redAllianceFarJustPark = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .forward(48)
+                .strafeRight(80)
+                .back(54)
                 .strafeRight(20)
                 .build();
 
@@ -421,6 +486,11 @@ public class MainAuto extends LinearOpMode {
                 wait=true;
                 telemetry.update();
             }
+            if(gp1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)){
+                telemetry.addLine("not through middle");
+                throughMiddle=false;
+                telemetry.update();
+            }
 
 
 
@@ -433,25 +503,45 @@ public class MainAuto extends LinearOpMode {
                 if (side == Side.BLUE) {
                     drive.setPoseEstimate(startPoseBlueFar);
                     if (autopath == AutoPath.OPTIMAL) {
-                        drive.followTrajectorySequence(blueAllianceFar);
+                        if(throughMiddle){
+                            drive.followTrajectorySequence(blueAllianceFarThroughMiddle);
+                        }
+                        else {
+                            drive.followTrajectorySequence(blueAllianceFar);
+                        }
                     }
                     else if(autopath== AutoPath.JUST_PARK){
                         drive.followTrajectorySequence(blueAllianceFarJustPark);
                     }
                     else {
-                        drive.followTrajectorySequence(blueAllianceFarRobotFail);
+                        if(throughMiddle){
+                            drive.followTrajectorySequence(blueAllianceFarThroughMiddleRobotFail);
+                        }
+                        else {
+                            drive.followTrajectorySequence(blueAllianceFarRobotFail);
+                        }
                     }
                 }
                 else {
                     drive.setPoseEstimate(startPoseRedFar);
                     if (autopath == AutoPath.OPTIMAL) {
-                        drive.followTrajectorySequence(redAllianceFar);
+                        if(throughMiddle){
+                            drive.followTrajectorySequence(redAllianceFarThroughMiddle);
+                        }
+                        else{
+                            drive.followTrajectorySequence(redAllianceFar);
+                        }
                     }
                     else if(autopath== AutoPath.JUST_PARK){
                         drive.followTrajectorySequence(redAllianceFarJustPark);
                     }
                     else {
-                        drive.followTrajectorySequence(redAllianceFarRobotFail);
+                        if(throughMiddle){
+                            drive.followTrajectorySequence(redAllianceFarThroughMiddleRobotFail);
+                        }
+                        else {
+                            drive.followTrajectorySequence(redAllianceFarRobotFail);
+                        }
                     }
                 }
             }
