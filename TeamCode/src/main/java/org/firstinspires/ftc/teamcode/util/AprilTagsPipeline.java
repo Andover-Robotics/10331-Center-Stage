@@ -20,7 +20,7 @@
  */
 
 
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.util;
 
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.CvType;
@@ -69,8 +69,6 @@ public class AprilTagsPipeline extends OpenCvPipeline
     private float decimation;
     private boolean needToSetDecimation;
     private final Object decimationSync = new Object();
-
-
 
     public AprilTagsPipeline(double tagsize, double fx, double fy, double cx, double cy)
     {
@@ -142,7 +140,6 @@ public class AprilTagsPipeline extends OpenCvPipeline
             needToSetDecimation = true;
         }
     }
-
 
     public ArrayList<AprilTagDetection> getLatestDetections(){
         return detections;
@@ -233,6 +230,7 @@ public class AprilTagsPipeline extends OpenCvPipeline
         Imgproc.line(buf, projectedPoints[4], projectedPoints[7], green, thickness);
     }
 
+    //6dof
     Pose poseFromTrapezoid(Point[] points, Mat cameraMatrix, double tagsizeX , double tagsizeY)
     {
         // The actual 2d points of the tag detected in the image
@@ -271,5 +269,3 @@ public class AprilTagsPipeline extends OpenCvPipeline
         }
     }
 }
-
-

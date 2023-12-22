@@ -4,9 +4,12 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
+import org.opencv.core.Mat;
 import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.apriltag.AprilTagPose;
 
 import java.util.ArrayList;
+import org.opencv.calib3d.Calib3d;
 
 public class AprilTagsDetection{
 
@@ -34,6 +37,7 @@ public class AprilTagsDetection{
     static int ONE = 1;
     static int TWO = 2;
     static int THREE = 3;
+
 
     private static AprilTagDetection tagOfInterest = null;
 
@@ -104,16 +108,9 @@ public class AprilTagsDetection{
         return tagOfInterest;
     }
 
-     public static void calcDistToTag(AprilTagDetection detection){
-      /*  double distance = (tagSize * Math.sqrt(fx*fy))/(2*tagSize*PIXELS_PER_METER);
-        return distance;
-
-       */
-        // return  detection.pose.;
+     public static double calcDistToTag(AprilTagDetection detection){
+        return Math.hypot(detection.pose.x,detection.pose.y);
     }
-
-
-
 
     static void tagToTelemetry(AprilTagDetection detection)
     {
