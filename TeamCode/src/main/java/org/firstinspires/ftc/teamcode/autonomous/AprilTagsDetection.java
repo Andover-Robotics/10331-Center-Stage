@@ -35,7 +35,6 @@ public class AprilTagsDetection{
     static int TWO = 2;
     static int THREE = 3;
 
-
     private static AprilTagDetection tagOfInterest = null;
 
     public void detectTag(){
@@ -105,10 +104,12 @@ public class AprilTagsDetection{
         return tagOfInterest;
     }
 
-     public double calcDistToTag(){
-        detectTag();
-        double distance = (tagSize * Math.sqrt(fx*fy))/(2*tagSize*PIXELS_PER_METER);
+     public static void calcDistToTag(AprilTagDetection detection){
+      /*  double distance = (tagSize * Math.sqrt(fx*fy))/(2*tagSize*PIXELS_PER_METER);
         return distance;
+
+       */
+        // return  detection.pose.;
     }
 
 

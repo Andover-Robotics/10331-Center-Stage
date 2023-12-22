@@ -55,19 +55,20 @@ public class TestMainAuto extends LinearOpMode {
         //writing variables for Vector2d positions that are reused
         Vector2d parkingPosBlue = new Vector2d(56,56);
         Vector2d parkingPosRed = new Vector2d(56,-56);
+
         Vector2d scoreBlue = new Vector2d(42,38);
-        Vector2d scoreRed = new Vector2d(42,-34);
+        Vector2d scoreRed = new Vector2d(42,-20);
 
 
         TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
-                .splineTo(new Vector2d(10,-34), Math.toRadians(90))
-               // .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
-                .waitSeconds(1.5)
-               // .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                .splineTo(scoreRed, Math.toRadians(0))
-               // .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                .splineTo(new Vector2d(10,-20), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
                 .waitSeconds(1)
-                .lineTo(parkingPosRed)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .splineTo(scoreRed, Math.toRadians(18 0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                .waitSeconds(1)
+                .splineTo(parkingPosRed, Math.toRadians(90))
                 .build();
 
         waitForStart();
@@ -78,5 +79,86 @@ public class TestMainAuto extends LinearOpMode {
         }
 
 
+    }
+
+
+
+    private void dropPurplePixel(){
+       // if(autopath== MainAuto.AutoPath.NO_SENSE){
+            bot.noodles.reverseIntake();
+       // }
+       /* else {
+            currentPose = drive.getPoseEstimate();
+            if (prop == TeamPropDetectionPipeline.TeamProp.ONLEFT) {
+                drive.turn(Math.toRadians(90));
+                bot.noodles.reverseIntake();
+                drive.turn(Math.toRadians(-90));
+            } else if (prop == TeamPropDetectionPipeline.TeamProp.ONRIGHT) {
+                drive.turn(Math.toRadians(-90));
+                bot.noodles.reverseIntake();
+                drive.turn(Math.toRadians(90));
+            } else {
+                bot.noodles.reverseIntake();
+            }
+            drive.setPoseEstimate(currentPose);
+        }
+
+        telemetry.addData("purple pixel is currently being dropped",".");
+        telemetry.update();
+
+        */
+    }
+
+    public void stopNoodles(){
+        bot.noodles.stop();
+        bot.box.resetBox();
+        telemetry.addData("noodles are stopped",".");
+        telemetry.update();
+    }
+
+
+    private void stageScore(){
+        bot.noodles.reverseIntake();
+        time.reset();
+        while(time.seconds() < 7) {
+            bot.box.runWheel(true);
+        }
+        bot.box.runWheel(false);
+        telemetry.addData("Scoring in stage area should occur right now",".");
+        telemetry.update();
+    }
+
+
+   /* private void senseAndScore(){
+        //locates and moves to corresponding position on Backdrop based on april tags
+
+        AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
+        bot.camera.setPipeline(aprilTagsPipeline);
+        AprilTagsDetection detection= new AprilTagsDetection();
+        int counter=0;
+        detection.detectTag();
+
+            drive.followTrajectorySequence(forward);
+            score();
+            drive.setPoseEstimate(currentPose);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        telemetry.addData("Sensing and scoring should occur right now", ".");
+        telemetry.update();
+    }
+
+    */
+
+
+    private void score(){
+        bot.fourbar.outtake();
+        bot.box.depositSecondPixel();
+        bot.resetEverything();
+        telemetry.addData("Scoring with no sensing should occur right now",".");
+        telemetry.update();
     }
 }

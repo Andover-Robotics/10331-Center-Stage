@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.test;
 
+import static org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection.calcDistToTag;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.cx;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.cy;
 import static org.firstinspires.ftc.teamcode.autonomous.MainAuto.fx;
@@ -14,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.autonomous.AprilTagsDetection;
 import org.firstinspires.ftc.teamcode.autonomous.AprilTagsPipeline;
+import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -32,13 +34,14 @@ public class TestAprilTagDetection extends LinearOpMode {
 
         cameraInit();
         waitForStart();
+        double distance;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         while(opModeIsActive() && !isStopRequested()) {
             telemetry.update();
             detection.detectTag();
-            telemetry.addLine("The tag detected is:" + detection.getTagOfInterest());
-            telemetry.addLine("the distance to tag is " + detection.calcDistToTag());
+            telemetry.addLine("The tag detected is:" + detection.getTagOfInterest().id);
+          //  telemetry.addLine("the distance to tag is " + calcDistToTag(detection.getTagOfInterest()));
             telemetry.update();
         }
 
