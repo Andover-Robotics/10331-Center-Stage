@@ -228,6 +228,21 @@ public class Bot {
     }
     */
 
+    public void setIndividualMotorPower(int motor, double power) {
+        //1 FL 2 FR 3 BL 4 BR
+        switch(motor) {
+            case 1:
+                FL.setPower(power);
+                break;
+            case 2:
+                FR.setPower(power);
+            case 3:
+                BL.setPower(power);
+            case 4:
+                BR.setPower(power);
+        }
+    }
+
     public void resetEverything(){
         noodles.stop();
         reverseMotors();
