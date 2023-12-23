@@ -60,7 +60,8 @@ public class TestMainAuto extends LinearOpMode {
         Vector2d scoreRed = new Vector2d(40,-25);
 
 
-        TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
+        //fixed park
+        TrajectorySequence redAllianceCloseNoSenseSpline = drive.trajectorySequenceBuilder(startPoseRedClose)
                 .splineTo(new Vector2d(10,-17 ), Math.toRadians(90))
                 .UNSTABLE_addTemporalMarkerOffset(-1, this::dropPurplePixel)
                 .waitSeconds(1)
@@ -73,29 +74,46 @@ public class TestMainAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(1,this::reset)
                 .waitSeconds(5)
                 .back(5)
-                //fix with MeepMeep
-                .splineTo(parkingPosRed, Math.toRadians(90))
+                .splineTo(parkingPosRed, Math.toRadians(-90))
                 .build();
 
-        TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseRedClose)
-                .forward(20)
-                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
-                .waitSeconds(1.5)
+        TrajectorySequence redAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .forward(35)
+                .UNSTABLE_addTemporalMarkerOffset(-1,this::dropPurplePixel)
+                .waitSeconds(1)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .back(7)
+                .strafeRight(36)
+                .turn(Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::score)
+                .waitSeconds(2)
+                .forward(5)
+                .UNSTABLE_addTemporalMarkerOffset(1,this::reset)
+                .strafeLeft(37)
+                .back(20)
+                .build();
+
+        TrajectorySequence blueAllianceCloseNoSense = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .forward(35)
+                .UNSTABLE_addTemporalMarkerOffset(-1,this::dropPurplePixel)
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .back(7)
+                .strafeLeft(36)
                 .turn(Math.toRadians(-90))
-                .forward(36)
-                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
-                .waitSeconds(1.5)
-                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                .strafeRight(27)
-                .forward(20)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::score)
+                .waitSeconds(2)
+                .forward(5)
+                .UNSTABLE_addTemporalMarkerOffset(1,this::reset)
+                .strafeRight(37)
+                .back(20)
                 .build();
 
         waitForStart();
 
         if (opModeIsActive() && !isStopRequested()) {
             drive.setPoseEstimate(startPoseRedClose);
-            drive.followTrajectorySequence(redAllianceCloseRobotFail);
+            drive.followTrajectorySequence(redAllianceCloseNoSense);
         }
 
 
