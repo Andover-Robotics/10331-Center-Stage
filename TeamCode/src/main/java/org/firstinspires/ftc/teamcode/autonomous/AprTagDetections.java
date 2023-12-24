@@ -15,12 +15,10 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 import java.util.List;
 
 public class AprTagDetections {
-
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
     public VisionPortal visionPortal;
     private OpMode opMode;
-
     /*
     following lines of code are for testing if this detection works in an OpMode
     public void runOpMode() {
@@ -51,7 +49,6 @@ public class AprTagDetections {
         visionPortal.close();
     }
      */
-
     public AprTagDetections(OpMode opMode) {
         this.opMode = opMode;
     }

@@ -31,11 +31,9 @@ public class TestBackdropAlign extends LinearOpMode {
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
     final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
     //tune this?
-    final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
-
-    //private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
+    final double MAX_AUTO_SPEED = 1;   //  Clip the approach speed to this max value (original was 1)
+    final double MAX_AUTO_STRAFE= 1;   //  Clip the approach speed to this max value (original was 1)
+    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value
     private static final int DESIRED_TAG_ID = 1;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private AprilTagDetection desiredTag = null;
     private AprTagDetections detections = null;
@@ -50,12 +48,8 @@ public class TestBackdropAlign extends LinearOpMode {
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
-        // Initialize the Apriltag Detection process
         detections.initAprilTag();
-
         setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
-
-        // Wait for driver to press start
         waitForStart();
 
         if (opModeIsActive()) {
@@ -77,8 +71,6 @@ public class TestBackdropAlign extends LinearOpMode {
                 sleep(20);
             }
         }
-        // Save more CPU resources when camera is no longer needed.
-        detections.visionPortal.close();
 
         while (opModeIsActive())
         {
@@ -131,6 +123,8 @@ public class TestBackdropAlign extends LinearOpMode {
             moveRobot(drive, strafe, turn);
             sleep(10);
         }
+        // Save more CPU resources when camera is no longer needed.
+        detections.visionPortal.close();
     }
     /**
      * Move robot according to desired axes motions
