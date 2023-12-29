@@ -232,6 +232,8 @@ public class Bot {
         reverseMotors();
         resetEncoder();
         slides.runToLow();
+
+
         fourbar.storage();
         box.resetBox();
     }

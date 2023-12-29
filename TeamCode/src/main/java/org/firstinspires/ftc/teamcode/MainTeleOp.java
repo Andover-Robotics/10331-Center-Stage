@@ -193,7 +193,7 @@ public class MainTeleOp extends LinearOpMode {
                 turnVector = new Vector2d(
                         gp1.getRightX(), 0);
 
-        bot.driveRobotCentric(-driveVector.getX() * driveSpeed,
+        bot.driveRobotCentric(driveVector.getX() * driveSpeed,
                 driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
         );

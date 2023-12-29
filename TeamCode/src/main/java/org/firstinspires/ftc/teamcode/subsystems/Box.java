@@ -10,23 +10,26 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //link to intake, comment out breakbeam sensor
 
 public class Box {
-    private final CRServo wheelServo;
-    private final Servo flapServo;
+    public final CRServo wheelServo;
+    public final CRServo flapServo;
 
     private int numPixelsDeposited=0;
   //  private final DigitalChannel breakbeamSensor;
     private boolean boxFull;
     //private int timesBroken;
-    private final double flapClosed = 0;
-    private final double flapOpen = 0.5;
    private ElapsedTime time;
 
     //boolean boxFull has to receive input from break beam sensor
 
     public Box(OpMode opMode) {
+
+        //switched configs
+
         wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
         wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        flapServo = opMode.hardwareMap.servo.get("flap servo");
+        flapServo = opMode.hardwareMap.crservo.get("flap servo");
+
+
        /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
         */
@@ -34,17 +37,18 @@ public class Box {
     }
 
     public void depositFirstPixel() {
-        flapServo.setPosition(flapOpen);
+        flapServo.setPower(0.7);
        // runWheel(true);
         numPixelsDeposited = 1;
     }
 
     public void depositSecondPixel() {
-        flapServo.setPosition(flapOpen);
+        flapServo.setPower(0.7);
         runWheel(false);
         numPixelsDeposited = 0;
     }
     public void secure() {
+        flapServo.setPower(0);
         time.reset();
         while(time.seconds() < 0.5) {
             runWheel(true);
@@ -69,7 +73,7 @@ public class Box {
     public void resetBox() {
        // timesBroken= 0;
         numPixelsDeposited = 0;
-        flapServo.setPosition(flapClosed);
+        flapServo.setPower(0);
         wheelServo.setPower(0);
     }
 

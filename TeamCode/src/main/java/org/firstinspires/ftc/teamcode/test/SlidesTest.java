@@ -5,13 +5,19 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Bot;
 
 @TeleOp(group = "test")
 public class SlidesTest extends LinearOpMode {
+
+    //unplugged port 0
+    //unplugged port 1
     Bot bot;
     private GamepadEx gp2;
+    private ElapsedTime time;
+
 
     @Override
     public void runOpMode(){
@@ -23,15 +29,36 @@ public class SlidesTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
+            time = new ElapsedTime();
             gp2.readButtons();
-            runSlides(gp2.getLeftY());
-            telemetry.update();
+           // runSlides(gp2.getLeftY());
+
+            /*
+            if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+                bot.slides.test(0.5);
+            }
+
+            if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
+                bot.slides.test(0);
+            }
+
+             */
+
+
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                //first stage
+                while(time.seconds() <= 3) bot.slides.test(0.5);
+                time.reset();
+            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                while(time.seconds() <= 3) bot.slides.test(-0.5);
+                time.reset();
+            }
+
 
             //dpad check
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+           /* if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
              //   bot.slides.periodic();
                 bot.slides.runToTop();
-                //dont question why the commands seem upside down... idk why
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
              //   bot.slides.periodic();
@@ -45,9 +72,8 @@ public class SlidesTest extends LinearOpMode {
                // bot.slides.periodic();
                 bot.slides.runToMid();
             }
-
-
-            bot.slides.periodic();
+            */
+           // bot.slides.periodic();
         }
     }
 
@@ -55,9 +81,8 @@ public class SlidesTest extends LinearOpMode {
         //manual slides test
         telemetry.addData("Gamepad Power", power);
         telemetry.addData("Slide Power Given",bot.slides.getManualPower());
-        telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
-        bot.slides.periodic();
+        //telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);
-
+        bot.slides.periodic();
     }
 }
