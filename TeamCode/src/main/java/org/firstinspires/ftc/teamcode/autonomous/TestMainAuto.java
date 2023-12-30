@@ -89,7 +89,7 @@ public class TestMainAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
                 .back(5)
                 .strafeRight(40)
-                .forward(10)
+                .forward(25)
                 .build();
 
         waitForStart();
@@ -142,10 +142,11 @@ public class TestMainAuto extends LinearOpMode {
     private void stageScore(){
         bot.noodles.reverseIntake();
         time.reset();
-        while(time.seconds() < 11) {
+        while(time.seconds() < 4) {
             bot.box.runWheel(true);
+            //need to replace this servo
         }
-        bot.box.runWheel(false);
+        bot.box.runWheel(true);
         telemetry.addData("Scoring in stage area should occur right now",".");
         telemetry.update();
     }
