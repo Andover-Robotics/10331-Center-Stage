@@ -26,22 +26,24 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPoseRedClose)
-                                .splineTo(new Vector2d(10,-34), Math.toRadians(90))
-                               // .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
-                                .waitSeconds(1.5)
-                               // .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                                .splineTo(scoreRed, Math.toRadians(0))
-                             //   .UNSTABLE_addTemporalMarkerOffset(-0.5, this::score)
+                                .forward(35)
+                                //.UNSTABLE_addTemporalMarkerOffset(-1,this::dropPurplePixel)
                                 .waitSeconds(1)
-                                .lineTo(parkingPosRed)
+                               // .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                                .back(7)
+                                .strafeRight(36)
+                                .turn(Math.toRadians(90))
+                               // .UNSTABLE_addTemporalMarkerOffset(-0.1,this::score)
+                                .waitSeconds(2)
+                                .forward(5)
+                              //  .UNSTABLE_addTemporalMarkerOffset(1,this::reset)
+                                .strafeLeft(37)
+                                .back(20)
                                 .build()
                 );
 
-        //red far is done
-        // blue far is done
-        // blue close is done
-        // red close is done
-
+        //blue close is done
+        //red close is done
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)

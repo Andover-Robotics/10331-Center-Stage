@@ -42,16 +42,14 @@ public class MainAuto extends LinearOpMode {
     // just park has 1 path
 
     // total => 14 x 4 = 56 paths
+    //up to 10 wait seconds before start: 56 * 10 = 560 paths
 
 
 
     Bot bot;
-
-
-    double distanceFromObject;
-    boolean wait=false;
-    boolean throughMiddle= true;
-
+    boolean wait = false;
+    boolean throughMiddle = true;
+    double waitSecondsBeforeStart;
     enum Side {
         RED, BLUE,
     }
@@ -60,7 +58,7 @@ public class MainAuto extends LinearOpMode {
     }
 
     //different paths to follow depending on driver input before match
-    enum AutoPath{
+    enum AutoPath {
         MECHANICAL_FAILURE, OPTIMAL, NO_SENSE, JUST_PARK
     }
 
@@ -158,7 +156,7 @@ public class MainAuto extends LinearOpMode {
         //optimal outtakes on the backdrop
         // no sense does not involve team prop sensing or april tag sensing (still outtakes)
 
-
+        //blue alliance trajectories
         TrajectorySequence blueAllianceClose = drive.trajectorySequenceBuilder(startPoseBlueClose)
                 .forward(20)
                 .UNSTABLE_addTemporalMarkerOffset(-0.3, this::dropPurplePixel)
@@ -330,6 +328,8 @@ public class MainAuto extends LinearOpMode {
 
 
         TrajectorySequence redAllianceClose = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .waitSeconds(waitSecondsBeforeStart)
+                //this is to test different wait times before we start, also lets us see how much time we can afford to wait and still complete the trajectoryseq
                 .forward(20)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
                 .waitSeconds(1.5)
@@ -550,6 +550,10 @@ public class MainAuto extends LinearOpMode {
                 throughMiddle=false;
                 telemetry.update();
             }
+            while(gp1.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
+                if(waitSecondsBeforeStart>=10) break;
+                waitSecondsBeforeStart++;
+            }
 
 
 
@@ -680,6 +684,7 @@ public class MainAuto extends LinearOpMode {
 
     private void senseAndScore(){
         //locates and moves to corresponding position on Backdrop based on april tags
+        //Note: can change this based on the backdropAlign method if it works
 
         AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
         bot.camera.setPipeline(aprilTagsPipeline);
