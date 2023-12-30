@@ -35,7 +35,7 @@ public class Bot {
 
    // private static AprilTagsDetection detections;
 
-    public Slides slides;
+ //   public Slides slides;
     public Fourbar fourbar;
 
     public Noodles noodles;
@@ -97,7 +97,7 @@ public class Bot {
         BL.setMode(RUN_USING_ENCODER);
         BR.setMode(RUN_USING_ENCODER);
 
-        this.slides = new Slides(opMode);
+     //   this.slides = new Slides();
         this.fourbar = new Fourbar(opMode);
         this.noodles = new Noodles(opMode);
         this.box = new Box(opMode);
@@ -232,7 +232,7 @@ public class Bot {
         noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToLow();
+      //  slides.runToLow();
         fourbar.storage();
         box.resetBox();
     }
@@ -269,7 +269,7 @@ public class Bot {
 
     public void outtakeSlides(double target){
         currentState = BotState.OUTTAKE;
-        slides.runTo(target);
+ //       slides.runTo(target);
     }
 
     public void outtakeFourbar(double input){
@@ -287,13 +287,13 @@ public class Bot {
         FR.setMode(STOP_AND_RESET_ENCODER);
         BR.setMode(STOP_AND_RESET_ENCODER);
         BL.setMode(STOP_AND_RESET_ENCODER);
-        slides.resetEncoder();
+      //  slides.resetEncoder();
     }
 
 
 
     public void resetProfiler() {
-        slides.resetProfiler();
+   //     slides.resetProfiler();
 
     }
     public void turn(double power){

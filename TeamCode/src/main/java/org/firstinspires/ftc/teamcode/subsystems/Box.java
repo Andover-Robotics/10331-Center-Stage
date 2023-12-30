@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Box {
     private final CRServo wheelServo;
-    private final Servo flapServo;
+    private final CRServo flapServo;
 
     private int numPixelsDeposited=0;
     //  private final DigitalChannel breakbeamSensor;
@@ -26,7 +26,7 @@ public class Box {
     public Box(OpMode opMode) {
         wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
         wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        flapServo = opMode.hardwareMap.servo.get("flap servo");
+        flapServo = opMode.hardwareMap.crservo.get("flap servo");
        /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
         breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
         */
@@ -34,13 +34,13 @@ public class Box {
     }
 
     public void depositFirstPixel() {
-        flapServo.setPosition(flapOpen);
+        flapServo.setPower(flapOpen);
         // runWheel(true);
         numPixelsDeposited = 1;
     }
 
     public void depositSecondPixel() {
-        flapServo.setPosition(flapOpen);
+        flapServo.setPower(flapOpen);
         runWheel(false);
         numPixelsDeposited = 0;
     }
@@ -69,7 +69,7 @@ public class Box {
     public void resetBox() {
         // timesBroken= 0;
         numPixelsDeposited = 0;
-        flapServo.setPosition(flapClosed);
+        flapServo.setPower(flapClosed);
         wheelServo.setPower(0);
     }
 

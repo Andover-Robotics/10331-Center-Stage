@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.MotionProfiler;
 
 
 public class Slides {
-    public final MotorEx slidesMotor;
+/*    public final MotorEx slidesMotor;
     private double current_pos = 0 ;
     private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
@@ -132,7 +132,8 @@ public class Slides {
         b) we are using manual control
          */
 
-        else {
+
+    /*    else {
             if (profiler.isDone()) {
                 profiler = new MotionProfiler(MAX_VELOCITY, MAX_ACCELERATION);
             }
@@ -165,6 +166,7 @@ public class Slides {
                 if (power < Math.abs(0.1)) slidesMotor.set(0);
                 else slidesMotor.set(power);
                  */
+    /*
         }
     }
 
@@ -185,6 +187,9 @@ public class Slides {
     public double getManualPower(){
         return manualPower;
     }
+
+     */
+
 
 }
 

@@ -83,15 +83,17 @@ public class TestMainAuto extends LinearOpMode {
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
                 .turn(Math.toRadians(-90))
-                .forward(36)
+                .forward(17)
                 .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                .strafeRight(27)
-                .forward(20)
+                .back(5)
+                .strafeRight(40)
+                .forward(10)
                 .build();
 
         waitForStart();
+
 
         if (opModeIsActive() && !isStopRequested()) {
             drive.setPoseEstimate(startPoseRedClose);
@@ -140,7 +142,7 @@ public class TestMainAuto extends LinearOpMode {
     private void stageScore(){
         bot.noodles.reverseIntake();
         time.reset();
-        while(time.seconds() < 7) {
+        while(time.seconds() < 11) {
             bot.box.runWheel(true);
         }
         bot.box.runWheel(false);
