@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
 public class Slides {
     public final MotorEx leftMotor, midMotor, rightMotor;
-    private double current_pos = 0 ;
+    private double target = 0 ;
     private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
     private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1;
@@ -23,7 +23,7 @@ public class Slides {
     public static final double MAX_VELOCITY = 500, MAX_ACCELERATION = 500;
     //tune
     private PIDFController controller;
-    private MotionProfiler profiler;
+    private MotionProfiler profiler = new MotionProfiler(30000, 20000);
     private double profile_init_time = 0;
 
     public enum slidesPosition{
@@ -34,7 +34,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 100, top = 1500, mid = 1000, low = 450;
+    public static int storage = 100, top = 1500, mid = 1000, low = 700;
     //tune
 
     private final OpMode opMode;
@@ -45,8 +45,8 @@ public class Slides {
         midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
 
         rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
-        midMotor.setInverted(false);
+        leftMotor.setInverted(true);
+        midMotor.setInverted(true);
 
         //right is the one closest to outtake
         //left and mid are the chain
@@ -65,7 +65,7 @@ public class Slides {
         this.opMode = opMode;
     }
 
-    public void runTo(double target) {
+    public void runTo(double pos) {
         rightMotor.setRunMode(Motor.RunMode.RawPower);
         rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightMotor.setRunMode(Motor.RunMode.RawPower);
@@ -76,11 +76,12 @@ public class Slides {
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(tolerance);
         resetProfiler();
-        profiler.init(rightMotor.getCurrentPosition(), current_pos);
+        profiler.init(rightMotor.getCurrentPosition(), pos);
         profile_init_time = opMode.time;
 
-        goingDown = current_pos > target;
-        target = current_pos;
+        goingDown = pos > target;
+        target = pos;
+        periodic();
     }
 
     public void runToTop() {
@@ -120,16 +121,21 @@ public class Slides {
     }
 
     public void periodic() {
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(false);
-        midMotor.setInverted(false);
+     //   rightMotor.setInverted(false);
+      //  leftMotor.setInverted(false);
+      //  midMotor.setInverted(false);
+
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(true);
+        midMotor.setInverted(true);
+
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
         if (!profiler.isOver()) {
             controller.setSetPoint(profiler.profile_pos(dt));
-            power = powerUp * controller.calculate(leftMotor.getCurrentPosition());
+            power = powerUp * controller.calculate(rightMotor.getCurrentPosition());
             if (goingDown) {
-                power = powerDown * controller.calculate(leftMotor.getCurrentPosition());
+                power = powerDown * controller.calculate(rightMotor.getCurrentPosition());
             }
             leftMotor.set(power);
             rightMotor.set(power);
@@ -139,20 +145,19 @@ public class Slides {
                 profiler = new MotionProfiler(30000, 20000);
             }
             if (manualPower != 0) {
-                controller.setSetPoint(leftMotor.getCurrentPosition());
-                leftMotor.set(manualPower / manualDivide);
-                rightMotor.set(manualPower / manualDivide);
+                controller.setSetPoint(rightMotor.getCurrentPosition());
                 midMotor.set(manualPower / manualDivide);
+                rightMotor.set(manualPower / manualDivide);
+                leftMotor.set(manualPower / manualDivide);
             } else {
-                power = staticF * controller.calculate(leftMotor.getCurrentPosition());
+                power = staticF * controller.calculate(rightMotor.getCurrentPosition());
                 leftMotor.set(power);
-                rightMotor.set(power);
+                midMotor.set(power);
                 if (power < Math.abs(0.1)) {
-                    midMotor.set(0);
+                    rightMotor.set(0);
                 } else {
-                    midMotor.set(power);
+                    rightMotor.set(power);
                 }
-
             }
         }
     }

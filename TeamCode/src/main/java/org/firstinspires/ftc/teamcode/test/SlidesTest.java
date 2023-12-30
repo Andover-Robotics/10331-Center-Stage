@@ -16,8 +16,6 @@ public class SlidesTest extends LinearOpMode {
     //unplugged port 1
     Bot bot;
     private GamepadEx gp2;
-    private ElapsedTime time;
-
 
     @Override
     public void runOpMode(){
@@ -25,55 +23,50 @@ public class SlidesTest extends LinearOpMode {
         gp2 = new GamepadEx(gamepad2);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         bot.slides.resetEncoder();
-        bot.slides.runToStorage();
+        //bot.slides.runToStorage();
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            time = new ElapsedTime();
             gp2.readButtons();
-           // runSlides(gp2.getLeftY());
+            runSlides(gp2.getLeftY());
 
-            /*
             if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
-                bot.slides.test(0.5);
+                bot.slides.test(0.25);
             }
 
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
                 bot.slides.test(0);
             }
 
-             */
-
-
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                //first stage
-                while(time.seconds() <= 3) bot.slides.test(0.5);
-                time.reset();
-            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                while(time.seconds() <= 3) bot.slides.test(-0.5);
-                time.reset();
+            if(gp2.wasJustPressed(GamepadKeys.Button.Y)) {
+                bot.slides.test(-0.25);
             }
+
+            bot.slides.periodic();
 
 
             //dpad check
-           /* if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
              //   bot.slides.periodic();
                 bot.slides.runToTop();
+           //     bot.slides.periodic();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-             //   bot.slides.periodic();
+              //  bot.slides.periodic();
                 bot.slides.runToStorage();
+           //     bot.slides.periodic();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-              //  bot.slides.periodic();
+             //   bot.slides.periodic();
                 bot.slides.runToLow();
+            //    bot.slides.periodic();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
                // bot.slides.periodic();
                 bot.slides.runToMid();
+              //  bot.slides.periodic();;
             }
-            */
-           // bot.slides.periodic();
+          //  bot.slides.periodic();
         }
     }
 

@@ -8,12 +8,12 @@ public class Fourbar {
     private final Servo angleBoxServo;
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.67;
+    private static double outtakeBox=0.57;
 
-    private static double boxAngleReadyForStorage=1.0;
-    private static double storageBox=0.37;
-    private static double outtake = 0.819;
-    public static double storage = 0.1;
+   // private static double boxAngleReadyForStorage=1.0;
+    private static double storageBox=0.95;
+    private static double outtake = 0.0;
+    public static double storage = 0.7;
     //storage position is 0,1
 
     public static double fourbarPos=1.0;
@@ -52,10 +52,15 @@ public class Fourbar {
     }
 
     public void storage(){
-        angleBoxServo.setPosition(boxAngleReadyForStorage);
+        //angleBoxServo.setPosition(boxAngleReadyForStorage);
         fourbar.setPosition(storage);
         angleBoxServo.setPosition(storageBox);
         isOuttakePosition = false;
+    }
+
+    public void position(double fourbarPos, double box){
+        angleBoxServo.setPosition(box);
+        fourbar.setPosition(fourbarPos);
     }
 
     public void runManualOuttake(double position){
@@ -83,14 +88,14 @@ public class Fourbar {
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void incrementFourbarPosition(){
-        fourbarPos+=0.01;
+        fourbarPos+=0.1;
         if(fourbarPos>=1){
             fourbarPos=1;
         }
         fourbar.setPosition(fourbarPos);
     }
     public void decrementFourbarPosition(){
-        fourbarPos-=0.01;
+        fourbarPos-=0.1;
         if(fourbarPos<=0){
             fourbarPos=0;
         }
@@ -115,10 +120,10 @@ public class Fourbar {
         return outtakeBox;
     }
     public double getBoxPos(){
-        return boxInitialPos;
+        return angleBoxServo.getPosition();
     }
     public double getFourbarPos(){
-        return fourbarPos;
+        return fourbar.getPosition();
     }
 
 }
