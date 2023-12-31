@@ -100,4 +100,8 @@ public class MotionProfiler {
     public boolean isDone() {
         return isDone;
     }
+
+    public void setIsOverTrue() {
+        isOver = true;
+    }
 }

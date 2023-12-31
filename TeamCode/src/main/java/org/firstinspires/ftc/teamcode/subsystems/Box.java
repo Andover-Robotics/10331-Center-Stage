@@ -29,29 +29,34 @@ public class Box {
         wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
         flapServo = opMode.hardwareMap.crservo.get("flap servo");
 
-
-       /* breakbeamSensor = hardwareMap.get(DigitalChannel.class, "breakbeamSensor");
-        breakbeamSensor.setMode(DigitalChannel.Mode.INPUT);
-        */
         time = new ElapsedTime();
     }
 
     public void depositFirstPixel() {
-        flapServo.setPower(0.7);
-       // runWheel(true);
+        time.reset();
+        while(time.seconds() < 1.5) {
+            flapServo.setPower(1);
+        }
+        flapServo.setPower(0);
         numPixelsDeposited = 1;
     }
 
     public void depositSecondPixel() {
-        flapServo.setPower(0.7);
-        runWheel(false);
+        time.reset();
+        while(time.seconds() < 2.5) {
+            flapServo.setPower(1);
+            wheelServo.setPower(1);
+        }
+        flapServo.setPower(0);
+        wheelServo.setPower(0);
+
         numPixelsDeposited = 0;
     }
     public void secure() {
         flapServo.setPower(0);
         time.reset();
         while(time.seconds() < 0.5) {
-            runWheel(true);
+            wheelServo.setPower(-1);
         }
         wheelServo.setPower(0);
     }
@@ -85,21 +90,6 @@ public class Box {
         boxFull = isFull;
     }
 
-    /*
-    public void checkBeam(){
-        boolean isBeamBroken = breakbeamSensor.getState();
-        if (isBeamBroken) {
-            telemetry.addData("Status", "Object detected!");
-            timesBroken++;
-        } else {
-            telemetry.addData("Status", "No object detected");
-        }
-        if(timesBroken ==2){
-           setIsFull(true);
-        }
-    }
-
-     */
 
     public int getNumPixelsDeposited(){
         return numPixelsDeposited;

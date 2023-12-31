@@ -71,7 +71,7 @@ public class MainTeleOp extends LinearOpMode {
                     //storage position
                     bot.box.resetBox();
                     bot.fourbar.storage();
-                    bot.noodles.intake(10);
+                  //  bot.noodles.intake();
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
                 }
@@ -93,7 +93,6 @@ public class MainTeleOp extends LinearOpMode {
             if(gp2.wasJustPressed(GamepadKeys.Button.Y)){
                 if(bot.box.getNumPixelsDeposited()==1){
                     bot.box.depositSecondPixel();
-                    sleep(1000);
                     bot.box.resetBox();
                 }
                 else {
@@ -105,21 +104,17 @@ public class MainTeleOp extends LinearOpMode {
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
                 time.reset();
                 bot.fourbar.outtake();
-                if(bot.fourbar.getIsOuttakePos()) {
                     if(isIntake){
                         isIntake = false;
                         bot.stopIntake();
                     }
-                    while(time.seconds() < 2) {
-                        telemetry.addData("waiting...", time.seconds());
-                        telemetry.update();
-                    }
                     isOuttakePosition = true;
+                    bot.box.depositFirstPixel();
                     bot.box.depositSecondPixel();
-                }
                 telemetry.addLine("Currently in outtake position and deposited two pixels");
             }
 
+            //feeder bot -> deposit pixel
             if(gp2.wasJustPressed(GamepadKeys.Button.START)){
                 bot.noodles.reverseIntake();
                 time.reset();

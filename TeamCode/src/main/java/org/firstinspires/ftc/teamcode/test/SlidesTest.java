@@ -30,7 +30,7 @@ public class SlidesTest extends LinearOpMode {
             gp2.readButtons();
             runSlides(gp2.getLeftY());
 
-            if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+       /*     if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 bot.slides.test(0.25);
             }
 
@@ -41,41 +41,38 @@ public class SlidesTest extends LinearOpMode {
             if(gp2.wasJustPressed(GamepadKeys.Button.Y)) {
                 bot.slides.test(-0.25);
             }
+        */
 
-            bot.slides.periodic();
+         //   bot.slides.periodic();
 
 
             //dpad check
             if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
              //   bot.slides.periodic();
                 bot.slides.runToTop();
-           //     bot.slides.periodic();
+             //   bot.slides.periodic();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-              //  bot.slides.periodic();
+             //   bot.slides.periodic();
                 bot.slides.runToStorage();
-           //     bot.slides.periodic();
+             //   bot.slides.periodic();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
              //   bot.slides.periodic();
                 bot.slides.runToLow();
-            //    bot.slides.periodic();
+             //   bot.slides.periodic();
             }
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-               // bot.slides.periodic();
+              //  bot.slides.periodic();
                 bot.slides.runToMid();
               //  bot.slides.periodic();;
             }
-          //  bot.slides.periodic();
+            bot.slides.periodic();
         }
     }
 
     private void runSlides(double power) {
-        //manual slides test
-        telemetry.addData("Gamepad Power", power);
-        telemetry.addData("Slide Power Given",bot.slides.getManualPower());
-        //telemetry.addData("Slides Power", bot.slides.slidesMotor.getVelocity());
         bot.slides.runToManual(power);
-        bot.slides.periodic();
+       // bot.slides.periodic();
     }
 }

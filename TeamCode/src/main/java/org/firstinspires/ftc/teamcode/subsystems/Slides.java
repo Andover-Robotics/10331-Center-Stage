@@ -20,7 +20,7 @@ public class Slides {
     public boolean goingDown;
     private final double MIN_POWER = 0.1;
 
-    public static final double MAX_VELOCITY = 500, MAX_ACCELERATION = 500;
+    public static final double MAX_VELOCITY = 30000, MAX_ACCELERATION = 20000;
     //tune
     private PIDFController controller;
     private MotionProfiler profiler = new MotionProfiler(30000, 20000);
@@ -34,7 +34,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 100, top = 1500, mid = 1000, low = 700;
+    public static int storage = -100, top = 200, mid = 100, low = 0;
     //tune
 
     private final OpMode opMode;
@@ -81,7 +81,7 @@ public class Slides {
 
         goingDown = pos > target;
         target = pos;
-        periodic();
+       // periodic();
     }
 
     public void runToTop() {
@@ -115,22 +115,20 @@ public class Slides {
     }
 
     public void resetEncoder() {
-        leftMotor.resetEncoder();
-        midMotor.resetEncoder();
+       // leftMotor.resetEncoder();
+      //  midMotor.resetEncoder();
         rightMotor.resetEncoder();
+      //  resetProfiler();
     }
 
     public void periodic() {
-     //   rightMotor.setInverted(false);
-      //  leftMotor.setInverted(false);
-      //  midMotor.setInverted(false);
-
         rightMotor.setInverted(true);
         leftMotor.setInverted(true);
         midMotor.setInverted(true);
 
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
+
         if (!profiler.isOver()) {
             controller.setSetPoint(profiler.profile_pos(dt));
             power = powerUp * controller.calculate(rightMotor.getCurrentPosition());
@@ -140,10 +138,12 @@ public class Slides {
             leftMotor.set(power);
             rightMotor.set(power);
             midMotor.set(power);
+
         } else {
             if (profiler.isDone()) {
                 profiler = new MotionProfiler(30000, 20000);
             }
+
             if (manualPower != 0) {
                 controller.setSetPoint(rightMotor.getCurrentPosition());
                 midMotor.set(manualPower / manualDivide);
@@ -151,12 +151,12 @@ public class Slides {
                 leftMotor.set(manualPower / manualDivide);
             } else {
                 power = staticF * controller.calculate(rightMotor.getCurrentPosition());
+                rightMotor.set(power);
                 leftMotor.set(power);
-                midMotor.set(power);
                 if (power < Math.abs(0.1)) {
-                    rightMotor.set(0);
+                    midMotor.set(0);
                 } else {
-                    rightMotor.set(power);
+                    midMotor.set(power);
                 }
             }
         }
@@ -166,6 +166,7 @@ public class Slides {
         rightMotor.set(power);
         leftMotor.set(power);
         midMotor.set(power);
+
     }
 
     public void resetProfiler(){

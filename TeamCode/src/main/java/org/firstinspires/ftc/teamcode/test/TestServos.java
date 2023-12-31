@@ -38,10 +38,11 @@ public class TestServos extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             gp2.readButtons();
-//AnikaAnoushka
+
             if(gp2.wasJustPressed(GamepadKeys.Button.A)){
                 if(isRun){
-                    bot.box.wheelServo.setPower(0.7);
+                    bot.box.wheelServo.setPower(1);
+                    //power of 1 is intaking
                     isRun=false;
                 }
                 else{
@@ -51,7 +52,8 @@ public class TestServos extends LinearOpMode {
             }
             if(gp2.wasJustPressed(GamepadKeys.Button.X)){
                if(isRun){
-                   bot.box.flapServo.setPower(0.7);
+                   bot.box.flapServo.setPower(1);
+                   //power of 1 is depositing
                    isRun=false;
                }
                else{
