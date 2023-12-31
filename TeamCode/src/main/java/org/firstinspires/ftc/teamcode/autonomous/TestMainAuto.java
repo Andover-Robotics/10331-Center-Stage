@@ -78,7 +78,7 @@ public class TestMainAuto extends LinearOpMode {
                 .build();
 
         TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseRedClose)
-                .forward(20)
+                .forward(25)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
