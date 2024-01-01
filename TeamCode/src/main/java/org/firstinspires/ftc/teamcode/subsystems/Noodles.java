@@ -17,7 +17,7 @@ public class Noodles {
         this.opMode = opMode;
         noodleMotor= opMode.hardwareMap.get(DcMotorEx.class, "noodles motor");
         counterRoller= opMode.hardwareMap.get(CRServo.class, "counter roller");
-        counterRoller.setDirection(CRServo.Direction.FORWARD);
+        counterRoller.setDirection(CRServo.Direction.REVERSE);
         noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
         isIntake = false;
     }

@@ -34,7 +34,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = -100, top = 200, mid = 100, low = 0;
+    public static int storage = 100, top = 700 , mid = 500, low = 300;
     //tune
 
     private final OpMode opMode;
@@ -68,8 +68,8 @@ public class Slides {
     public void runTo(double pos) {
         rightMotor.setRunMode(Motor.RunMode.RawPower);
         rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightMotor.setRunMode(Motor.RunMode.RawPower);
-        rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        leftMotor.setRunMode(Motor.RunMode.RawPower);
+        leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         midMotor.setRunMode(Motor.RunMode.RawPower);
         midMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
@@ -122,9 +122,9 @@ public class Slides {
     }
 
     public void periodic() {
-        rightMotor.setInverted(true);
-        leftMotor.setInverted(true);
-        midMotor.setInverted(true);
+        rightMotor.setInverted(false);
+        leftMotor.setInverted(false);
+        midMotor.setInverted(false);
 
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
@@ -149,6 +149,7 @@ public class Slides {
                 midMotor.set(manualPower / manualDivide);
                 rightMotor.set(manualPower / manualDivide);
                 leftMotor.set(manualPower / manualDivide);
+
             } else {
                 power = staticF * controller.calculate(rightMotor.getCurrentPosition());
                 rightMotor.set(power);

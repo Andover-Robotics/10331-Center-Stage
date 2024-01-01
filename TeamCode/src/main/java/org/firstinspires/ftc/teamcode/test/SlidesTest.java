@@ -43,7 +43,7 @@ public class SlidesTest extends LinearOpMode {
             }
         */
 
-         //   bot.slides.periodic();
+              bot.slides.periodic();
 
 
             //dpad check
