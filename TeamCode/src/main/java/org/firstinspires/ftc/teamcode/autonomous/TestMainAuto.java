@@ -78,18 +78,33 @@ public class TestMainAuto extends LinearOpMode {
                 .build();
 
         TrajectorySequence redAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseRedClose)
-                .forward(25)
+                .forward(17)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
                 .turn(Math.toRadians(-90))
-                .forward(17)
+                .forward(13)
                 .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
                 .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
-                .back(5)
-                .strafeRight(40)
-                .forward(25)
+                .back(8)
+                .strafeRight(30)
+                .forward(15)
+                .build();
+
+        TrajectorySequence blueAllianceCloseRobotFail = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .forward(17)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .turn(Math.toRadians(90))
+                .forward(13)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .back(8)
+                .strafeLeft(30)
+                .forward(15)
                 .build();
 
         waitForStart();
