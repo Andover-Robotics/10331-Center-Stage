@@ -30,6 +30,7 @@ public class TestColorDetection extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
         pipeline = new TeamPropDetectionPipeline(telemetry);
         camera.setPipeline(pipeline);
+        pipeline.setAlliance(2);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
 

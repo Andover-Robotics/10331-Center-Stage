@@ -10,8 +10,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
 @Autonomous(name = "TestMainAutonomous")
@@ -19,6 +24,7 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 public class TestMainAuto extends LinearOpMode {
 
     Bot bot;
+    Pose2d currentPose;
 
    // TeamPropDetectionPipeline.TeamProp prop;
     private ElapsedTime time = new ElapsedTime();
@@ -29,13 +35,42 @@ public class TestMainAuto extends LinearOpMode {
     public static double cx = 580.850545;
     public static double cy = 245.959325;
 
+    TrajectorySequence strafeLeft;
+    TrajectorySequence strafeRight;
+    TrajectorySequence forward;
+
+  //  TeamPropDetectionPipeline.TeamProp prop;
+    OpenCvWebcam camera;
+    TeamPropDetectionPipeline pipeline;
 
     // UNITS ARE METERS
     public static double tagSize = 0.032;
 
     SampleMecanumDrive drive;
+    private final int STREAM_HEIGHT = 720, STREAM_WIDTH = 1280;
     @Override
     public void runOpMode() throws InterruptedException {
+
+        WebcamName camName = hardwareMap.get(WebcamName.class, "webcam");
+        camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
+        pipeline = new TeamPropDetectionPipeline(telemetry);
+        camera.setPipeline(pipeline);
+        pipeline.setAlliance(2);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+
+            @Override
+            public void onOpened() {
+                camera.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addData("Error", errorCode);
+                telemetry.update();
+            }
+        });
+
 
         bot = Bot.getInstance(this);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -107,12 +142,39 @@ public class TestMainAuto extends LinearOpMode {
                 .forward(15)
                 .build();
 
+        TrajectorySequence blueAllianceCloseScore = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .forward(17)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::dropPurplePixel)
+                .waitSeconds(1.5)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .turn(Math.toRadians(90))
+                .forward(13)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::stageScore)
+                .waitSeconds(12)
+                .UNSTABLE_addTemporalMarkerOffset(-0.1,this::reset)
+                .waitSeconds(3)
+              //  .UNSTABLE_addTemporalMarkerOffset(0,this::stopNoodles)
+                .back(10)
+                .strafeLeft(30)
+                .forward(15)
+                .build();
+
+        strafeLeft = drive.trajectorySequenceBuilder(startPose)
+                .strafeLeft(5)
+                .build();
+        strafeRight = drive.trajectorySequenceBuilder(startPose)
+                .strafeRight(5)
+                .build();
+        forward = drive.trajectorySequenceBuilder(startPose)
+                .forward(2)
+                .build();
+
         waitForStart();
 
 
         if (opModeIsActive() && !isStopRequested()) {
-            drive.setPoseEstimate(startPoseRedClose);
-            drive.followTrajectorySequence(redAllianceCloseRobotFail);
+            drive.setPoseEstimate(startPoseBlueClose);
+            drive.followTrajectorySequence(blueAllianceCloseScore);
         }
 
 
@@ -121,16 +183,12 @@ public class TestMainAuto extends LinearOpMode {
 
 
     private void dropPurplePixel(){
-       // if(autopath== MainAuto.AutoPath.NO_SENSE){
-            bot.noodles.reverseIntake();
-       // }
-       /* else {
             currentPose = drive.getPoseEstimate();
-            if (prop == TeamPropDetectionPipeline.TeamProp.ONLEFT) {
+            if (pipeline.getTeamPropLocation() == TeamPropDetectionPipeline.TeamProp.ONLEFT) {
                 drive.turn(Math.toRadians(90));
                 bot.noodles.reverseIntake();
                 drive.turn(Math.toRadians(-90));
-            } else if (prop == TeamPropDetectionPipeline.TeamProp.ONRIGHT) {
+            } else if (pipeline.getTeamPropLocation() == TeamPropDetectionPipeline.TeamProp.ONRIGHT) {
                 drive.turn(Math.toRadians(-90));
                 bot.noodles.reverseIntake();
                 drive.turn(Math.toRadians(90));
@@ -140,11 +198,7 @@ public class TestMainAuto extends LinearOpMode {
             drive.setPoseEstimate(currentPose);
         }
 
-        telemetry.addData("purple pixel is currently being dropped",".");
-        telemetry.update();
 
-        */
-    }
 
     public void stopNoodles(){
         bot.noodles.stop();
@@ -167,29 +221,30 @@ public class TestMainAuto extends LinearOpMode {
     }
 
 
-   /* private void senseAndScore(){
-        //locates and moves to corresponding position on Backdrop based on april tags
-
+    private void senseAndScore(){
         AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
         bot.camera.setPipeline(aprilTagsPipeline);
         AprilTagsDetection detection= new AprilTagsDetection();
+        currentPose= drive.getPoseEstimate();
         int counter=0;
         detection.detectTag();
 
-            drive.followTrajectorySequence(forward);
-            score();
-            drive.setPoseEstimate(currentPose);
 
-        }catch(Exception e){
-            e.printStackTrace();
+        //keep strafing left until robot detects AprilTag or if you have run loop over 5 times
+        while(detection.getTagOfInterest().id!= 1 && counter<5){
+            detection.detectTag();
+            drive.followTrajectorySequence(strafeLeft);
+            counter++;
         }
 
 
-        telemetry.addData("Sensing and scoring should occur right now", ".");
-        telemetry.update();
+        drive.followTrajectorySequence(forward);
+        score();
+        drive.setPoseEstimate(currentPose);
+
     }
 
-    */
+
 
 
     private void score(){

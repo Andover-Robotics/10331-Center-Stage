@@ -40,6 +40,7 @@ public class TestBackdropAlign extends LinearOpMode {
     @Override public void runOpMode() {
         bot = Bot.getInstance(this);
         bot.reverseMotors();
+        detections = new AprTagDetections(this);
         detections.initAprilTag();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -52,28 +53,29 @@ public class TestBackdropAlign extends LinearOpMode {
         setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
         waitForStart();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+        while (opModeIsActive() && !isStopRequested()) {
 
-                detections.telemetryAprilTag();
+            detections.telemetryAprilTag();
 
-                // Push telemetry to the Driver Station.
-                telemetry.update();
+            // Push telemetry to the Driver Station.
+            telemetry.update();
 
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    detections.visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    detections.visionPortal.resumeStreaming();
-                }
-
-                // Share the CPU.
-                sleep(20);
+            // Save CPU resources; can resume streaming when needed.
+            if (gamepad1.dpad_down) {
+                detections.visionPortal.stopStreaming();
+            } else if (gamepad1.dpad_up) {
+                detections.visionPortal.resumeStreaming();
             }
-        }
 
-        while (opModeIsActive())
-        {
+            // Share the CPU.
+            sleep(20);
+        }
+    }
+
+
+      //  while (opModeIsActive()) {
+
+            /*
             targetFound = false;
             desiredTag  = null;
 
@@ -122,10 +124,13 @@ public class TestBackdropAlign extends LinearOpMode {
             telemetry.update();
             moveRobot(drive, strafe, turn);
             sleep(10);
-        }
+
+             */
+       // }
         // Save more CPU resources when camera is no longer needed.
-        detections.visionPortal.close();
-    }
+     //   detections.visionPortal.close();
+
+
     /**
      * Move robot according to desired axes motions
      * Positive X is forward

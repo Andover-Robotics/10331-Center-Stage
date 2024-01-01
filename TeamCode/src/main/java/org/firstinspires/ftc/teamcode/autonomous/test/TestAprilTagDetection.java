@@ -38,10 +38,14 @@ public class TestAprilTagDetection extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         while(opModeIsActive() && !isStopRequested()) {
-            telemetry.update();
-            detection.detectTag();
-            telemetry.addLine("The tag detected is:" + detection.getTagOfInterest().id);
-            telemetry.addLine("the distance to tag is " + calcDistToTag(detection.getTagOfInterest()));
+            while(detection.getTagOfInterest().id!=1){
+                detection.detectTag();
+                telemetry.addLine("The tag ID is" + detection.getTagOfInterest().id);
+                telemetry.addLine("The tag is not detected");
+            //    telemetry.addLine("the distance to tag is " + calcDistToTag(detection.getTagOfInterest()));
+                telemetry.update();
+            }
+            telemetry.addLine("The tag was detected");
             telemetry.update();
         }
 

@@ -53,12 +53,20 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
 
         if(alliance== TeamPropDetectionPipeline.Alliance.BLUE){
-        lowH = 75;
+    /*    lowH = 75;
         lowS = 110;
         lowV = 150;
         highH = 181;
         highS = 255;
         highV = 255;
+
+     */
+            lowH = 90;
+            lowS = 56;
+            lowV = 35;
+            highH = 140;
+            highS = 360;
+            highV = 255;
         }
         else{
            lowH = 105;
