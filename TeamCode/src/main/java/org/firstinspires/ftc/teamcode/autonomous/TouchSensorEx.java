@@ -31,20 +31,24 @@ public class TouchSensorEx extends LinearOpMode {
                 .forward(10)
                 .build();
 
-        while(!sensor.isPressed()) {
-            drive.followTrajectorySequence(goatedTraj);
-            distanceTravelled += 10;
-            telemetry.addData("Sensor not touched, distance travelled is ",distanceTravelled);
-            telemetry.update();
-            if(distanceTravelled > 100) {
-                wasTouched = false;
-                break;
-            }
-        }
+        waitForStart();
 
-        if(!wasTouched) telemetry.addData("Sensor not touched, troubleshoot pls","");
-        else telemetry.addData("Sensor was touched ;)","");
-        telemetry.update();
+        while(opModeIsActive() && !isStopRequested()) {
+            while(!sensor.isPressed()) {
+                drive.followTrajectorySequence(goatedTraj);
+                distanceTravelled += 10;
+                telemetry.addData("Sensor not touched, distance travelled is ",distanceTravelled);
+                telemetry.update();
+                if(distanceTravelled > 100) {
+                    wasTouched = false;
+                    break;
+                }
+            }
+
+            if(!wasTouched) telemetry.addData("Sensor not touched, troubleshoot pls","");
+            else telemetry.addData("Sensor was touched ;)","");
+            telemetry.update();
+        }
     }
 
 
