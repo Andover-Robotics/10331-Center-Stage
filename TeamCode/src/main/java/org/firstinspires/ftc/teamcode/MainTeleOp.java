@@ -33,6 +33,34 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
 
+            /*
+            CONTROLS:
+            GP1:
+                Start button: Resets everything
+                Left joystick X axis: strafe
+                Left joystick Y axis: forward backward
+                Right joystick X axis: turn
+                B: Drone Shooting
+                A: Drone Resetting
+
+            GP2:
+                X button:
+                    clicked once: runs intake
+                    clicked twice: stops intake
+                Right Bumper: Reverses intake
+                A:
+                    if in outtake pos, returns to storage position
+                    if in intake pos, goes to outtake position
+                Y: deposits the pixels one at a time
+                B: deposits both pixels at the same time
+                Start button: Feeder bot mode
+                DPAD UP: Run slides to top
+                DPAD DOWN: Run slides to storage
+                DPAD LEFT: Run slides to low stage
+                DPAD RIGHT: Run slides to mid stage
+                Left Joystick Y axis: Manual slides operation
+             */
+
             gp2.readButtons();
             telemetry.addLine("TeleOp has started");
 
@@ -145,18 +173,6 @@ public class MainTeleOp extends LinearOpMode {
                 bot.slides.runToMid();
             }
 
-           /*
-
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToTop();
-                bot.slides.periodic();
-            }
-            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                bot.slides.runToStorage();
-                bot.slides.periodic();
-            }
-
-            */
 
 
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){

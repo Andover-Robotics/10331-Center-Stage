@@ -44,9 +44,9 @@ public class Slides {
         rightMotor = new MotorEx(opMode.hardwareMap, "slidesRight", Motor.GoBILDA.RPM_312);
         midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
 
-        rightMotor.setInverted(true);
-        leftMotor.setInverted(true);
-        midMotor.setInverted(true);
+        rightMotor.setInverted(false);
+        leftMotor.setInverted(false);
+        midMotor.setInverted(false);
 
         //right is the one closest to outtake
         //left and mid are the chain
@@ -68,8 +68,10 @@ public class Slides {
     public void runTo(double pos) {
         rightMotor.setRunMode(Motor.RunMode.RawPower);
         rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         leftMotor.setRunMode(Motor.RunMode.RawPower);
         leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         midMotor.setRunMode(Motor.RunMode.RawPower);
         midMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
@@ -115,16 +117,13 @@ public class Slides {
     }
 
     public void resetEncoder() {
-       // leftMotor.resetEncoder();
-      //  midMotor.resetEncoder();
         rightMotor.resetEncoder();
-      //  resetProfiler();
     }
 
     public void periodic() {
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(false);
-        midMotor.setInverted(false);
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(true);
+        midMotor.setInverted(true);
 
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
