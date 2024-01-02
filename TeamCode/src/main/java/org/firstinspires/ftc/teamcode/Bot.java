@@ -35,7 +35,7 @@ public class Bot {
 
    // private static AprilTagsDetection detections;
 
- //   public Slides slides;
+    public Slides slides;
     public Fourbar fourbar;
 
     public Noodles noodles;
@@ -97,7 +97,7 @@ public class Bot {
         BL.setMode(RUN_USING_ENCODER);
         BR.setMode(RUN_USING_ENCODER);
 
-     //   this.slides = new Slides();
+        this.slides = new Slides();
         this.fourbar = new Fourbar(opMode);
         this.noodles = new Noodles(opMode);
         this.box = new Box(opMode);
