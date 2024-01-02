@@ -21,11 +21,15 @@ public class FourbarTest extends LinearOpMode {
         gp2 = new GamepadEx(gamepad2);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
+      //  bot.fourbar.position(0.2,0.95);
+
 
         while (opModeIsActive() && !isStopRequested()) {
             gp2.readButtons();
             telemetry.update();
 
+
+            /*
             if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 bot.fourbar.storage();
                 telemetry.addLine("Currently in storage position");
@@ -35,9 +39,11 @@ public class FourbarTest extends LinearOpMode {
                 telemetry.addLine("Currently in outtake position");
             }
 
+             */
 
-/*
-            if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
+
+
+         /*   if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 bot.fourbar.incrementBoxAnglePosition();
                 telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
             }
@@ -45,17 +51,25 @@ public class FourbarTest extends LinearOpMode {
                 bot.fourbar.decrementBoxAnglePosition();
                 telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
             }
+
+          */
             if (gp2.wasJustPressed(GamepadKeys.Button.X)) {
-                bot.fourbar.incrementFourbarPosition();
-                telemetry.addLine("Fourbar position is " + bot.fourbar.getFourbarPos());
+                bot.box.resetBox();
+                bot.fourbar.storage();
             }
             if(gp2.wasJustPressed(GamepadKeys.Button.Y)) {
-                bot.fourbar.decrementFourbarPosition();
-                telemetry.addLine("Fourbar position is " + bot.fourbar.getFourbarPos());
+                bot.noodles.stop();
+                bot.fourbar.outtake();
+                bot.box.flapServo.setPower(0.7);
+                bot.box.runWheel(true);
             }
+            if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+                bot.intake();
+            }
+
+
             telemetry.update();
 
- */
         }
     }
 }

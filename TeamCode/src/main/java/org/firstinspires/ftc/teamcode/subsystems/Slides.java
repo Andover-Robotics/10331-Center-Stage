@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
 
 public class Slides {
-    public final MotorEx slidesMotor;
-    private double current_pos = 0 ;
+    public final MotorEx leftMotor, midMotor, rightMotor;
+    private double target = 0 ;
     private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
     private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1;
@@ -23,7 +23,7 @@ public class Slides {
     public static final double MAX_VELOCITY = 30000, MAX_ACCELERATION = 20000;
     //tune
     private PIDFController controller;
-    private MotionProfiler profiler;
+    private MotionProfiler profiler = new MotionProfiler(30000, 20000);
     private double profile_init_time = 0;
 
     public enum slidesPosition{
@@ -34,66 +34,80 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 0, top = 3250, mid = 1700, low = 450;
+    public static int storage = 100, top = 700 , mid = 500, low = 300;
     //tune
 
     private final OpMode opMode;
 
     public Slides(OpMode opMode) {
-        this.opMode = opMode;
-        slidesMotor = new MotorEx(opMode.hardwareMap, "slides motor");
-        slidesMotor.setRunMode(Motor.RunMode.RawPower);
+        leftMotor = new MotorEx(opMode.hardwareMap, "slidesLeft", Motor.GoBILDA.RPM_312);
+        rightMotor = new MotorEx(opMode.hardwareMap, "slidesRight", Motor.GoBILDA.RPM_312);
+        midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
 
-        controller = new PIDFController(p,i,d,f);
-        controller.setTolerance(tolerance);
-        controller.setSetPoint(0);
+        rightMotor.setInverted(false);
+        leftMotor.setInverted(false);
+        midMotor.setInverted(false);
 
-        profiler = new MotionProfiler(MAX_VELOCITY, MAX_ACCELERATION);
-    }
-
-    public void runTo(double target) {
-        slidesMotor.setRunMode(Motor.RunMode.RawPower);
-        slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        slidesMotor.setInverted(true);
+        //right is the one closest to outtake
+        //left and mid are the chain
 
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(tolerance);
+        controller.setSetPoint(0);
 
+        leftMotor.setRunMode(Motor.RunMode.RawPower);
+        leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        rightMotor.setRunMode(Motor.RunMode.RawPower);
+        rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        midMotor.setRunMode(Motor.RunMode.RawPower);
+        midMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
+        this.opMode = opMode;
+    }
+
+    public void runTo(double pos) {
+        rightMotor.setRunMode(Motor.RunMode.RawPower);
+        rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
+        leftMotor.setRunMode(Motor.RunMode.RawPower);
+        leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
+        midMotor.setRunMode(Motor.RunMode.RawPower);
+        midMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
+        controller = new PIDFController(p, i, d, f);
+        controller.setTolerance(tolerance);
         resetProfiler();
-        profiler.init(slidesMotor.getCurrentPosition(), target);
+        profiler.init(rightMotor.getCurrentPosition(), pos);
         profile_init_time = opMode.time;
 
-        //goingDown =  targetPoint > target;
-        goingDown =  target > current_pos;
-        current_pos = target;
+        goingDown = pos > target;
+        target = pos;
+       // periodic();
     }
 
     public void runToTop() {
-        if(position.equals(slidesPosition.HIGH)) return;
         runTo(top);
         position = slidesPosition.HIGH;
     }
 
     public void runToMid() {
-        if(position.equals(slidesPosition.MID)) return;
         runTo(mid);
         position = slidesPosition.MID;
-
     }
 
     public void runToLow() {
-        if(position.equals(slidesPosition.LOW)) return;
         runTo(low);
         position = slidesPosition.LOW;
     }
+
     public void runToStorage() {
-        if(position.equals(slidesPosition.GROUND)) return;
         runTo(storage);
         position = slidesPosition.GROUND;
     }
 
 
-    public void runToManual(double power){
+    public void runToManual(double power) {
         if(Math.abs(power) > MIN_POWER) {
             manualPower = power;
         }
@@ -103,65 +117,56 @@ public class Slides {
     }
 
     public void resetEncoder() {
-        slidesMotor.resetEncoder();
+        rightMotor.resetEncoder();
     }
 
     public void periodic() {
-        slidesMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(true);
+        midMotor.setInverted(true);
+
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
-        //if motion profiling is being used i.e, runTo() methods
 
         if (!profiler.isOver()) {
             controller.setSetPoint(profiler.profile_pos(dt));
-            power = powerUp * controller.calculate(slidesMotor.getCurrentPosition());
-
+            power = powerUp * controller.calculate(rightMotor.getCurrentPosition());
             if (goingDown) {
-                power = powerDown * controller.calculate(slidesMotor.getCurrentPosition());
+                power = powerDown * controller.calculate(rightMotor.getCurrentPosition());
+            }
+            leftMotor.set(power);
+            rightMotor.set(power);
+            midMotor.set(power);
+
+        } else {
+            if (profiler.isDone()) {
+                profiler = new MotionProfiler(30000, 20000);
             }
 
-            slidesMotor.set(power);
-        }
-
-        /*all the cases in which isOver is true
-        a) we were using runTo() control, but we successfully ran to the target value and the trajectory is now over
-        b) we are using manual control
-         */
-
-        else {
-            if (profiler.isDone()) resetProfiler();
-            //if we aren't using manual power, but the profile just ended, we should create a new motionprofiler obj to
-            //erase previous trajectory data
-
             if (manualPower != 0) {
-                //controller.setSetPoint(slidesMotor.getCurrentPosition());
-                slidesMotor.set(manualPower / manualDivide);
-            } else
-                slidesMotor.set(0);
+                controller.setSetPoint(rightMotor.getCurrentPosition());
+                midMotor.set(manualPower / manualDivide);
+                rightMotor.set(manualPower / manualDivide);
+                leftMotor.set(manualPower / manualDivide);
 
-                //pls work bro :praying:
-                /*
-                power = staticF * controller.calculate(slidesMotor.getCurrentPosition());
-                slidesMotor.set(power);
-                 */
-                //THIS IS WHY it's going back to original position after we let go of the joystick
-                //the setPoint was set to the position BEFORE it moved manually.
-
-                /*
-                if (power < Math.abs(0.1)) slidesMotor.set(0);
-                else slidesMotor.set(power);
-                 */
+            } else {
+                power = staticF * controller.calculate(rightMotor.getCurrentPosition());
+                rightMotor.set(power);
+                leftMotor.set(power);
+                if (power < Math.abs(0.1)) {
+                    midMotor.set(0);
+                } else {
+                    midMotor.set(power);
+                }
+            }
         }
     }
 
-    public void operateSlides() {
-        if(position.equals(slidesPosition.GROUND)) {
-            slidesMotor.setTargetPosition(slidesMotor.getCurrentPosition() + encoderTickPerLevel);
-        //    slidesMotor.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //last resort: convert motor back to DcMotorEx and try using this method
-          //  slidesMotor.setPower(0.5);
-        }
-        //else if(position.equals(slidesPosition.LOW))
+    public void test(double power) {
+        rightMotor.set(power);
+        leftMotor.set(power);
+        midMotor.set(power);
+
     }
 
     public void resetProfiler(){

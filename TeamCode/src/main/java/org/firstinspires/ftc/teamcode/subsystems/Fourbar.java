@@ -8,13 +8,13 @@ public class Fourbar {
     private final Servo angleBoxServo;
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.5;
+    private static double outtakeBox=0.57;
 
-    private static double boxAngleReadyForStorage=1.0;
-    private static double storageBox=0.2;
-    private static double outtake = 1.0;
-    public static double storage = 0.0;
-    //storage position is GOOOOD
+   // private static double boxAngleReadyForStorage=1.0;
+    private static double storageBox=0.95;
+    private static double outtake = 0.0;
+    public static double storage = 0.7;
+    //storage position is 0,1
 
     public static double fourbarPos=1.0;
 
@@ -30,7 +30,6 @@ public class Fourbar {
     }
 
     public void outtake(){
-     //   angleBoxServo.setPosition(boxAngleReadyForStorage);
         fourbar.setPosition(outtake);
         angleBoxServo.setPosition(outtakeBox);
         isOuttakePosition = true;
@@ -53,10 +52,15 @@ public class Fourbar {
     }
 
     public void storage(){
-        angleBoxServo.setPosition(boxAngleReadyForStorage);
-        fourbar.setPosition(storage);
+        //angleBoxServo.setPosition(boxAngleReadyForStorage);
         angleBoxServo.setPosition(storageBox);
+        fourbar.setPosition(storage);
         isOuttakePosition = false;
+    }
+
+    public void position(double fourbarPos, double box){
+        angleBoxServo.setPosition(box);
+        fourbar.setPosition(fourbarPos);
     }
 
     public void runManualOuttake(double position){
@@ -70,14 +74,14 @@ public class Fourbar {
         fourbar.setPosition(position);
     }
     public void incrementBoxAnglePosition(){
-        boxInitialPos+=0.1;
+        boxInitialPos+=0.01;
         if(boxInitialPos>=1){
             boxInitialPos=1;
         }
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void decrementBoxAnglePosition(){
-        boxInitialPos-=0.1;
+        boxInitialPos-=0.01;
         if(boxInitialPos<=0){
             boxInitialPos=0;
         }
@@ -116,10 +120,10 @@ public class Fourbar {
         return outtakeBox;
     }
     public double getBoxPos(){
-        return boxInitialPos;
+        return angleBoxServo.getPosition();
     }
     public double getFourbarPos(){
-        return fourbarPos;
+        return fourbar.getPosition();
     }
 
 }

@@ -83,7 +83,10 @@ public class Bot {
         BL = opMode.hardwareMap.get(DcMotorEx.class, "bl");
         BR = opMode.hardwareMap.get(DcMotorEx.class, "br");
 
-
+        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
        // distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
@@ -228,7 +231,9 @@ public class Bot {
         noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToStorage();
+        slides.runToLow();
+
+
         fourbar.storage();
         box.resetBox();
     }
@@ -238,24 +243,16 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
-
-
-    public void intake(double power){
-        currentState = BotState.INTAKE;
-        noodles.intake(power);
-        if(power<=0.1){
-            noodles.stop();
-        }
-    }
     public void intake(){
         currentState = BotState.INTAKE;
-        noodles.intake();
+        //box.resetBox();
         box.runWheel(false);
+        noodles.intake();
     }
     public void stopIntake(){
         currentState = BotState.STORAGE_FULL;
+        box.secure();
         noodles.stop();
-        box.runWheel(true);
     }
 
 

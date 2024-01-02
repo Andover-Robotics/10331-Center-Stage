@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class MainTeleOp extends LinearOpMode {
@@ -14,6 +15,8 @@ public class MainTeleOp extends LinearOpMode {
     private GamepadEx gp2;
     public boolean isIntake=false;
     public boolean isOuttakePosition=false;
+
+    private ElapsedTime time = new ElapsedTime();
 
 
     @Override
@@ -26,8 +29,37 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
 
         waitForStart();
+        bot.reverseMotors();
 
         while (opModeIsActive() && !isStopRequested()) {
+
+            /*
+            CONTROLS:
+            GP1:
+                Start button: Resets everything
+                Left joystick X axis: strafe
+                Left joystick Y axis: forward backward
+                Right joystick X axis: turn
+                B: Drone Shooting
+                A: Drone Resetting
+
+            GP2:
+                X button:
+                    clicked once: runs intake
+                    clicked twice: stops intake
+                Right Bumper: Reverses intake
+                A:
+                    if in outtake pos, returns to storage position
+                    if in intake pos, goes to outtake position
+                Y: deposits the pixels one at a time
+                B: deposits both pixels at the same time
+                Start button: Feeder bot mode
+                DPAD UP: Run slides to top
+                DPAD DOWN: Run slides to storage
+                DPAD LEFT: Run slides to low stage
+                DPAD RIGHT: Run slides to mid stage
+                Left Joystick Y axis: Manual slides operation
+             */
 
             gp2.readButtons();
             telemetry.addLine("TeleOp has started");
@@ -35,17 +67,22 @@ public class MainTeleOp extends LinearOpMode {
             //drivetrain movement works
             drive();
 
+            if(gp1.wasJustPressed(GamepadKeys.Button.START)) {
+                bot.resetEverything();
+            }
+
             //intake works
             if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
                 if(isIntake){
                     bot.stopIntake();
                     isIntake = false;
-                    telemetry.addLine("Stopped Intaking");
+                    telemetry.addData("Stopped Intaking", isIntake);
                 }
                 else {
+                    bot.box.resetBox();
                     bot.intake();
                     isIntake = true;
-                    telemetry.addLine("Currently intaking");
+                    telemetry.addData("Currently Intaking", isIntake);
                 }
                 telemetry.update();
             }
@@ -62,10 +99,15 @@ public class MainTeleOp extends LinearOpMode {
                     //storage position
                     bot.box.resetBox();
                     bot.fourbar.storage();
+                  //  bot.noodles.intake();
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
                 }
                 else {
+                    if(isIntake){
+                        isIntake = false;
+                        bot.stopIntake();
+                    }
                     //outtake position
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
@@ -79,7 +121,6 @@ public class MainTeleOp extends LinearOpMode {
             if(gp2.wasJustPressed(GamepadKeys.Button.Y)){
                 if(bot.box.getNumPixelsDeposited()==1){
                     bot.box.depositSecondPixel();
-                    sleep(1000);
                     bot.box.resetBox();
                 }
                 else {
@@ -89,32 +130,60 @@ public class MainTeleOp extends LinearOpMode {
 
             //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
+                time.reset();
                 bot.fourbar.outtake();
-                if(bot.fourbar.getIsOuttakePos()) {
+                    if(isIntake){
+                        isIntake = false;
+                        bot.stopIntake();
+                    }
                     isOuttakePosition = true;
                     bot.box.depositFirstPixel();
                     bot.box.depositSecondPixel();
-                }
                 telemetry.addLine("Currently in outtake position and deposited two pixels");
+            }
+
+            //feeder bot -> deposit pixel
+            if(gp2.wasJustPressed(GamepadKeys.Button.START)){
+                bot.noodles.reverseIntake();
+                time.reset();
+                while(time.seconds() < 5) {
+                    bot.box.runWheel(true);
+                }
+                bot.box.runWheel(false);
             }
 
             //manual movement of slides
             runSlides(gp2.getLeftY());
 
             //slide movement to preset values
-            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                bot.slides.runToStorage();
-                //goes up
-            }
-            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {;
                 bot.slides.runToTop();
-                //goes down
-            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+               // bot.slides.periodic();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+               // bot.slides.periodic();
+                bot.slides.runToStorage();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+           //     bot.slides.periodic();
                 bot.slides.runToLow();
-
-            } else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+          //       bot.slides.periodic();
                 bot.slides.runToMid();
             }
+
+
+
+            if (gp1.wasJustPressed(GamepadKeys.Button.B)){
+                bot.drone.shoot();
+                telemetry.addLine("Drone shooting");
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.A)){
+                bot.drone.reset();
+                telemetry.addLine("Drone resetting");
+            }
+
             bot.slides.periodic();
 
             telemetry.addData("box position", bot.fourbar.getBoxPos());
@@ -124,25 +193,28 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void drive() {
+        gp1.readButtons();
 
         driveSpeed = 1;
 
-        driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+        driveSpeed *= 1 - 0.9 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
 
         Vector2d driveVector = new Vector2d(gp1.getLeftX(), -gp1.getLeftY()),
                 turnVector = new Vector2d(
                         gp1.getRightX(), 0);
 
-        bot.driveRobotCentric(-driveVector.getX() * driveSpeed,
-                -driveVector.getY() * driveSpeed,
+        bot.driveRobotCentric(driveVector.getX() * driveSpeed,
+                driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
         );
     }
-
-
     private void runSlides(double power) {
         bot.slides.runToManual(power);
+        bot.slides.periodic();
     }
-
 }
+
+
+
+
