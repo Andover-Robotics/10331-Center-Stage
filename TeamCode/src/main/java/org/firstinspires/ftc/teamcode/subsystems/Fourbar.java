@@ -8,7 +8,7 @@ public class Fourbar {
     private final Servo angleBoxServo;
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.57;
+    private static double outtakeBox=0.51;
 
    // private static double boxAngleReadyForStorage=1.0;
     private static double storageBox=0.95;
@@ -53,7 +53,7 @@ public class Fourbar {
 
     public void storage(){
         //angleBoxServo.setPosition(boxAngleReadyForStorage);
-        angleBoxServo.setPosition(storageBox);
+       // angleBoxServo.setPosition(storageBox);
         fourbar.setPosition(storage);
         isOuttakePosition = false;
     }

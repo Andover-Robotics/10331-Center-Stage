@@ -43,7 +43,7 @@ public class Box {
 
     public void depositSecondPixel() {
         time.reset();
-        while(time.seconds() < 2.5) {
+        while(time.seconds() < 2) {
             flapServo.setPower(1);
             wheelServo.setPower(1);
         }

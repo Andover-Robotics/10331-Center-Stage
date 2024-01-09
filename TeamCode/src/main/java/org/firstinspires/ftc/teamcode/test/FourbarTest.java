@@ -43,7 +43,7 @@ public class FourbarTest extends LinearOpMode {
 
 
 
-         /*   if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
+          if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
                 bot.fourbar.incrementBoxAnglePosition();
                 telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
             }
@@ -52,7 +52,7 @@ public class FourbarTest extends LinearOpMode {
                 telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());
             }
 
-          */
+
             if (gp2.wasJustPressed(GamepadKeys.Button.X)) {
                 bot.box.resetBox();
                 bot.fourbar.storage();
@@ -63,9 +63,9 @@ public class FourbarTest extends LinearOpMode {
                 bot.box.flapServo.setPower(0.7);
                 bot.box.runWheel(true);
             }
-            if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
-                bot.intake();
-            }
+            //if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+              //  bot.intake();
+            //}
 
 
             telemetry.update();
