@@ -61,20 +61,20 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
         highV = 255;
 
      */
-            lowH = 90;
-            lowS = 56;
-            lowV = 35;
-            highH = 140;
-            highS = 360;
-            highV = 255;
+            lowH = 100;
+            lowS = 0;
+            lowV = 158;
+            highH = 137;
+            highS = 71;
+            highV = 227;
         }
         else{
-           lowH = 105;
-           lowS = 20;
-           lowV = 86;
-           highH = 247;
-           highS = 151;
-           highV = 220;
+           lowH = 160;
+           lowS = 83;
+           lowV = 144;
+           highH = 180;
+           highS = 181;
+           highV = 223;
         }
         lowHSV= new Scalar(lowH, lowS, lowV);
         highHSV= new Scalar(highH, highS, highV);
