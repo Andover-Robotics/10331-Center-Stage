@@ -231,7 +231,7 @@ public class Bot {
         noodles.stop();
         reverseMotors();
         resetEncoder();
-        slides.runToLow();
+        slides.runToStorage();
 
 
         fourbar.storage();

@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+
 import org.firstinspires.ftc.teamcode.util.MotionProfiler;
+
+
 
 
 public class Slides {
@@ -20,11 +23,13 @@ public class Slides {
     public boolean goingDown;
     private final double MIN_POWER = 0.1;
 
+
     public static final double MAX_VELOCITY = 30000, MAX_ACCELERATION = 20000;
     //tune
     private PIDFController controller;
     private MotionProfiler profiler = new MotionProfiler(30000, 20000);
     private double profile_init_time = 0;
+
 
     public enum slidesPosition{
         GROUND,
@@ -34,27 +39,33 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 100, top = 700 , mid = 500, low = 300;
+    public static int storage = -143, top = -2900, mid = -1800, low = -900;
     //tune
 
+
     private final OpMode opMode;
+
 
     public Slides(OpMode opMode) {
         leftMotor = new MotorEx(opMode.hardwareMap, "slidesLeft", Motor.GoBILDA.RPM_312);
         rightMotor = new MotorEx(opMode.hardwareMap, "slidesRight", Motor.GoBILDA.RPM_312);
         midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
 
+
         rightMotor.setInverted(false);
-        leftMotor.setInverted(false);
-        midMotor.setInverted(false);
+        leftMotor.setInverted(true);
+        midMotor.setInverted(true);
+
 
         //right is the one closest to outtake
-        //left and mid are the chain
+        //left and center are the chain
+
 
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(tolerance);
         controller.setSetPoint(0);
 
+
         leftMotor.setRunMode(Motor.RunMode.RawPower);
         leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightMotor.setRunMode(Motor.RunMode.RawPower);
@@ -62,18 +73,23 @@ public class Slides {
         midMotor.setRunMode(Motor.RunMode.RawPower);
         midMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+
         this.opMode = opMode;
     }
+
 
     public void runTo(double pos) {
         rightMotor.setRunMode(Motor.RunMode.RawPower);
         rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+
         leftMotor.setRunMode(Motor.RunMode.RawPower);
         leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+
         midMotor.setRunMode(Motor.RunMode.RawPower);
         midMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
 
         controller = new PIDFController(p, i, d, f);
         controller.setTolerance(tolerance);
@@ -81,52 +97,81 @@ public class Slides {
         profiler.init(rightMotor.getCurrentPosition(), pos);
         profile_init_time = opMode.time;
 
+
         goingDown = pos > target;
         target = pos;
-       // periodic();
+
+        // periodic();
     }
 
+
     public void runToTop() {
-        runTo(top);
+//        if(rightMotor.getCurrentPosition() >= top)
+//            return;
         position = slidesPosition.HIGH;
     }
 
+
     public void runToMid() {
+//        if(position != position.MID) runTo(mid);
         runTo(mid);
         position = slidesPosition.MID;
     }
 
+
     public void runToLow() {
+//        if(position != position.LOW) runTo(low);
         runTo(low);
         position = slidesPosition.LOW;
     }
 
+
     public void runToStorage() {
-        runTo(storage);
         position = slidesPosition.GROUND;
+        runTo(storage);
+//        if(rightMotor.getCurrentPosition() <= storage)
+//            return;
+//        else
+//            position = slidesPosition.GROUND;
     }
 
 
+
+
     public void runToManual(double power) {
-        if(Math.abs(power) > MIN_POWER) {
+//        if(rightMotor.getCurrentPosition() < storage) {
+//            return;
+//        }
+
+
+        if(power > MIN_POWER || power < -MIN_POWER) {
             manualPower = power;
         }
         else {
             manualPower = 0;
         }
+
+
+    }
+
+    public int getCurrentPosition() {
+        return rightMotor.getCurrentPosition();
     }
 
     public void resetEncoder() {
         rightMotor.resetEncoder();
     }
 
+
     public void periodic() {
-        rightMotor.setInverted(true);
+        rightMotor.setInverted(false);
         leftMotor.setInverted(true);
         midMotor.setInverted(true);
 
+
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
+
 
         if (!profiler.isOver()) {
             controller.setSetPoint(profiler.profile_pos(dt));
@@ -138,16 +183,19 @@ public class Slides {
             rightMotor.set(power);
             midMotor.set(power);
 
+
         } else {
             if (profiler.isDone()) {
                 profiler = new MotionProfiler(30000, 20000);
             }
+
 
             if (manualPower != 0) {
                 controller.setSetPoint(rightMotor.getCurrentPosition());
                 midMotor.set(manualPower / manualDivide);
                 rightMotor.set(manualPower / manualDivide);
                 leftMotor.set(manualPower / manualDivide);
+
 
             } else {
                 power = staticF * controller.calculate(rightMotor.getCurrentPosition());
@@ -162,19 +210,24 @@ public class Slides {
         }
     }
 
+
     public void test(double power) {
         rightMotor.set(power);
         leftMotor.set(power);
         midMotor.set(power);
 
+
     }
+
 
     public void resetProfiler(){
         profiler = new MotionProfiler(MAX_VELOCITY, MAX_ACCELERATION);
     }
 
+
     public double getManualPower(){
         return manualPower;
     }
+
 
 }

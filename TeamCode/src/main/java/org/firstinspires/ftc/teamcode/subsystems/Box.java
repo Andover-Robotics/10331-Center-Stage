@@ -45,7 +45,7 @@ public class Box {
         time.reset();
         while(time.seconds() < 2) {
             flapServo.setPower(1);
-            wheelServo.setPower(1);
+            wheelServo.setPower(-1);
         }
         flapServo.setPower(0);
         wheelServo.setPower(0);

@@ -1,33 +1,42 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
 
 public class Fourbar {
     public final Servo fourbar;
     private final Servo angleBoxServo;
 
-    //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.51;
 
-   // private static double boxAngleReadyForStorage=1.0;
+    //values ARE FINALLL DO NOT CHANGE
+    private static double outtakeBox=0.57;
+
+
+    // private static double boxAngleReadyForStorage=1.0;
     private static double storageBox=0.95;
     private static double outtake = 0.0;
     public static double storage = 0.7;
     //storage position is 0,1
 
+
     public static double fourbarPos=1.0;
+
 
     public static double boxInitialPos=0.5;
     public static boolean isOuttakePosition;
 
 
+
+
     public Fourbar(OpMode opMode) {
-        fourbar = opMode.hardwareMap.servo.get("fourBarServo");
+        fourbar = opMode.hardwareMap.servo.get("fourBarServo"); //
         angleBoxServo= opMode.hardwareMap.servo.get("boxAngleServo");
         fourbar.setDirection(Servo.Direction.FORWARD);
         isOuttakePosition= false;
     }
+
 
     public void outtake(){
         fourbar.setPosition(outtake);
@@ -51,22 +60,26 @@ public class Fourbar {
         isOuttakePosition = false;
     }
 
+
     public void storage(){
         //angleBoxServo.setPosition(boxAngleReadyForStorage);
-       // angleBoxServo.setPosition(storageBox);
+        angleBoxServo.setPosition(storageBox);
         fourbar.setPosition(storage);
         isOuttakePosition = false;
     }
+
 
     public void position(double fourbarPos, double box){
         angleBoxServo.setPosition(box);
         fourbar.setPosition(fourbarPos);
     }
 
+
     public void runManualOuttake(double position){
         angleBoxServo.setPosition(outtakeBox);
         fourbar.setPosition(position);
     }
+
 
     public void runManualStorage(double position){
         angleBoxServo.setPosition(0);
@@ -105,9 +118,11 @@ public class Fourbar {
         return isOuttakePosition;
     }
 
+
     public double getStoragePos(){
         return storage;
     }
+
 
     public double getOuttakePos(){
         return outtake;
@@ -115,6 +130,7 @@ public class Fourbar {
     public double getBoxStoragePos(){
         return storageBox;
     }
+
 
     public double getBoxOuttakePos(){
         return outtakeBox;
@@ -125,5 +141,6 @@ public class Fourbar {
     public double getFourbarPos(){
         return fourbar.getPosition();
     }
+
 
 }
