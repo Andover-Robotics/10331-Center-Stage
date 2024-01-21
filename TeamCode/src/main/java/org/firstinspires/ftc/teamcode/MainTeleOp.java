@@ -17,6 +17,7 @@ public class MainTeleOp extends LinearOpMode {
     private GamepadEx gp2;
     public boolean isIntake=false;
     public boolean isOuttakePosition=false;
+    public boolean isIncrementFourbar=true;
 
 
     private ElapsedTime time = new ElapsedTime();
@@ -81,9 +82,10 @@ public class MainTeleOp extends LinearOpMode {
             drive();
 
 
-//            if(gp1.wasJustPressed(GamepadKeys.Button.START)) {
-//                bot.resetEverything();
-//            }
+            if(gp1.wasJustPressed(GamepadKeys.Button.START)) {
+             //   bot.resetEverything();
+                isIncrementFourbar=!isIncrementFourbar;
+            }
 
 
             //intake works
@@ -119,7 +121,9 @@ public class MainTeleOp extends LinearOpMode {
                     //  bot.noodles.intake();
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
+
                 }
+
                 else {
                     if(isIntake){
                         isIntake = false;
@@ -131,6 +135,15 @@ public class MainTeleOp extends LinearOpMode {
                     telemetry.addLine("Currently in outtake position");
                     telemetry.update();
                 }
+
+            /*    if(isIncrementFourbar){
+                    bot.fourbar.incrementBoxAnglePosition();
+                }
+                else{
+                    bot.fourbar.decrementBoxAnglePosition();
+                }
+
+             */
                 telemetry.update();
             }
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 public class Fourbar {
@@ -15,17 +16,18 @@ public class Fourbar {
 
 
     // private static double boxAngleReadyForStorage=1.0;
-    private static double storageBox=0.95;
-    private static double outtake = 0.0;
-    public static double storage = 0.7;
+    private static double storageBox = 1.0;
+    private static double outtake = 0.2;
+    public static double storage = 1;
     //storage position is 0,1
 
 
-    public static double fourbarPos=1.0;
+    public static double fourbarPos = 1.0;
 
 
     public static double boxInitialPos=0.5;
     public static boolean isOuttakePosition;
+    public static ElapsedTime time;
 
 
 
@@ -35,6 +37,7 @@ public class Fourbar {
         angleBoxServo= opMode.hardwareMap.servo.get("boxAngleServo");
         fourbar.setDirection(Servo.Direction.FORWARD);
         isOuttakePosition= false;
+        time = new ElapsedTime();
     }
 
 
@@ -63,8 +66,12 @@ public class Fourbar {
 
     public void storage(){
         //angleBoxServo.setPosition(boxAngleReadyForStorage);
+        time.reset();
+        while(time.seconds() <2)  {
+            fourbar.setPosition(storage);
+            angleBoxServo.setPosition(storageBox-0.3);
+        }
         angleBoxServo.setPosition(storageBox);
-        fourbar.setPosition(storage);
         isOuttakePosition = false;
     }
 
@@ -87,28 +94,28 @@ public class Fourbar {
         fourbar.setPosition(position);
     }
     public void incrementBoxAnglePosition(){
-        boxInitialPos+=0.01;
+        boxInitialPos+=0.1;
         if(boxInitialPos>=1){
             boxInitialPos=1;
         }
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void decrementBoxAnglePosition(){
-        boxInitialPos-=0.01;
+        boxInitialPos-=0.1;
         if(boxInitialPos<=0){
             boxInitialPos=0;
         }
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void incrementFourbarPosition(){
-        fourbarPos+=0.1;
+        fourbarPos+=0.05;
         if(fourbarPos>=1){
             fourbarPos=1;
         }
         fourbar.setPosition(fourbarPos);
     }
     public void decrementFourbarPosition(){
-        fourbarPos-=0.1;
+        fourbarPos-=0.05;
         if(fourbarPos<=0){
             fourbarPos=0;
         }
