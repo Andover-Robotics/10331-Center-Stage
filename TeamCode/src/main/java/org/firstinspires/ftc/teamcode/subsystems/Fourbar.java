@@ -12,7 +12,7 @@ public class Fourbar {
 
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=0.57;
+    private static double outtakeBox=0.45;
 
 
     // private static double boxAngleReadyForStorage=1.0;
@@ -67,7 +67,7 @@ public class Fourbar {
     public void storage(){
         //angleBoxServo.setPosition(boxAngleReadyForStorage);
         time.reset();
-        while(time.seconds() <2)  {
+        while(time.seconds() < 1.25)  {
             fourbar.setPosition(storage);
             angleBoxServo.setPosition(storageBox-0.3);
         }

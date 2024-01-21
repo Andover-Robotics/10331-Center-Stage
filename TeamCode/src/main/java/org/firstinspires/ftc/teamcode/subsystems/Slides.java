@@ -39,7 +39,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = -143, top = -2900, mid = -1800, low = -900;
+    public static int storage = 0, top = -2900, mid = -1800, low = -900;
     //tune
 
 
@@ -50,7 +50,6 @@ public class Slides {
         leftMotor = new MotorEx(opMode.hardwareMap, "slidesLeft", Motor.GoBILDA.RPM_312);
         rightMotor = new MotorEx(opMode.hardwareMap, "slidesRight", Motor.GoBILDA.RPM_312);
         midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
-
 
         rightMotor.setInverted(false);
         leftMotor.setInverted(true);
@@ -139,10 +138,9 @@ public class Slides {
 
 
     public void runToManual(double power) {
-//        if(rightMotor.getCurrentPosition() < storage) {
-//            return;
-//        }
-
+        if(rightMotor.getCurrentPosition() <= storage && power > 0) {
+            return;
+        }
 
         if(power > MIN_POWER || power < -MIN_POWER) {
             manualPower = power;
@@ -163,6 +161,30 @@ public class Slides {
     }
 
 
+    public void periodicNoPreset() {
+        rightMotor.setInverted(false);
+        leftMotor.setInverted(true);
+        midMotor.setInverted(true);
+        controller.setPIDF(p, i, d, f);
+
+        if (manualPower != 0) {
+            controller.setSetPoint(rightMotor.getCurrentPosition());
+            midMotor.set(manualPower / manualDivide);
+            rightMotor.set(manualPower / manualDivide);
+            leftMotor.set(manualPower / manualDivide);
+
+
+        } else {
+            power = staticF * controller.calculate(rightMotor.getCurrentPosition());
+            rightMotor.set(power);
+            leftMotor.set(power);
+            if (power < Math.abs(0.1)) {
+                midMotor.set(0);
+            } else {
+                midMotor.set(power);
+            }
+        }
+    }
     public void periodic() {
         rightMotor.setInverted(false);
         leftMotor.setInverted(true);

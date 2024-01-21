@@ -228,12 +228,15 @@ public class Bot {
     */
 
     public void resetEverything(){
+
         noodles.stop();
         reverseMotors();
         resetEncoder();
         slides.runToStorage();
-
-
+        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         fourbar.storage();
         box.resetBox();
     }
