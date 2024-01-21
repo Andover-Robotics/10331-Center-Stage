@@ -138,9 +138,12 @@ public class Slides {
 
 
     public void runToManual(double power) {
-        if(rightMotor.getCurrentPosition() <= storage && power > 0) {
+        /*
+        if(rightMotor.getCurrentPosition() >= storage && power > 0) {
             return;
         }
+
+         */
 
         if(power > MIN_POWER || power < -MIN_POWER) {
             manualPower = power;
