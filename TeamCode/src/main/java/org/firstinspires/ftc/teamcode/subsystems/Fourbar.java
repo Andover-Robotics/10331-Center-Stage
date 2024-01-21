@@ -17,8 +17,8 @@ public class Fourbar {
 
     // private static double boxAngleReadyForStorage=1.0;
     private static double storageBox = 1.0;
-    private static double outtake = 0.2;
-    public static double storage = 1;
+    private static double outtake = 0.725;
+    public static double storage = 0.0;
     //storage position is 0,1
 
 
