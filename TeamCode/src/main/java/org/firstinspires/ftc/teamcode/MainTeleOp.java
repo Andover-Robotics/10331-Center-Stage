@@ -39,13 +39,13 @@ public class MainTeleOp extends LinearOpMode {
 
         waitForStart();
         bot.reverseMotors();
-        //
-        bot.slides.runTo(0);
 
 
         while (opModeIsActive() && !isStopRequested()) {
+            telemetry.addLine("TeleOp has started");
 
-
+            gp2.readButtons();
+            runSlides(gp2.getLeftY());
            /*
            CONTROLS:
            GP1:
@@ -76,16 +76,12 @@ public class MainTeleOp extends LinearOpMode {
             */
 
 
-            gp2.readButtons();
-            telemetry.addLine("TeleOp has started");
-
-
             //drivetrain movement works
             drive();
 
 
             if(gp1.wasJustPressed(GamepadKeys.Button.START)) {
-             //   bot.resetEverything();
+                //   bot.resetEverything();
                 isIncrementFourbar=!isIncrementFourbar;
             }
 
@@ -206,11 +202,6 @@ public class MainTeleOp extends LinearOpMode {
 //                bot.slides.runToMid();
 //            }
 
-
-
-
-
-
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 bot.drone.shoot();
                 telemetry.addLine("Drone shooting");
@@ -220,43 +211,33 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addLine("Drone resetting");
             }
 
-
-            //manual movement of slides
-            runSlides(gp2.getLeftY());
-            bot.slides.periodic();
-
-
             telemetry.addData("box position", bot.fourbar.getBoxPos());
             telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
             telemetry.addData("slides position", bot.slides.getCurrentPosition());
             telemetry.update();
+
+            bot.slides.periodicNoPreset();
         }
     }
 
 
     private void drive() {
         gp1.readButtons();
-
-
         driveSpeed = 1;
-
-
         driveSpeed *= 1 - 0.9 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
-
 
         Vector2d driveVector = new Vector2d(gp1.getLeftX(), -gp1.getLeftY()),
                 turnVector = new Vector2d(
                         gp1.getRightX(), 0);
-
 
         bot.driveRobotCentric(driveVector.getX() * driveSpeed,
                 driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
         );
     }
+
     private void runSlides(double power) {
         bot.slides.runToManual(power*-0.5);
-        bot.slides.periodic();
     }
 }

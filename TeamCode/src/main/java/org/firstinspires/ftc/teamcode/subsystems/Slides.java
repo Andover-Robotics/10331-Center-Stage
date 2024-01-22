@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
+
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
 
 import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
@@ -17,6 +15,8 @@ public class Slides {
     private double target = 0 ;
     private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
+
+    //original 0.015
     private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1;
     public double power;
     private double manualPower;
@@ -51,9 +51,9 @@ public class Slides {
         rightMotor = new MotorEx(opMode.hardwareMap, "slidesRight", Motor.GoBILDA.RPM_312);
         midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
 
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(true);
-        midMotor.setInverted(true);
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(false);
+        midMotor.setInverted(false);
 
 
         //right is the one closest to outtake
@@ -138,20 +138,29 @@ public class Slides {
 
 
     public void runToManual(double power) {
+
+        if(power<0){
+            goingDown=false;
+        }
+        else{
+            goingDown=true;
+        }
+        manualPower = power;
         /*
-        if(rightMotor.getCurrentPosition() >= storage && power > 0) {
+        if(rightMotor.getCurrentPosition() >= storage && power < 0) {
+            manualPower = 0;
             return;
         }
-
          */
-
-        if(power > MIN_POWER || power < -MIN_POWER) {
+        //if you try to make it go lower than storage, it goes up instead.
+      /*  if(Math.abs(MIN_POWER) > power) {
             manualPower = power;
         }
         else {
-            manualPower = 0;
+            manualPower = MIN_POWER;
         }
 
+       */
 
     }
 
@@ -165,33 +174,35 @@ public class Slides {
 
 
     public void periodicNoPreset() {
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(true);
-        midMotor.setInverted(true);
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(false);
+        midMotor.setInverted(false);
+
         controller.setPIDF(p, i, d, f);
 
+
         if (manualPower != 0) {
-            controller.setSetPoint(rightMotor.getCurrentPosition());
+            //controller.setSetPoint(rightMotor.getCurrentPosition());
             midMotor.set(manualPower / manualDivide);
             rightMotor.set(manualPower / manualDivide);
             leftMotor.set(manualPower / manualDivide);
-
-
-        } else {
+        }
+        else {
             power = staticF * controller.calculate(rightMotor.getCurrentPosition());
-            rightMotor.set(power);
-            leftMotor.set(power);
-            if (power < Math.abs(0.1)) {
+            rightMotor.set(manualPower);
+            leftMotor.set(manualPower);
+            if (manualPower < Math.abs(0.1)) {
                 midMotor.set(0);
             } else {
-                midMotor.set(power);
+                midMotor.set(manualPower);
             }
         }
     }
+
     public void periodic() {
-        rightMotor.setInverted(false);
-        leftMotor.setInverted(true);
-        midMotor.setInverted(true);
+        rightMotor.setInverted(true);
+        leftMotor.setInverted(false);
+        midMotor.setInverted(false);
 
 
         controller.setPIDF(p, i, d, f);
