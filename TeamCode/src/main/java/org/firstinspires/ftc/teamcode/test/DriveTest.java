@@ -14,29 +14,37 @@ public class DriveTest extends LinearOpMode{
     private GamepadEx gp1;
     Bot bot;
     private double driveSpeed=1;
+    private boolean isFieldCentric;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         bot = Bot.getInstance(this);
         gp1 = new GamepadEx(gamepad1);
+        gp1.readButtons();
 
         waitForStart();
         bot.reverseMotors();
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addData("TeleOp has started","wheeeee");
-            drive();
+
+            if(isFieldCentric){
+                driveRobotCentric();
+            }
+            else{
+                driveFieldCentric();
+            }
+
+            if(gp1.wasJustPressed(GamepadKeys.Button.START)){
+                isFieldCentric=!isFieldCentric;
+            }
         }
 
     }
 
-    //THIS WORKS CORRECTLY
-    private void drive() {
-        gp1.readButtons();
-
+    private void driveRobotCentric() {
         driveSpeed = 1;
-
         driveSpeed *= 1 - 0.5 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);
 
@@ -49,4 +57,19 @@ public class DriveTest extends LinearOpMode{
                 turnVector.getX() * driveSpeed / 1.7
         );
     }
+
+    private void driveFieldCentric() {
+            driveSpeed = 1 - 0.8 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
+            driveSpeed = Math.max(0, driveSpeed);
+            bot.fixMotors();
+
+            Vector2d driveVector = new Vector2d(-gp1.getLeftX(), -gp1.getLeftY()),
+                    turnVector = new Vector2d(-gp1.getRightX(), 0);
+
+            bot.driveFieldCentric(driveVector.getX() * driveSpeed,
+                    driveVector.getY() * driveSpeed,
+                    turnVector.getX() * driveSpeed
+            );
+    }
+
 }

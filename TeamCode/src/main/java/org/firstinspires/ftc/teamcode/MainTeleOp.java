@@ -185,22 +185,17 @@ public class MainTeleOp extends LinearOpMode {
 
 
 //            //slide movement to preset values
-//            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {;
-//                bot.slides.runToTop();
-//                // bot.slides.periodic();
-//            }
-//            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-//                // bot.slides.periodic();
-//                bot.slides.runToStorage();
-//            }
-//            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-//                //     bot.slides.periodic();
-//                bot.slides.runToLow();
-//            }
-//            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-//                //       bot.slides.periodic();
-//                bot.slides.runToMid();
-//            }
+            if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {;
+                bot.slides.runToTop();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                bot.slides.runToStorage();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                bot.slides.runToLow();
+            }
+            else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                bot.slides.runToMid();}
 
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 bot.drone.shoot();
@@ -216,7 +211,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("slides position", bot.slides.getCurrentPosition());
             telemetry.update();
 
-            bot.slides.periodicNoPreset();
+            bot.slides.periodic();
         }
     }
 

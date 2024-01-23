@@ -15,9 +15,7 @@ public class Slides {
     private double target = 0 ;
     private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
-
-    //original 0.015
-    private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1;
+    private final double tolerance = 20, powerUp = 0.1, powerDown = 0.05, manualDivide = 1, powerMin = 0.1;
     public double power;
     private double manualPower;
     public boolean goingDown;
@@ -39,7 +37,8 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = 0, top = -2900, mid = -1800, low = -900;
+    public static int storage = -50, top = -2000, mid = -1000, low = -500;
+
     //tune
 
 
@@ -99,14 +98,13 @@ public class Slides {
 
         goingDown = pos > target;
         target = pos;
-
-        // periodic();
     }
 
 
     public void runToTop() {
 //        if(rightMotor.getCurrentPosition() >= top)
 //            return;
+        runTo(top);
         position = slidesPosition.HIGH;
     }
 
@@ -137,15 +135,18 @@ public class Slides {
 
 
 
-    public void runToManual(double power) {
+    public void runToManual(double manual) {
 
-        if(power<0){
+      /*  if(power<0){
             goingDown=false;
         }
         else{
             goingDown=true;
         }
         manualPower = power;
+
+       */
+
         /*
         if(rightMotor.getCurrentPosition() >= storage && power < 0) {
             manualPower = 0;
@@ -162,6 +163,12 @@ public class Slides {
 
        */
 
+        if (manual > powerMin || manual < -powerMin) {
+            manualPower = manual;
+        } else {
+            manualPower = 0;
+        }
+
     }
 
     public int getCurrentPosition() {
@@ -173,7 +180,7 @@ public class Slides {
     }
 
 
-    public void periodicNoPreset() {
+    public void periodicWithoutProfiler() {
         rightMotor.setInverted(true);
         leftMotor.setInverted(false);
         midMotor.setInverted(false);
@@ -182,7 +189,6 @@ public class Slides {
 
 
         if (manualPower != 0) {
-            //controller.setSetPoint(rightMotor.getCurrentPosition());
             midMotor.set(manualPower / manualDivide);
             rightMotor.set(manualPower / manualDivide);
             leftMotor.set(manualPower / manualDivide);
@@ -204,55 +210,49 @@ public class Slides {
         leftMotor.setInverted(false);
         midMotor.setInverted(false);
 
-
         controller.setPIDF(p, i, d, f);
         double dt = opMode.time - profile_init_time;
-
-
         if (!profiler.isOver()) {
             controller.setSetPoint(profiler.profile_pos(dt));
             power = powerUp * controller.calculate(rightMotor.getCurrentPosition());
             if (goingDown) {
                 power = powerDown * controller.calculate(rightMotor.getCurrentPosition());
             }
-            leftMotor.set(power);
             rightMotor.set(power);
+            leftMotor.set(power);
             midMotor.set(power);
-
 
         } else {
             if (profiler.isDone()) {
                 profiler = new MotionProfiler(30000, 20000);
             }
 
-
             if (manualPower != 0) {
                 controller.setSetPoint(rightMotor.getCurrentPosition());
-                midMotor.set(manualPower / manualDivide);
                 rightMotor.set(manualPower / manualDivide);
                 leftMotor.set(manualPower / manualDivide);
-
+                midMotor.set(manualPower / manualDivide);
 
             } else {
                 power = staticF * controller.calculate(rightMotor.getCurrentPosition());
                 rightMotor.set(power);
                 leftMotor.set(power);
+
                 if (power < Math.abs(0.1)) {
                     midMotor.set(0);
+                    leftMotor.set(0);
                 } else {
                     midMotor.set(power);
+                    leftMotor.set(power);
                 }
             }
         }
     }
 
-
     public void test(double power) {
         rightMotor.set(power);
         leftMotor.set(power);
         midMotor.set(power);
-
-
     }
 
 
@@ -264,6 +264,5 @@ public class Slides {
     public double getManualPower(){
         return manualPower;
     }
-
 
 }
