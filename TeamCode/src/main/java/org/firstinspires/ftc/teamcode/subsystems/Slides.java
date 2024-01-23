@@ -38,9 +38,7 @@ public class Slides {
     private slidesPosition position = slidesPosition.GROUND;
 
     public static int storage = -50, top = -2000, mid = -1000, low = -500;
-
-    //tune
-
+    //tune high and storage
 
     private final OpMode opMode;
 
@@ -137,15 +135,6 @@ public class Slides {
 
     public void runToManual(double manual) {
 
-      /*  if(power<0){
-            goingDown=false;
-        }
-        else{
-            goingDown=true;
-        }
-        manualPower = power;
-
-       */
 
         /*
         if(rightMotor.getCurrentPosition() >= storage && power < 0) {
@@ -154,14 +143,15 @@ public class Slides {
         }
          */
         //if you try to make it go lower than storage, it goes up instead.
-      /*  if(Math.abs(MIN_POWER) > power) {
-            manualPower = power;
-        }
-        else {
-            manualPower = MIN_POWER;
-        }
 
-       */
+        if(rightMotor.getCurrentPosition() >= storage && manual<0) {
+            manualPower = 0;
+            return;
+        }
+        if(rightMotor.getCurrentPosition() <= top && manual>0) {
+            manualPower = 0;
+            return;
+        }
 
         if (manual > powerMin || manual < -powerMin) {
             manualPower = manual;
