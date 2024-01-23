@@ -39,6 +39,9 @@ public class MainTeleOp extends LinearOpMode {
 
         waitForStart();
         bot.reverseMotors();
+        bot.slides.resetEncoder();
+        bot.slides.resetProfiler();
+        bot.slides.runToStorage();
 
 
         while (opModeIsActive() && !isStopRequested()) {

@@ -7,6 +7,15 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.util.MotionProfiler;
 
+/*
+
+problems:
+
+1. sometimes slides stop working when trying to switch to preset position
+2. sometimes when going to pre-set posotion, one of the motors cant reach there and keeps whirring
+
+
+ */
 
 
 
@@ -37,7 +46,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = -50, top = -2000, mid = -1000, low = -500;
+    public static int storage = 0, top = -2000, mid = -1000, low = -500;
     //tune high and storage
 
     private final OpMode opMode;
@@ -144,11 +153,11 @@ public class Slides {
          */
         //if you try to make it go lower than storage, it goes up instead.
 
-        if(rightMotor.getCurrentPosition() >= storage && manual<0) {
+        if(rightMotor.getCurrentPosition() >= storage && manual>0) {
             manualPower = 0;
             return;
         }
-        if(rightMotor.getCurrentPosition() <= top && manual>0) {
+        if(rightMotor.getCurrentPosition() <= top && manual<0) {
             manualPower = 0;
             return;
         }
@@ -167,6 +176,8 @@ public class Slides {
 
     public void resetEncoder() {
         rightMotor.resetEncoder();
+        leftMotor.resetEncoder();
+        midMotor.resetEncoder();
     }
 
 
@@ -211,6 +222,7 @@ public class Slides {
             rightMotor.set(power);
             leftMotor.set(power);
             midMotor.set(power);
+
 
         } else {
             if (profiler.isDone()) {
