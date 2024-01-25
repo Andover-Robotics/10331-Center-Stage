@@ -128,7 +128,8 @@ public class Slides {
         runTo(low);
         position = slidesPosition.LOW;
     }
-
+//if start with preset position nothing works
+    //start with manual preset does not work
 
     public void runToStorage() {
         position = slidesPosition.GROUND;
@@ -143,16 +144,6 @@ public class Slides {
 
 
     public void runToManual(double manual) {
-
-
-        /*
-        if(rightMotor.getCurrentPosition() >= storage && power < 0) {
-            manualPower = 0;
-            return;
-        }
-         */
-        //if you try to make it go lower than storage, it goes up instead.
-
         if(rightMotor.getCurrentPosition() >= storage && manual>0) {
             manualPower = 0;
             return;
@@ -162,12 +153,17 @@ public class Slides {
             return;
         }
 
-        if (manual > powerMin || manual < -powerMin) {
-            manualPower = manual;
-        } else {
+        /*
+        if(rightMotor.getCurrentPosition() == storage && manualPower > 0) {
             manualPower = 0;
+            return;
         }
+         */
 
+        if (manual > powerMin || manual < - powerMin)
+            manualPower = manual;
+        else
+            manualPower = 0;
     }
 
     public int getCurrentPosition() {

@@ -43,10 +43,9 @@ public class MainTeleOp extends LinearOpMode {
         bot.slides.resetProfiler();
         bot.slides.runToStorage();
 
-
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addLine("TeleOp has started");
-
+            //if slides dont work run to storage first
             gp2.readButtons();
             runSlides(gp2.getLeftY());
            /*

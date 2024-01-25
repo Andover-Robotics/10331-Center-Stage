@@ -94,14 +94,14 @@ public class Fourbar {
         fourbar.setPosition(position);
     }
     public void incrementBoxAnglePosition(){
-        boxInitialPos+=0.1;
+        boxInitialPos+=0.05;
         if(boxInitialPos>=1){
             boxInitialPos=1;
         }
         angleBoxServo.setPosition(boxInitialPos);
     }
     public void decrementBoxAnglePosition(){
-        boxInitialPos-=0.1;
+        boxInitialPos-=0.05;
         if(boxInitialPos<=0){
             boxInitialPos=0;
         }
