@@ -26,7 +26,7 @@ public class Box {
         //switched configs
 
         wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
-        wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelServo.setDirection(DcMotorSimple.Direction.FORWARD);
         flapServo = opMode.hardwareMap.crservo.get("flap servo");
 
         time = new ElapsedTime();
@@ -63,7 +63,7 @@ public class Box {
 
 
     public void runWheel(boolean isHolding) {
-        wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelServo.setDirection(DcMotorSimple.Direction.FORWARD);
         if(!isHolding){
             wheelServo.setPower(1);
         }
