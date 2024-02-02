@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous.tuning.odometry;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -33,6 +34,7 @@ import java.util.List;
  *    \--------------/
  *
  */
+@Config
 public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
     //The REV Through Bore Encoder has a TICKS_PER_REV of 8192
@@ -40,15 +42,18 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
     public static double WHEEL_RADIUS = 0.75; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double PARALLEL_X = 3.5; // X is the up and down direction, parallel wheel
-    public static double PARALLEL_Y = -4.5; // Y is the strafe direction
-
-    public static double PERPENDICULAR_X = -1;
-    public static double PERPENDICULAR_Y = 2;
+    public static double PARALLEL_X = -5.5; // X is the up and down direction, parallel wheel
+    public static double PARALLEL_Y = 5.5; // Y is the strafe direction
+//1.296247195284742
+    public static double PERPENDICULAR_X = 1.4;
+    public static double PERPENDICULAR_Y = 0.5 ;
 
     //VALUES NEED TO BE FIXED
-    public static double X_MULTIPLIER = 12.2513194;
-    public static double Y_MULTIPLIER = 12.1565972;
+    public static double X_MULTIPLIER = 1.0507;
+    //1.099
+    //1.011
+    //1.042
+    public static double Y_MULTIPLIER = 1;
 
 
     // Parallel/Perpendicular to the forward axis
