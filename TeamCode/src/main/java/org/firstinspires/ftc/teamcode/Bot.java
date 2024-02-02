@@ -9,11 +9,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.autonomous.TeamPropDetectionPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.Box;
 import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
 import org.firstinspires.ftc.teamcode.subsystems.Noodles;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 
@@ -89,8 +94,6 @@ public class Bot {
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        // distanceSensor = opMode.hardwareMap.get(DistanceSensor.class, "distanceSensor");
-
 
         FL.setMode(RUN_USING_ENCODER);
         FR.setMode(RUN_USING_ENCODER);
@@ -105,65 +108,6 @@ public class Bot {
 
     }
 
-
-
-    /*
-
-    public void prepForOuttake() {
-        currentState = BotState.STORAGE_FULL;
-        resetOuttake();
-    }
-
-    // must be combined with bot.slide.run___() in MainTeleOp
-    public void outtake(int stage, boolean pixelTwo) {
-        currentState = BotState.OUTTAKE;
-        aprilTagTuning();
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
-
-    public void outtake(boolean pixelTwo, int stage){
-        currentState = BotState.OUTTAKE;
-        slides.runTo(stage);
-        fourbar.outtake();
-        box.depositFirstPixel();
-        if(pixelTwo){
-            box.depositSecondPixel();
-            resetOuttake();
-        }
-    }
-
-
-    public void storageSlides(){
-        slides.runTo(1);
-    }
-
-    public void resetOuttake(){
-        box.resetBox();
-        storageSlides();
-        fourbar.storage();
-    }
-
-
-*/
-    public void fixMotors(double velocity) {
-     /*   FL.setDirection(DcMotorEx.Direction.REVERSE);
-        FR.setVelocity(velocity);
-        BL.setDirection(DcMotorEx.Direction.REVERSE);
-        BR.setVelocity(velocity);
-
-        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-      */
-    }
 
     public void reverseMotors(){
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -191,42 +135,6 @@ public class Bot {
         BR.setPower(speeds[3]);
 
     }
-    /*
-
-    //cope no one uses field centric
-    public void driveFieldCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed, double heading) {
-        double magnitude = Math.sqrt(strafeSpeed * strafeSpeed + forwardBackSpeed * forwardBackSpeed);
-        double theta = (Math.atan2(forwardBackSpeed, strafeSpeed) - heading) % (2 * Math.PI);
-        double[] speeds = {
-                magnitude * Math.sin(theta + Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) - turnSpeed,
-                magnitude * Math.sin(theta - Math.PI / 4) + turnSpeed,
-                magnitude * Math.sin(theta + Math.PI / 4) - turnSpeed
-        };
-
-        double maxSpeed = 0;
-
-        for (int i = 0; i < 4; i++) {
-            maxSpeed = Math.max(maxSpeed, speeds[i]);
-        }
-
-        if (maxSpeed > 1) {
-            for (int i = 0; i < 4; i++) {
-                speeds[i] /= maxSpeed;
-            }
-        }
-
-        //        for (int i = 0; i < 4; i++) {
-        //            driveTrainMotors[i].set(speeds[i]);
-        //        }
-        // manually invert the left side
-
-        FL.setPower(speeds[0]);
-        FR.setPower(speeds[1]);
-        BL.setPower(speeds[2]);
-        BR.setPower(speeds[3]);
-    }
-    */
 
     public void setIndividualMotorPower(int motor, double power) {
         //1 FL 2 FR 3 BL 4 BR
@@ -257,42 +165,6 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
-    public void intake(){
-        currentState = BotState.INTAKE;
-        //box.resetBox();
-        box.runWheel(false);
-        noodles.intake();
-    }
-    public void stopIntake(){
-        currentState = BotState.STORAGE_FULL;
-        box.secure();
-        noodles.stop();
-    }
-
-
-   /* public void outtakeBox(){
-        currentState = BotState.OUTTAKE;
-        if(box.getNumPixelsDeposited() == 0){
-            box.depositFirstPixel();
-        }else if(box.getNumPixelsDeposited()==1){
-            box.depositSecondPixel();
-            box.resetBox();
-        }
-    }
-
-    */
-
-    public void outtakeSlides(double target){
-        currentState = BotState.OUTTAKE;
- //       slides.runTo(target);
-    }
-
-    public void outtakeFourbar(double input){
-        if(!fourbar.getIsOuttakePos()){
-            fourbar.runManualOuttake(input);
-        }
-    }
-
 
 
 
@@ -305,127 +177,26 @@ public class Bot {
       //  slides.resetEncoder();
     }
 
+    public void initCamera(TeamPropDetectionPipeline pipeline){
 
+        WebcamName camName = opMode.hardwareMap.get(WebcamName.class, "webcam");
+        camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
 
-    public void resetProfiler() {
-   //     slides.resetProfiler();
+        camera.setPipeline(pipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
 
-    }
-    public void turn(double power){
-        if(power>0) {
-            //turn right
-            //FL.setPower(power);
-        }
-        if(power<0){
-            //turn left
-            //  FR.setPower(-power);
-        }
-    }
-    public void strafeRight(){
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setPower(0);
-        FR.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-
-    }
-    public void strafeLeft(){
-
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
-        FR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setPower(0);
-        FR.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-
-
-    }
-    public void back(){
-        /*
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
-        FR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
-        BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        FL.setPower(0);
-        FR.setPower(0);
-        BR.setPower(0);
-        BL.setPower(0);
-
-         */
-
-    }
-    public void forward(){
-     /*   FL.setPower(0.1);
-        FR.setPower(0.1);
-        BR.setPower(0.1);
-        BL.setPower(0.1);
-
-      */
-    }
-
-
-   /* public void distanceTuning(DistanceSensor sensor){
-        double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
-        boolean inRange = Math.abs(diffy) <= 5;
-        if(inRange){
-            return;
-        }
-        while(!inRange){
-            if(diffy<0){
-                back();
-            }else{
-                forward();
+            @Override
+            public void onOpened() {
+                camera.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
-            distanceFromBackdrop = sensor.getDistance(DistanceUnit.CM);
-            diffy = distanceFromBackdrop - optimalDistanceFromBackdrop;
-            inRange = Math.abs(diffy) <= 5;
-            distanceTuning(sensor);
-        }
-    }
 
-    */
-/*
-    public void aprilTagTuning(){
-        detections.detectTag();
-        distanceFromBackdrop = detections.calcDistToTag();
-        double diffy = this.distanceFromBackdrop - optimalDistanceFromBackdrop;
-        boolean inRange = Math.abs(diffy) <= 5;
-        while(!inRange){
-            if(diffy<0){
-                back();
-            }else{
-                forward();
+            @Override
+            public void onError(int errorCode) {
+
             }
-            distanceFromBackdrop = detections.calcDistToTag();
-            diffy = distanceFromBackdrop - optimalDistanceFromBackdrop;
-            inRange = Math.abs(diffy) <= 5;
-        }
+        });
+
     }
-
- */
-
 
 
 
