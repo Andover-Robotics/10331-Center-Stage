@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
             SIDE:
                 b=red
                 a=blue
-            DTB:
+            DTB:q
                 X= Close
                 Y= Far
              */
