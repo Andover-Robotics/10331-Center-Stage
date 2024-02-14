@@ -45,7 +45,7 @@ public class DriveConstants {
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
     //public static double TRACK_WIDTH = 10.8; // in
-    public static double TRACK_WIDTH = 13;
+    public static double TRACK_WIDTH = 14.95;
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -53,10 +53,14 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.015045745489133502;
-    public static double kA = 0.00152;
-    public static double kStatic = 0.001;
+    public static double kV = 0.014945745489133502;
+    //0.015045745489133502
+    public static double kA =0.003275;
+    //0.0045
+    public static double kStatic = 0.002;
+    //0.0015
 
+    //0.0033
     /* 0
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
      * the constraints should never exceed ~80% of the robot's actual capabilities. While Road
@@ -99,14 +103,14 @@ public class DriveConstants {
     //52.4829190833
     public static double MAX_ACCEL = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.55;
     //33.9595358774
-   public static double MAX_ANG_VEL = Math.toRadians(132.46784704269953);
+   public static double MAX_ANG_VEL = 0.4133333206176758;
    //2.312000083917605
     public static double MAX_ANG_ACCEL = Math.toRadians(38.37343888888889);
 //0.6697428539222843
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
-            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-            RevHubOrientationOnRobot.UsbFacingDirection.DOWN;
+            RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
 
     public static double encoderTicksToInches(double ticks) {

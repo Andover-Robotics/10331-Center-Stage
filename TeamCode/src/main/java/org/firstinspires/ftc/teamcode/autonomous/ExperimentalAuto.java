@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
             SIDE:
                 b=red
                 a=blue
-            DTB:
+            DTB:q
                 X= Close
                 Y= Far
              */
@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 // no sense does not involve team prop sensing or april tag sensing (still outtakes)
 
 @Config
-@Autonomous(name = "MainAutonomous")
+@Autonomous(name = "ExperimentalAuto")
 
 public class ExperimentalAuto extends LinearOpMode {
 
