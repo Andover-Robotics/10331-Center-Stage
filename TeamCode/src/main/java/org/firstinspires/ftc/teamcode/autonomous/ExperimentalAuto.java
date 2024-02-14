@@ -236,6 +236,20 @@ public class ExperimentalAuto extends LinearOpMode {
             checkControls();
             waitForStart();
 
+            if(dtb==DistanceToBackdrop.CLOSE && side== Side.BLUE){
+                drive.setPoseEstimate(startPoseBlueClose);
+            }
+            else if(dtb==DistanceToBackdrop.FAR && side== Side.BLUE){
+                drive.setPoseEstimate(startPoseBlueFar);
+            }
+            else if(dtb==DistanceToBackdrop.CLOSE && side== Side.RED){
+                drive.setPoseEstimate(startPoseRedClose);
+            }
+            else if(dtb==DistanceToBackdrop.FAR && side== Side.RED){
+                drive.setPoseEstimate(startPoseBlueClose);
+
+            }
+
             if (opModeIsActive() && !isStopRequested()) {
 
                 if(autopath== AutoPath.JUST_PARK){
