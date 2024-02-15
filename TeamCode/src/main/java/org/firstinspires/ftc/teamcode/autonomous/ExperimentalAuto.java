@@ -222,11 +222,11 @@ public class ExperimentalAuto extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
+     //   teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
 
-        bot.initCamera(teamPropDetectionPipeline);
+      //  bot.initCamera(teamPropDetectionPipeline);
 
-        prop = teamPropDetectionPipeline.getTeamPropLocation();
+      //  prop = teamPropDetectionPipeline.getTeamPropLocation();
 
 
         while (!isStarted()) {
@@ -302,7 +302,7 @@ public class ExperimentalAuto extends LinearOpMode {
         if(autopath==AutoPath.NO_SENSE){
             drive.followTrajectorySequence(dropPixelCenter);
         }
-        else {
+       /* else {
             if (prop == TeamPropDetectionPipeline.TeamProp.ONLEFT) {
                 drive.followTrajectorySequence(dropPixelLeft);
 
@@ -312,6 +312,8 @@ public class ExperimentalAuto extends LinearOpMode {
                 drive.followTrajectorySequence(dropPixelCenter);
             }
         }
+
+        */
     }
 
     private void depositPurplePixel(){
@@ -373,8 +375,10 @@ public class ExperimentalAuto extends LinearOpMode {
 
 
     private void senseAndScore(){
-        AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
+   /*     AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
+
         bot.camera.setPipeline(aprilTagsPipeline);
+
         AprilTagsDetection detection= new AprilTagsDetection();
         int counter=0;
         detection.detectTag();
@@ -396,6 +400,8 @@ public class ExperimentalAuto extends LinearOpMode {
                 }
             }
             score();
+
+    */
     }
 
 
