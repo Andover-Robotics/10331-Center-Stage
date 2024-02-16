@@ -74,9 +74,7 @@ public class ExperimentalAuto extends LinearOpMode {
     // UNITS ARE METERS
     public static double tagSize = 0.032;
 
-    SampleMecanumDrive drive= new SampleMecanumDrive(hardwareMap);
-
-    GamepadEx gp1 = new GamepadEx(gamepad1);
+    SampleMecanumDrive drive;
 
 
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
@@ -92,129 +90,38 @@ public class ExperimentalAuto extends LinearOpMode {
 
     Vector2d parkingPosBlue = new Vector2d(56, 60);
     Vector2d parkingPosRed = new Vector2d(54, -60);
+    TrajectorySequence redFarJustPark;
+    TrajectorySequence redCloseJustPark;
+    TrajectorySequence blueFarJustPark;
+    TrajectorySequence blueCloseJustPark;
+    TrajectorySequence redFarApproachSpike;
+    TrajectorySequence redCloseApproachSpike;
+    TrajectorySequence blueCloseApproachSpike;
+    TrajectorySequence blueFarApproachSpike;
+    TrajectorySequence dropPixelCenter;
+    TrajectorySequence dropPixelLeft;
+    TrajectorySequence dropPixelRight;
+    TrajectorySequence redPassCenterTruss;
+    TrajectorySequence bluePassCenterTruss;
+    TrajectorySequence redScore;
+    TrajectorySequence blueScore;
+    TrajectorySequence redScoreNoSense;
+    TrajectorySequence blueScoreNoSense;
+    TrajectorySequence redStageScore;
+    TrajectorySequence blueStageScore;
+    TrajectorySequence redPark;
+    TrajectorySequence bluePark;
+    TrajectorySequence strafeLeft;
+    TrajectorySequence strafeRight;
 
-    TrajectorySequence redFarJustPark = drive.trajectorySequenceBuilder(startPoseRedFar)
-            .forward(40)
-            .strafeRight(50)
-            .lineTo(parkingPosRed)
-            .build();
-
-    TrajectorySequence redCloseJustPark = drive.trajectorySequenceBuilder(startPoseRedClose)
-            .lineTo(parkingPosRed)
-            .build();
-    TrajectorySequence blueFarJustPark = drive.trajectorySequenceBuilder(startPoseBlueFar)
-            .forward(40)
-            .strafeLeft(50)
-            .lineTo(parkingPosBlue)
-            .build();
-    TrajectorySequence blueCloseJustPark = drive.trajectorySequenceBuilder(startPoseBlueClose)
-            .lineTo(parkingPosBlue)
-            .build();
-
-    TrajectorySequence redFarApproachSpike = drive.trajectorySequenceBuilder(startPoseRedFar)
-            .splineTo(new Vector2d(-34, -34), Math.toRadians(90))
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::facePurplePixel)
-            .UNSTABLE_addTemporalMarkerOffset(0, this::goToScore)
-            .build();
-
-
-    TrajectorySequence redCloseApproachSpike = drive.trajectorySequenceBuilder(startPoseRedClose)
-            .splineTo(new Vector2d(10, -34), Math.toRadians(90))
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::facePurplePixel)
-            .UNSTABLE_addTemporalMarkerOffset(0, this::goToScore)
-            .build();
-
-    TrajectorySequence blueCloseApproachSpike = drive.trajectorySequenceBuilder(startPoseBlueClose)
-            .splineTo(new Vector2d(10, 34), Math.toRadians(-90))
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::facePurplePixel)
-            .UNSTABLE_addTemporalMarkerOffset(0, this::goToScore)
-            .build();
-
-
-    TrajectorySequence blueFarApproachSpike = drive.trajectorySequenceBuilder(startPoseBlueFar)
-            .splineTo(new Vector2d(-36, 34), Math.toRadians(-90))
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::facePurplePixel)
-            .UNSTABLE_addTemporalMarkerOffset(0, this::goToScore)
-            .build();
-
-    TrajectorySequence dropPixelCenter = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .forward(5)
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::depositPurplePixel)
-            .turn(Math.toRadians(-90))
-            .build();
-
-    TrajectorySequence dropPixelLeft = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .turn(Math.toRadians(-90))
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::depositPurplePixel)
-            .build();
-
-    TrajectorySequence dropPixelRight = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .turn(Math.toRadians(90))
-            .UNSTABLE_addTemporalMarkerOffset(-0.3, this::depositPurplePixel)
-            .turn(Math.toRadians(180))
-            .build();
-
-    TrajectorySequence redPassCenterTruss = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(new Vector2d(-34, -10))
-            .lineTo(new Vector2d(20, -10))
-            .build();
-
-    TrajectorySequence bluePassCenterTruss = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(new Vector2d(-36, 10))
-            .lineTo(new Vector2d(30, 10))
-            .build();
-
-    TrajectorySequence redScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(scoreBackdropRed)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::senseAndScore)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::park)
-            .build();
-
-    TrajectorySequence blueScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(scoreBackdropBlue)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::senseAndScore)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::park)
-            .build();
-
-    TrajectorySequence redScoreNoSense = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(scoreBackdropRed)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::score)
-            .build();
-
-    TrajectorySequence blueScoreNoSense = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(scoreBackdropBlue)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::score)
-            .build();
-
-    TrajectorySequence redStageScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(scoreBackdropRed)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::stageScore)
-            .build();
-
-    TrajectorySequence blueStageScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(scoreBackdropBlue)
-            .UNSTABLE_addTemporalMarkerOffset(0,this::stageScore)
-            .build();
-
-    TrajectorySequence redPark = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(parkingPosRed)
-            .build();
-
-    TrajectorySequence bluePark = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-            .lineTo(parkingPosBlue)
-            .build();
-
-    TrajectorySequence strafeLeft = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .strafeLeft(5)
-                .build();
-
-    TrajectorySequence strafeRight = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .strafeRight(5)
-                .build();
 
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        GamepadEx gp1 = new GamepadEx(gamepad1);
+
+        drive= new SampleMecanumDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -222,18 +129,192 @@ public class ExperimentalAuto extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-     //   teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
+        teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
 
-      //  bot.initCamera(teamPropDetectionPipeline);
+        bot.initCamera(teamPropDetectionPipeline);
 
-      //  prop = teamPropDetectionPipeline.getTeamPropLocation();
+        prop = teamPropDetectionPipeline.getTeamPropLocation();
+
+        redFarJustPark = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .forward(40)
+                .strafeRight(50)
+                .lineTo(parkingPosRed)
+                .build();
+
+        redCloseJustPark = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .lineTo(parkingPosRed)
+                .build();
+        blueFarJustPark = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .forward(40)
+                .strafeLeft(50)
+                .lineTo(parkingPosBlue)
+                .build();
+        blueCloseJustPark = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .lineTo(parkingPosBlue)
+                .build();
+
+        redFarApproachSpike = drive.trajectorySequenceBuilder(startPoseRedFar)
+                .splineTo(new Vector2d(-34, -34), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> facePurplePixel(drive))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> goToScore(drive))
+                .build();
+
+
+        redCloseApproachSpike = drive.trajectorySequenceBuilder(startPoseRedClose)
+                .splineTo(new Vector2d(10, -34), Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> facePurplePixel(drive))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> goToScore(drive))
+                .build();
+
+        blueCloseApproachSpike = drive.trajectorySequenceBuilder(startPoseBlueClose)
+                .splineTo(new Vector2d(10, 34), Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> facePurplePixel(drive))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> goToScore(drive))
+                .build();
+
+
+        blueFarApproachSpike = drive.trajectorySequenceBuilder(startPoseBlueFar)
+                .splineTo(new Vector2d(-36, 34), Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> facePurplePixel(drive))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> goToScore(drive))
+                .build();
+
+        dropPixelCenter = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .forward(5)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::depositPurplePixel)
+                .turn(Math.toRadians(-90))
+                .build();
+
+        dropPixelLeft = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .turn(Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::depositPurplePixel)
+                .build();
+
+        dropPixelRight = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .turn(Math.toRadians(90))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, this::depositPurplePixel)
+                .turn(Math.toRadians(180))
+                .build();
+
+        redPassCenterTruss = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(new Vector2d(-34, -10))
+                .lineTo(new Vector2d(20, -10))
+                .build();
+
+        bluePassCenterTruss = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(new Vector2d(-36, 10))
+                .lineTo(new Vector2d(30, 10))
+                .build();
+
+        redScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(scoreBackdropRed)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> senseAndScore(drive))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> park(drive))
+                .build();
+
+        blueScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(scoreBackdropBlue)
+                .UNSTABLE_addTemporalMarkerOffset(-0.3, () -> senseAndScore(drive))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> park(drive))
+                .build();
+
+        redScoreNoSense = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(scoreBackdropRed)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::score)
+                .build();
+
+        blueScoreNoSense = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(scoreBackdropBlue)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::score)
+                .build();
+
+        redStageScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(scoreBackdropRed)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stageScore)
+                .build();
+
+        blueStageScore = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(scoreBackdropBlue)
+                .UNSTABLE_addTemporalMarkerOffset(0,this::stageScore)
+                .build();
+
+        redPark = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(parkingPosRed)
+                .build();
+
+        bluePark = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .lineTo(parkingPosBlue)
+                .build();
+
+        strafeLeft = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .strafeLeft(5)
+                .build();
+
+        strafeRight = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .strafeRight(5)
+                .build();
+
 
 
         while (!isStarted()) {
             gp1.readButtons();
-            drive.updatePoseEstimate();
+           // drive.updatePoseEstimate();
 
-            checkControls();
+            //checkControls(gp1);
+            if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
+                telemetry.addLine("Alliance: red");
+                side = Side.RED;
+                teamPropDetectionPipeline.setAlliance(1);
+                telemetry.update();
+            }
+
+            if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
+                telemetry.addLine("Alliance: blue");
+                side = BLUE;
+                teamPropDetectionPipeline.setAlliance(2);
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
+                telemetry.addLine("Distance: close");
+                dtb = DistanceToBackdrop.CLOSE;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
+                telemetry.addLine("Distance: far");
+                dtb = DistanceToBackdrop.FAR;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                telemetry.addLine("Mode: Mechanical Failure");
+                autopath = AutoPath.MECHANICAL_FAILURE;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                telemetry.addLine("Mode: No Sense");
+                autopath = AutoPath.NO_SENSE;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                telemetry.addLine("Mode: Optimal");
+                autopath = AutoPath.OPTIMAL;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                telemetry.addLine("Mode: Just Park");
+                autopath = AutoPath.JUST_PARK;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.START)) {
+                telemetry.addLine("wait for 15 seconds before outtaking");
+                wait = true;
+                telemetry.update();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
+                telemetry.addLine("pass through center truss");
+                throughMiddle = true;
+            }
+
+
             waitForStart();
 
             if(dtb==DistanceToBackdrop.CLOSE && side== Side.BLUE){
@@ -249,6 +330,7 @@ public class ExperimentalAuto extends LinearOpMode {
                 drive.setPoseEstimate(startPoseBlueClose);
 
             }
+            drive.updatePoseEstimate();
 
             if (opModeIsActive() && !isStopRequested()) {
 
@@ -298,11 +380,11 @@ public class ExperimentalAuto extends LinearOpMode {
         }
     }
 
-    private void facePurplePixel(){
+    private void facePurplePixel(SampleMecanumDrive drive){
         if(autopath==AutoPath.NO_SENSE){
             drive.followTrajectorySequence(dropPixelCenter);
         }
-       /* else {
+        else {
             if (prop == TeamPropDetectionPipeline.TeamProp.ONLEFT) {
                 drive.followTrajectorySequence(dropPixelLeft);
 
@@ -312,8 +394,6 @@ public class ExperimentalAuto extends LinearOpMode {
                 drive.followTrajectorySequence(dropPixelCenter);
             }
         }
-
-        */
     }
 
     private void depositPurplePixel(){
@@ -332,7 +412,7 @@ public class ExperimentalAuto extends LinearOpMode {
         telemetry.update();
     }
 
-    private void goToScore() {
+    private void goToScore(SampleMecanumDrive drive) {
 
         if(throughMiddle){
             if(side== Side.BLUE){
@@ -374,8 +454,8 @@ public class ExperimentalAuto extends LinearOpMode {
     }
 
 
-    private void senseAndScore(){
-   /*     AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
+    private void senseAndScore(SampleMecanumDrive drive){
+        AprilTagsPipeline aprilTagsPipeline= new AprilTagsPipeline(tagSize,fx,fy,cx,cy);
 
         bot.camera.setPipeline(aprilTagsPipeline);
 
@@ -400,8 +480,6 @@ public class ExperimentalAuto extends LinearOpMode {
                 }
             }
             score();
-
-    */
     }
 
 
@@ -413,7 +491,7 @@ public class ExperimentalAuto extends LinearOpMode {
         telemetry.update();
     }
 
-    private void park(){
+    private void park(SampleMecanumDrive drive){
         if(side== Side.RED){
             drive.followTrajectorySequence(redPark);
         }
@@ -423,7 +501,7 @@ public class ExperimentalAuto extends LinearOpMode {
 
     }
 
-        private void checkControls(){
+      /*  private void checkControls(GamepadEx gp1){
             if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
                 telemetry.addLine("Alliance: red");
                 side = Side.RED;
@@ -477,5 +555,9 @@ public class ExperimentalAuto extends LinearOpMode {
                 throughMiddle = true;
                 telemetry.update();
             }
+
         }
+
+       */
+
     }
