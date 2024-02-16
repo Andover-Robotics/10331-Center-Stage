@@ -555,8 +555,6 @@ public class MainAuto extends LinearOpMode {
                 waitSecondsBeforeStart++;
             }
 
-
-
         }
         waitForStart();
 

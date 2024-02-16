@@ -39,7 +39,6 @@ public class ExperimentalAuto extends LinearOpMode {
     Bot bot;
     boolean wait = false;
     boolean throughMiddle = false;
-    double waitSecondsBeforeStart;
 
     enum Side {
         RED, BLUE,
@@ -58,7 +57,7 @@ public class ExperimentalAuto extends LinearOpMode {
     DistanceToBackdrop dtb= DistanceToBackdrop.CLOSE;
     AutoPath autopath = AutoPath.OPTIMAL;
     TeamPropDetectionPipeline.TeamProp prop;
-    private ElapsedTime time = new ElapsedTime();
+    private final ElapsedTime time = new ElapsedTime();
 
     TeamPropDetectionPipeline teamPropDetectionPipeline;
 
@@ -69,15 +68,13 @@ public class ExperimentalAuto extends LinearOpMode {
     public static double cy = 245.959325;
 
 
-    Pose2d currentPose;
-
     // UNITS ARE METERS
     public static double tagSize = 0.032;
 
     SampleMecanumDrive drive;
 
-
-    Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
+    boolean isBlue;
+    boolean isFar;
 
     Pose2d startPoseBlueFar = new Pose2d(-36, 52, Math.toRadians(-90));
     Pose2d startPoseBlueClose = new Pose2d(10, 56, Math.toRadians(-90));
@@ -257,65 +254,62 @@ public class ExperimentalAuto extends LinearOpMode {
 
 
         while (!isStarted()) {
-            gp1.readButtons();
            // drive.updatePoseEstimate();
+            gp1.readButtons();
 
             //checkControls(gp1);
-            if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
-                telemetry.addLine("Alliance: red");
-                side = Side.RED;
-                teamPropDetectionPipeline.setAlliance(1);
+
+            while(!gp1.wasJustPressed(GamepadKeys.Button.START)) {
+                gp1.readButtons();
+                if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
+                    if(!isBlue){
+                        side = BLUE;
+                        teamPropDetectionPipeline.setAlliance(2);
+                        isBlue=true;
+                    }
+                    else{
+                        side = Side.RED;
+                        isBlue=false;
+                        teamPropDetectionPipeline.setAlliance(1);
+                    }
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
+                    if(!isFar){
+                        isFar=true;
+                        dtb = DistanceToBackdrop.FAR;
+                    }
+                    else{
+                        isFar=false;
+                        dtb = DistanceToBackdrop.CLOSE;
+                    }
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                    autopath = AutoPath.MECHANICAL_FAILURE;
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                    autopath = AutoPath.NO_SENSE;
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                    autopath = AutoPath.OPTIMAL;
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                    autopath = AutoPath.JUST_PARK;
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
+                    telemetry.addData("wait for 15 seconds before outtaking", "");
+                    wait = true;
+                    telemetry.update();
+                }
+                if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
+                    telemetry.addData("pass through center truss", "");
+                    throughMiddle = true;
+                }
+                telemetry.addData("Alliance color is ", side);
+                telemetry.addData("Distance from backdrop is ", dtb);
+                telemetry.addData("Mode is ", autopath);
                 telemetry.update();
             }
 
-            if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
-                telemetry.addLine("Alliance: blue");
-                side = BLUE;
-                teamPropDetectionPipeline.setAlliance(2);
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
-                telemetry.addLine("Distance: close");
-                dtb = DistanceToBackdrop.CLOSE;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
-                telemetry.addLine("Distance: far");
-                dtb = DistanceToBackdrop.FAR;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                telemetry.addLine("Mode: Mechanical Failure");
-                autopath = AutoPath.MECHANICAL_FAILURE;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                telemetry.addLine("Mode: No Sense");
-                autopath = AutoPath.NO_SENSE;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                telemetry.addLine("Mode: Optimal");
-                autopath = AutoPath.OPTIMAL;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                telemetry.addLine("Mode: Just Park");
-                autopath = AutoPath.JUST_PARK;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.START)) {
-                telemetry.addLine("wait for 15 seconds before outtaking");
-                wait = true;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
-                telemetry.addLine("pass through center truss");
-                throughMiddle = true;
-            }
-
-
-            waitForStart();
 
             if(dtb==DistanceToBackdrop.CLOSE && side== Side.BLUE){
                 drive.setPoseEstimate(startPoseBlueClose);
@@ -331,6 +325,8 @@ public class ExperimentalAuto extends LinearOpMode {
 
             }
             drive.updatePoseEstimate();
+
+            waitForStart();
 
             if (opModeIsActive() && !isStopRequested()) {
 
