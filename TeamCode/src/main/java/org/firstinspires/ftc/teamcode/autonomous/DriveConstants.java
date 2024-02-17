@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-//aaaaaaaa i hat my life
 /*
  * Constants shared between multiple drive types.
  *
@@ -52,11 +51,11 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.014945745489133502;
+    public static double kV = 0.0163957454891335;
     //0.015045745489133502
-    public static double kA =0.003275;
+    public static double kA =0.0037;
     //0.0045
-    public static double kStatic = 0.002;
+    public static double kStatic = 0.0001;
     //0.0015
 
     //0.0033

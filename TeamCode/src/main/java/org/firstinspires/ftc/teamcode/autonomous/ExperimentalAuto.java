@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 
 
-
+// switch forward and backward and strafe to lineTo
 
 //robot fail has no outtake
 //optimal outtakes on the backdrop
