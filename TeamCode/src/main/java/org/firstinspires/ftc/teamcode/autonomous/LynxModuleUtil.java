@@ -1,15 +1,20 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.auto.util;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
+
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * Collection of utilites for interacting with Lynx modules.
  */
 public class LynxModuleUtil {
+
     private static final LynxFirmwareVersion MIN_VERSION = new LynxFirmwareVersion(1, 8, 2);
+
     /**
      * Parsed representation of a Lynx module firmware version.
      */
@@ -17,11 +22,13 @@ public class LynxModuleUtil {
         public final int major;
         public final int minor;
         public final int eng;
+
         public LynxFirmwareVersion(int major, int minor, int eng) {
             this.major = major;
             this.minor = minor;
             this.eng = eng;
         }
+
         @Override
         public boolean equals(Object other) {
             if (other instanceof LynxFirmwareVersion) {
@@ -32,6 +39,7 @@ public class LynxModuleUtil {
                 return false;
             }
         }
+
         @Override
         public int compareTo(LynxFirmwareVersion other) {
             int majorComp = Integer.compare(major, other.major);
@@ -46,11 +54,13 @@ public class LynxModuleUtil {
                 return majorComp;
             }
         }
+
         @Override
         public String toString() {
             return Misc.formatInvariant("%d.%d.%d", major, minor, eng);
         }
     }
+
     /**
      * Retrieve and parse Lynx module firmware version.
      * @param module Lynx module
@@ -61,6 +71,7 @@ public class LynxModuleUtil {
         if (versionString == null) {
             return null;
         }
+
         String[] parts = versionString.split("[ :,]+");
         try {
             // note: for now, we ignore the hardware entry
@@ -73,6 +84,7 @@ public class LynxModuleUtil {
             return null;
         }
     }
+
     /**
      * Exception indicating an outdated Lynx firmware version.
      */
@@ -81,6 +93,7 @@ public class LynxModuleUtil {
             super(detailMessage);
         }
     }
+
     /**
      * Ensure all of the Lynx modules attached to the robot satisfy the minimum requirement.
      * @param hardwareMap hardware map containing Lynx modules

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+/*package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -132,7 +132,7 @@ public class TestBackdropAlign extends LinearOpMode {
             moveRobot(drive, strafe, turn);
             sleep(10);
 
-             */
+
        // }
         // Save more CPU resources when camera is no longer needed.
      //   detections.visionPortal.close();
@@ -143,7 +143,7 @@ public class TestBackdropAlign extends LinearOpMode {
      * Positive X is forward
      * Positive Y is strafe left
      * Positive Yaw is counter-clockwise
-     */
+
 
     public void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
@@ -174,7 +174,7 @@ public class TestBackdropAlign extends LinearOpMode {
     /*
      Manually set the camera gain and exposure.
      This can only be called AFTER calling initAprilTag(), and only works for Webcams;
-    */
+
     private void setManualExposure(int exposureMS, int gain) {
         if (detections.visionPortal == null) {
             return;
@@ -207,6 +207,8 @@ public class TestBackdropAlign extends LinearOpMode {
         }
     }
 }
+
+ */
 
 /* Copyright (c) 2023 FIRST. All rights reserved.
  *
