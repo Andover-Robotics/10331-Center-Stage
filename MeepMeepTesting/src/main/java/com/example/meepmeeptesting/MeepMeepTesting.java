@@ -12,7 +12,9 @@ public class MeepMeepTesting {
 
         Pose2d startPoseBlueFar = new Pose2d(-36, 52, Math.toRadians(-90));
         Pose2d startPoseBlueClose = new Pose2d(10, 56, Math.toRadians(-90));
+
         Pose2d startPoseRedClose = new Pose2d(10, -52, Math.toRadians(90));
+
         Pose2d startPoseRedFar = new Pose2d(-34, -48, Math.toRadians(90));
 
         Vector2d purplePixelRightPosBlueClose = new Vector2d(56, 56);
@@ -36,22 +38,17 @@ public class MeepMeepTesting {
 
 
         Vector2d parkingPosBlue = new Vector2d(56, 60);
-        Vector2d parkingPosRed = new Vector2d(54, -60);
+
+        Vector2d parkingPosRed = new Vector2d(54, -52);
 
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPoseRedFar)
-                                .splineTo(new Vector2d(-34, -34), Math.toRadians(90))
-                                .turn(Math.toRadians(-90))
-                                .lineTo(new Vector2d(-34, -10))
-                                .lineTo(new Vector2d(20, -10))
-                                .lineTo(scoreBackdropRed)
-                                .lineTo(parkingPosRed)
+                        drive.trajectorySequenceBuilder(startPoseRedClose)
+                                .lineToConstantHeading(parkingPosRed)
                                 .build()
-
                 );
 
 
