@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import static com.qualcomm.robotcore.hardware.DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 import static org.firstinspires.ftc.teamcode.Bot.BotState.STORAGE_NOT_FULL;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -73,7 +74,7 @@ public class Bot {
 
     private Bot(OpMode opMode) {
         this.opMode = opMode;
-      //  enableAutoBulkRead();
+        enableAutoBulkRead();
         //what is this
         try {
             fieldCentricRunMode = false;
@@ -161,11 +162,9 @@ public class Bot {
     }
 
     private void enableAutoBulkRead() {
-      /*  for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
+        for (LynxModule mod : opMode.hardwareMap.getAll(LynxModule.class)) {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
-
-       */
     }
 
 

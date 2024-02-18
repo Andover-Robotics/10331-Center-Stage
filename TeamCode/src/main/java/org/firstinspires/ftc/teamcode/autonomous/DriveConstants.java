@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 /*
  * Constants shared between multiple drive types.
@@ -106,12 +107,11 @@ public class DriveConstants {
     public static double MAX_ANG_ACCEL = Math.toRadians(38.37343888888889);
 //0.6697428539222843
 
-   /* public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
+    public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
             RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
             RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-    */
 
 
     public static double encoderTicksToInches(double ticks) {
