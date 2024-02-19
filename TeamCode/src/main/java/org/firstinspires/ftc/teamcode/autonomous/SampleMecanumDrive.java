@@ -325,7 +325,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
        // return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).yRotationRate;
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate;
+        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
 
 
