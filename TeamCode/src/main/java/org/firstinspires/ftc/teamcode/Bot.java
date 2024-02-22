@@ -189,16 +189,33 @@ public class Bot {
             mod.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
     }
+    /*
+    multithreading for intake:
+     */
+    Thread boxMovement = new Thread(() -> {
+        if(currentState == BotState.INTAKE)
+            box.runWheel(false);
+        else
+            box.secure();
+
+    }
+    );
+    Thread noodlesMovement = new Thread(() -> {
+        if(currentState == BotState.INTAKE)
+            noodles.intake();
+        else
+            noodles.stop();
+    }
+    );
     public void intake(){
         currentState = BotState.INTAKE;
-        //box.resetBox();
-        box.runWheel(false);
-        noodles.intake();
+        boxMovement.start();
+        noodlesMovement.start();
     }
     public void stopIntake(){
         currentState = BotState.STORAGE_FULL;
-        box.secure();
-        noodles.stop();
+        boxMovement.start();
+        noodlesMovement.start();
     }
 
     public void resetEncoder() {

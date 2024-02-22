@@ -22,9 +22,6 @@ public class MainTeleOp extends LinearOpMode {
 
     private ElapsedTime time = new ElapsedTime();
 
-
-
-
     @Override
     public void runOpMode() throws InterruptedException {
 
