@@ -31,17 +31,13 @@ public class ExperimentalAuto extends LinearOpMode {
 
     Bot bot;
     SampleMecanumDrive drive;
-
-    boolean wait = false;
-    boolean throughMiddle = false;
-    boolean isBlue = false;
-    boolean isFar = false;
+    boolean wait, throughMiddle, isBlue,isFar;
 
     enum Side {
-        RED, BLUE,
+        RED, BLUE
     }
     enum DistanceToBackdrop {
-        CLOSE, FAR,
+        CLOSE, FAR
     }
     enum AutoPath {
         MECHANICAL_FAILURE, OPTIMAL, NO_SENSE, JUST_PARK
@@ -78,36 +74,23 @@ public class ExperimentalAuto extends LinearOpMode {
 
     Vector2d parkingPosRed = new Vector2d(54, -52);
 
-    TrajectorySequence redFarJustPark;
-    TrajectorySequence redCloseJustPark;
-    TrajectorySequence blueFarJustPark;
-    TrajectorySequence blueCloseJustPark;
-    TrajectorySequence redFarApproachSpike;
-    TrajectorySequence redCloseApproachSpike;
-    TrajectorySequence blueCloseApproachSpike;
-    TrajectorySequence blueFarApproachSpike;
-    TrajectorySequence dropPixelCenter;
-    TrajectorySequence dropPixelLeft;
-    TrajectorySequence dropPixelRight;
-    TrajectorySequence redPassCenterTruss;
-    TrajectorySequence bluePassCenterTruss;
-    TrajectorySequence redScore;
-    TrajectorySequence blueScore;
-    TrajectorySequence redScoreNoSense;
-    TrajectorySequence blueScoreNoSense;
-    TrajectorySequence redStageScore;
-    TrajectorySequence blueStageScore;
-    TrajectorySequence redPark;
-    TrajectorySequence bluePark;
-    TrajectorySequence strafeLeft;
-    TrajectorySequence strafeRight;
+    //Red trajectories
+    TrajectorySequence redFarJustPark, redCloseJustPark, redFarApproachSpike,
+            redCloseApproachSpike, redPassCenterTruss, redScore, redPark, redScoreNoSense,
+            redStageScore;
+    //Blue trajectories
+    TrajectorySequence blueFarJustPark, blueCloseJustPark, blueCloseApproachSpike,
+            blueFarApproachSpike, bluePark, blueScoreNoSense, blueScore, bluePassCenterTruss,
+            blueStageScore;
+    //Other trajectories
+    TrajectorySequence dropPixelCenter, dropPixelLeft, dropPixelRight, strafeLeft, strafeRight;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         GamepadEx gp1 = new GamepadEx(gamepad1);
 
-        drive= new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         bot = Bot.getInstance(this);
@@ -296,11 +279,11 @@ public class ExperimentalAuto extends LinearOpMode {
 
             waitForStart();
 
-            if (opModeIsActive() && !isStopRequested()) {
+            while (opModeIsActive() && !isStopRequested()) {
 
-                if(autopath== AutoPath.JUST_PARK){
-                    if(side== Side.BLUE){
-                        if(dtb== DistanceToBackdrop.CLOSE){
+                if(autopath == AutoPath.JUST_PARK){
+                    if(side == Side.BLUE){
+                        if(dtb == DistanceToBackdrop.CLOSE){
                             drive.followTrajectorySequence(blueCloseJustPark);
                         }
                         else{
@@ -367,7 +350,7 @@ public class ExperimentalAuto extends LinearOpMode {
     private void stageScore(){
         bot.noodles.reverseIntake();
         time.reset();
-        while(time.seconds() < 7) {
+        while(time.seconds() < 3) {
             bot.box.runWheel(true);
         }
         bot.box.runWheel(false);
@@ -376,12 +359,10 @@ public class ExperimentalAuto extends LinearOpMode {
     }
 
     private void goToScore(SampleMecanumDrive drive) {
-
         if(throughMiddle){
-            if(side== Side.BLUE){
+            if(side == Side.BLUE){
                 drive.followTrajectorySequence(bluePassCenterTruss);
-            }
-            else{
+            } else{
                 drive.followTrajectorySequence(redPassCenterTruss);
             }
         }
@@ -425,7 +406,7 @@ public class ExperimentalAuto extends LinearOpMode {
         int counter=0;
         detection.detectTag();
 
-        if(prop== TeamPropDetectionPipeline.TeamProp.ONLEFT){
+        if(prop == TeamPropDetectionPipeline.TeamProp.ONLEFT){
             //keep strafing left until robot detects AprilTag or if you have run loop over 5 times
             while(detection.getTagOfInterest().id!= 1 && counter<5){
                 detection.detectTag();
@@ -434,7 +415,7 @@ public class ExperimentalAuto extends LinearOpMode {
             }
         }
 
-        else if(prop== TeamPropDetectionPipeline.TeamProp.ONRIGHT){
+        else if(prop == TeamPropDetectionPipeline.TeamProp.ONRIGHT){
             while(detection.getTagOfInterest().id!=3 && counter<5){
                 detection.detectTag();
                 drive.followTrajectorySequence(strafeRight);
@@ -444,82 +425,19 @@ public class ExperimentalAuto extends LinearOpMode {
         score();
     }
 
-
     private void score(){
         bot.fourbar.outtake();
         bot.box.depositSecondPixel();
         bot.fourbar.storage();
-        telemetry.addData("Scoring with no sensing should occur right now",".");
-        telemetry.update();
     }
 
     private void park(SampleMecanumDrive drive){
-        if(side== Side.RED){
+        if(side == Side.RED){
             drive.followTrajectorySequence(redPark);
         }
-        if(side== Side.BLUE){
+        if(side == Side.BLUE){
             drive.followTrajectorySequence(bluePark);
         }
 
     }
-
-      /*  private void checkControls(GamepadEx gp1){
-            if (gp1.wasJustPressed(GamepadKeys.Button.B)) {
-                telemetry.addLine("Alliance: red");
-                side = Side.RED;
-                teamPropDetectionPipeline.setAlliance(1);
-                telemetry.update();
-            }
-
-            if (gp1.wasJustPressed(GamepadKeys.Button.A)) {
-                telemetry.addLine("Alliance: blue");
-                side = BLUE;
-                teamPropDetectionPipeline.setAlliance(2);
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.X)) {
-                telemetry.addLine("Distance: close");
-                dtb = DistanceToBackdrop.CLOSE;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.Y)) {
-                telemetry.addLine("Distance: far");
-                dtb = DistanceToBackdrop.FAR;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-                telemetry.addLine("Mode: Mechanical Failure");
-                autopath = AutoPath.MECHANICAL_FAILURE;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                telemetry.addLine("Mode: No Sense");
-                autopath = AutoPath.NO_SENSE;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-                telemetry.addLine("Mode: Optimal");
-                autopath = AutoPath.OPTIMAL;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-                telemetry.addLine("Mode: Just Park");
-                autopath = AutoPath.JUST_PARK;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.START)) {
-                telemetry.addLine("wait for 15 seconds before outtaking");
-                wait = true;
-                telemetry.update();
-            }
-            if (gp1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
-                telemetry.addLine("pass through center truss");
-                throughMiddle = true;
-                telemetry.update();
-            }
-
-        }
-
-       */
-
 }
