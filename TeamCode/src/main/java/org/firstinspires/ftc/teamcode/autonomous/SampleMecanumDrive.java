@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.autonomous.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants.kV;
 
 import androidx.annotation.NonNull;
 
@@ -43,7 +43,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.autonomous.tuning.DriveConstants;
 import org.firstinspires.ftc.teamcode.autonomous.tuning.odometry.TwoWheelTrackingLocalizer;
+import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,8 +114,6 @@ public class SampleMecanumDrive extends MecanumDrive {
 
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-
-
 
 
         leftFront = hardwareMap.get(DcMotorEx.class, "fl");

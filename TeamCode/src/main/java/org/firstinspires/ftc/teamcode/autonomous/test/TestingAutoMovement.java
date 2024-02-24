@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.test;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.autonomous.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence;
 
 
@@ -64,7 +65,7 @@ public class TestingAutoMovement extends LinearOpMode{
                 .build();
 
 
-        while (!isStarted()) {
+        while (!isStarted())
 
             gp1.readButtons();
 
@@ -104,5 +105,3 @@ public class TestingAutoMovement extends LinearOpMode{
             }
         }
     }
-
-}
