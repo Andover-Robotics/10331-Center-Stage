@@ -32,8 +32,6 @@ public class TestServos extends LinearOpMode {
         waitForStart();
         bot.reverseMotors();
 
-        //flap servo works
-        // wheel servo sucks
 
         while (opModeIsActive() && !isStopRequested()) {
 

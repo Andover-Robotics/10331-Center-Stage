@@ -20,7 +20,7 @@ problems:
 
 
 public class Slides {
-    public final MotorEx leftMotor, midMotor, rightMotor;
+    public final MotorEx midMotor, rightMotor;
     private double target = 0 ;
     private int encoderTickPerLevel = -650;
     private final static double p = 0.015, i = 0 , d = 0, f = 0, staticF = 0.25;
@@ -53,12 +53,10 @@ public class Slides {
 
 
     public Slides(OpMode opMode) {
-        leftMotor = new MotorEx(opMode.hardwareMap, "slidesLeft", Motor.GoBILDA.RPM_312);
         rightMotor = new MotorEx(opMode.hardwareMap, "slidesRight", Motor.GoBILDA.RPM_312);
         midMotor = new MotorEx(opMode.hardwareMap, "slidesCenter", Motor.GoBILDA.RPM_312);
 
         rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
         midMotor.setInverted(false);
 
 
@@ -71,8 +69,6 @@ public class Slides {
         controller.setSetPoint(0);
 
 
-        leftMotor.setRunMode(Motor.RunMode.RawPower);
-        leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightMotor.setRunMode(Motor.RunMode.RawPower);
         rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         midMotor.setRunMode(Motor.RunMode.RawPower);
@@ -87,9 +83,6 @@ public class Slides {
         rightMotor.setRunMode(Motor.RunMode.RawPower);
         rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-
-        leftMotor.setRunMode(Motor.RunMode.RawPower);
-        leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
 
         midMotor.setRunMode(Motor.RunMode.RawPower);
@@ -172,14 +165,12 @@ public class Slides {
 
     public void resetEncoder() {
         rightMotor.resetEncoder();
-        leftMotor.resetEncoder();
         midMotor.resetEncoder();
     }
 
 
     public void periodicWithoutProfiler() {
         rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
         midMotor.setInverted(false);
 
         controller.setPIDF(p, i, d, f);
@@ -188,12 +179,10 @@ public class Slides {
         if (manualPower != 0) {
             midMotor.set(manualPower / manualDivide);
             rightMotor.set(manualPower / manualDivide);
-            leftMotor.set(manualPower / manualDivide);
         }
         else {
             power = staticF * controller.calculate(rightMotor.getCurrentPosition());
             rightMotor.set(manualPower);
-            leftMotor.set(manualPower);
             if (manualPower < Math.abs(0.1)) {
                 midMotor.set(0);
             } else {
@@ -204,7 +193,6 @@ public class Slides {
 
     public void periodic() {
         rightMotor.setInverted(true);
-        leftMotor.setInverted(false);
         midMotor.setInverted(false);
 
         controller.setPIDF(p, i, d, f);
@@ -216,7 +204,6 @@ public class Slides {
                 power = powerDown * controller.calculate(rightMotor.getCurrentPosition());
             }
             rightMotor.set(power);
-            leftMotor.set(power);
             midMotor.set(power);
 
 
@@ -228,20 +215,16 @@ public class Slides {
             if (manualPower != 0) {
                 controller.setSetPoint(rightMotor.getCurrentPosition());
                 rightMotor.set(manualPower / manualDivide);
-                leftMotor.set(manualPower / manualDivide);
                 midMotor.set(manualPower / manualDivide);
 
             } else {
                 power = staticF * controller.calculate(rightMotor.getCurrentPosition());
                 rightMotor.set(power);
-                leftMotor.set(power);
 
                 if (power < Math.abs(0.1)) {
                     midMotor.set(0);
-                    leftMotor.set(0);
                 } else {
                     midMotor.set(power);
-                    leftMotor.set(power);
                 }
             }
         }
@@ -249,7 +232,6 @@ public class Slides {
 
     public void test(double power) {
         rightMotor.set(power);
-        leftMotor.set(power);
         midMotor.set(power);
     }
 

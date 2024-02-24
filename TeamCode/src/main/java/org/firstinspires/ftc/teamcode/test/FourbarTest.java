@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.checkerframework.checker.units.qual.Temperature;
 import org.firstinspires.ftc.teamcode.Bot;
 
 @TeleOp(name="FourbarTest")
@@ -21,7 +20,6 @@ public class FourbarTest extends LinearOpMode {
         gp2 = new GamepadEx(gamepad2);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
-      //  bot.fourbar.position(0.2,0.95);
 
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -44,6 +42,7 @@ public class FourbarTest extends LinearOpMode {
 
 
           if (gp2.wasJustPressed(GamepadKeys.Button.A)) {
+              //counteroller moved instead
                 bot.fourbar.decrementFourbarPosition();
                 telemetry.addLine(" position is " + bot.fourbar.getFourbarPos());
             }
@@ -52,16 +51,12 @@ public class FourbarTest extends LinearOpMode {
                 telemetry.addLine("position " + bot.fourbar.getFourbarPos());
             }
 
-
             if (gp2.wasJustPressed(GamepadKeys.Button.X)) {
                 bot.fourbar.incrementBoxAnglePosition();
                 telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());       }
             if(gp2.wasJustPressed(GamepadKeys.Button.Y)) {
                 bot.fourbar.decrementBoxAnglePosition();
-                telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());       }            
-            //if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
-              //  bot.intake();
-            //}
+                telemetry.addLine("Box position is " + bot.fourbar.getBoxPos());       }
 
 
             telemetry.update();

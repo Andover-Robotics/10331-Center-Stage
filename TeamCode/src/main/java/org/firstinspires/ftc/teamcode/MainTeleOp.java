@@ -32,9 +32,11 @@ public class MainTeleOp extends LinearOpMode {
 
 
         telemetry.addData("boxAnglePosition:", bot.fourbar.getBoxStoragePos());
-
+        bot.noodles.storage();
 
         waitForStart();
+
+        bot.noodles.goToIntakePos();
         bot.reverseMotors();
         bot.slides.resetEncoder();
         bot.slides.resetProfiler();
@@ -42,7 +44,7 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addLine("TeleOp has started");
-            //if slides dont work run to storage first
+            //if slides dont work run to top first
             gp2.readButtons();
             runSlides(gp2.getLeftY());
            /*
@@ -75,17 +77,9 @@ public class MainTeleOp extends LinearOpMode {
             */
 
 
-            //drivetrain movement works
             drive();
 
-
-            if(gp1.wasJustPressed(GamepadKeys.Button.START)) {
-                //   bot.resetEverything();
-                isIncrementFourbar=!isIncrementFourbar;
-            }
-
-
-            //intake works
+            //intake
             if(gp2.wasJustPressed(GamepadKeys.Button.X)) {
                 if(isIntake){
                     bot.stopIntake();
@@ -100,8 +94,6 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 telemetry.update();
             }
-            //consider doing while x is pressed
-
 
             //reverse intake
             if(gp2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)){
@@ -111,11 +103,11 @@ public class MainTeleOp extends LinearOpMode {
 
             //fourbar and box outtake/storage position
             if(gp2.wasJustPressed(GamepadKeys.Button.A)) {
+
                 if(isOuttakePosition) {
-                    //storage position
                     bot.box.resetBox();
                     bot.fourbar.storage();
-                    //  bot.noodles.intake();
+                    bot.noodles.intake();
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
 
@@ -133,14 +125,6 @@ public class MainTeleOp extends LinearOpMode {
                     telemetry.update();
                 }
 
-            /*    if(isIncrementFourbar){
-                    bot.fourbar.incrementBoxAnglePosition();
-                }
-                else{
-                    bot.fourbar.decrementBoxAnglePosition();
-                }
-
-             */
                 telemetry.update();
             }
 
@@ -159,7 +143,6 @@ public class MainTeleOp extends LinearOpMode {
 
             //fourbar and box (automatic deposit): deposits both pixels at same time
             if(gp2.wasJustPressed(GamepadKeys.Button.B)) {
-                time.reset();
                 bot.fourbar.outtake();
                 if(isIntake){
                     isIntake = false;
@@ -196,10 +179,12 @@ public class MainTeleOp extends LinearOpMode {
             else if(gp2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
                 bot.slides.runToMid();}
 
+            //shoot drone
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 bot.drone.shoot();
                 telemetry.addLine("Drone shooting");
             }
+
             if (gp1.wasJustPressed(GamepadKeys.Button.A)){
                 bot.drone.reset();
                 telemetry.addLine("Drone resetting");
