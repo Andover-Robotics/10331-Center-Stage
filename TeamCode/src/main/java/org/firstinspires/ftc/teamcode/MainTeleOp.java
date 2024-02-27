@@ -40,7 +40,7 @@ public class MainTeleOp extends LinearOpMode {
         bot.reverseMotors();
         bot.slides.resetEncoder();
         bot.slides.resetProfiler();
-        bot.slides.runToStorage();
+        bot.slides.runTo(0);
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addLine("TeleOp has started");
@@ -107,7 +107,7 @@ public class MainTeleOp extends LinearOpMode {
                 if(isOuttakePosition) {
                     bot.box.resetBox();
                     bot.fourbar.storage();
-                    bot.noodles.intake();
+                   // bot.noodles.intake();
                     isOuttakePosition=false;
                     telemetry.addLine("Currently in storage position");
 
@@ -213,7 +213,7 @@ public class MainTeleOp extends LinearOpMode {
         bot.driveRobotCentric(driveVector.getX() * driveSpeed,
                 driveVector.getY() * driveSpeed,
                 turnVector.getX() * driveSpeed / 1.7
-        );
+        );  
     }
 
     private void runSlides(double power) {

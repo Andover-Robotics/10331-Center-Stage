@@ -18,7 +18,7 @@ public class Noodles {
 
     //values need to be runed
     private final double extendStoragePosition=0;
-    private final double extendOuttakePosition=0.5;
+    private final double extendOuttakePosition=0.8;
 
 
     public Noodles(OpMode opMode) {
