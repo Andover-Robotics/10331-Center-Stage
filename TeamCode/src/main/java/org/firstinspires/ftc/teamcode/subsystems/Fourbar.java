@@ -12,14 +12,14 @@ public class Fourbar {
 
 
     //values ARE FINALLL DO NOT CHANGE
-    private static double outtakeBox=1.0;
+    private static double outtakeBox=0.25;
 
 
     // private static double boxAngleReadyForStorage=1.0;
-    private static double storageBox = 0.8;
+    private static double storageBox = 0.7;
 
     private static double outtake = 0.7;
-    public static double storage = 0.15;
+    public static double storage = 0.1;
      //storage position is 0,1
 
 

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class Noodles {
-    //we need a sensor to sense how many pixels we are intaking!
+
     public final DcMotorEx noodleMotor;
     public final CRServo counterRoller;
     public final Servo extendOne;
@@ -16,9 +16,18 @@ public class Noodles {
     private final OpMode opMode;
     private boolean isIntake;
 
+
+    public double extendOnePos=0.625;
+    public double extendTwoPos=0.9;
+    //0.45 (storage left)
+    //1.0 (storage right)
+
+
     //values need to be runed
-    private final double extendStoragePosition=0;
-    private final double extendOuttakePosition=0.8;
+    private final double extendOneStoragePosition=1.0;
+    private final double extendTwoStoragePosition=0.45;
+    private final double extendOneOuttakePosition=0.625;
+    private final double extendTwoOuttakePosition=0.9;
 
 
     public Noodles(OpMode opMode) {
@@ -56,16 +65,16 @@ public class Noodles {
         counterRoller.setPower(0);
     }
     public void storage(){
-        extendOne.setPosition(extendStoragePosition);
-        extendTwo.setPosition(extendStoragePosition);
+        extendOne.setPosition(extendOneStoragePosition);
+        extendTwo.setPosition(extendTwoStoragePosition);
         isIntake= false;
         noodleMotor.setPower(0);
         counterRoller.setPower(0);
     }
 
     public void goToIntakePos(){
-        extendOne.setPosition(extendOuttakePosition);
-        extendTwo.setPosition(extendOuttakePosition);
+        extendOne.setPosition(extendOneOuttakePosition);
+        extendTwo.setPosition(extendTwoOuttakePosition);
     }
 
 
@@ -77,6 +86,37 @@ public class Noodles {
         counterRoller.setDirection(DcMotorEx.Direction.REVERSE);
         counterRoller.setPower(1);
     }
+
+
+    public void incrementServoRight(){
+        extendOnePos+=0.05;
+        if(extendOnePos>=1){
+            extendOnePos=1;
+        }
+        extendOne.setPosition(extendOnePos);
+    }
+    public void decrementServoRight(){
+        extendOnePos-=0.05;
+        if(extendOnePos<=0){
+            extendOnePos=0;
+        }
+        extendOne.setPosition(extendOnePos);
+    }
+    public void incrementServoLeft(){
+        extendTwoPos+=0.05;
+        if(extendTwoPos>=1){
+            extendTwoPos=1;
+        }
+        extendTwo.setPosition(extendTwoPos);
+    }
+    public void decrementServoLeft(){
+        extendTwoPos-=0.05;
+        if(extendTwoPos<=0){
+            extendTwoPos=0;
+        }
+        extendTwo.setPosition(extendTwoPos);
+    }
+
 
 
     public boolean getIntakeState(){
