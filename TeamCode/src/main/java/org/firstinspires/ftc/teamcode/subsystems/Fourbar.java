@@ -66,11 +66,11 @@ public class Fourbar {
 
 
     public void storage(){
-        //angleBoxServo.setPosition(boxAngleReadyForStorage);
+        //angleBoxServo.setPosition(boxAngleReadyForStorage);'
         time.reset();
-        while(time.seconds() < 2)  {
+        while(time.seconds() < 1)  {
             fourbar.setPosition(storage);
-           // angleBoxServo.setPosition(storageBox-0.3);
+            angleBoxServo.setPosition(storageBox+0.3);
         }
         fourbar.setPosition(storage);
         angleBoxServo.setPosition(storageBox);

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -26,7 +25,7 @@ public class Box {
         //switched configs
 
         wheelServo = opMode.hardwareMap.crservo.get("wheel servo");
-        wheelServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
         flapServo = opMode.hardwareMap.crservo.get("flap servo");
 
         time = new ElapsedTime();

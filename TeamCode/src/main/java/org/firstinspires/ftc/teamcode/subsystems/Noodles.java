@@ -25,7 +25,7 @@ public class Noodles {
 
     //values need to be runed
     private final double extendOneStoragePosition=1.0;
-    private final double extendTwoStoragePosition=0.45;
+    private final double extendTwoStoragePosition=0.5;
     private final double extendOneOuttakePosition=0.625;
     private final double extendTwoOuttakePosition=0.9;
 
@@ -34,8 +34,8 @@ public class Noodles {
         this.opMode = opMode;
         noodleMotor= opMode.hardwareMap.get(DcMotorEx.class, "noodles motor");
         counterRoller= opMode.hardwareMap.get(CRServo.class, "counter roller");
-        extendOne= opMode.hardwareMap.get(Servo.class, "extensionRight");
-        extendTwo= opMode.hardwareMap.get(Servo.class, "extensionLeft");
+        extendOne= opMode.hardwareMap.get(Servo.class, "extensionLeft");
+        extendTwo= opMode.hardwareMap.get(Servo.class, "extensionRight");
         noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
         isIntake = false;
     }
