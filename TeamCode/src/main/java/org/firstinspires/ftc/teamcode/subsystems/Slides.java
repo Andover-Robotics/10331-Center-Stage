@@ -46,7 +46,7 @@ public class Slides {
     }
     private slidesPosition position = slidesPosition.GROUND;
 
-    public static int storage = -264, top = -2250, mid = -1000, low = -500;
+    public static int storage =0, top = -2250, mid = -1000, low = -500;
     //tune high and storage
 
     private final OpMode opMode;

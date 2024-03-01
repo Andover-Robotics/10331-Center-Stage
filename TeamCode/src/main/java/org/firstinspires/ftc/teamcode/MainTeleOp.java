@@ -202,6 +202,7 @@ public class MainTeleOp extends LinearOpMode {
 
     private void drive() {
         gp1.readButtons();
+        bot.fixMotors();
         driveSpeed = 1;
         driveSpeed *= 1 - 0.9 * gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
         driveSpeed = Math.max(0, driveSpeed);

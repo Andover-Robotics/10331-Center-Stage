@@ -43,8 +43,8 @@ public class Noodles {
 
     public void intake(){
         counterRoller.setDirection(CRServo.Direction.FORWARD);
-        noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        noodleMotor.setPower(-0.5);
+        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        noodleMotor.setPower(1);
         counterRoller.setPower(1);
         isIntake=true;
     }
@@ -52,8 +52,8 @@ public class Noodles {
 
     public void intake(double power){
         counterRoller.setDirection(CRServo.Direction.FORWARD);
-        noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
-        noodleMotor.setPower(-power);
+        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        noodleMotor.setPower(power);
         counterRoller.setPower(1);
         isIntake=true;
     }
@@ -79,7 +79,7 @@ public class Noodles {
 
 
     public void reverseIntake(){
-        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
         noodleMotor.setPower(0.5);
         isIntake=false;
         noodleMotor.setPower(0.5);

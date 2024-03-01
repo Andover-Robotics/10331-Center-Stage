@@ -62,7 +62,7 @@ public class Box {
 
 
     public void runWheel(boolean isHolding) {
-        wheelServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        wheelServo.setDirection(DcMotorSimple.Direction.REVERSE);
         if(!isHolding){
             wheelServo.setPower(1);
         }

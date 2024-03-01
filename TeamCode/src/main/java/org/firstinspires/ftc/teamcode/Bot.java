@@ -163,7 +163,6 @@ public class Bot {
     public void fixMotors() {
         FR.setDirection(DcMotorEx.Direction.REVERSE);
         BR.setDirection(DcMotorEx.Direction.REVERSE);
-
         FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);

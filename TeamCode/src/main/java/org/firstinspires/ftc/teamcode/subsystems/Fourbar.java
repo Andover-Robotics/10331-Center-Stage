@@ -67,13 +67,12 @@ public class Fourbar {
 
     public void storage(){
         //angleBoxServo.setPosition(boxAngleReadyForStorage);'
-        time.reset();
+       time.reset();
         while(time.seconds() < 1)  {
-            fourbar.setPosition(storage);
-            angleBoxServo.setPosition(storageBox+0.3);
+            fourbar.setPosition(storage+0.3);
         }
-        fourbar.setPosition(storage);
         angleBoxServo.setPosition(storageBox);
+        fourbar.setPosition(storage);
         isOuttakePosition = false;
     }
 
