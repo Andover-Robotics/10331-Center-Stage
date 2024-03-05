@@ -92,7 +92,6 @@ public class MainTeleOp extends LinearOpMode {
                     isIntake = true;
                     telemetry.addData("Currently Intaking", isIntake);
                 }
-                telemetry.update();
             }
 
             //reverse intake
@@ -122,10 +121,7 @@ public class MainTeleOp extends LinearOpMode {
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
                     telemetry.addLine("Currently in outtake position");
-                    telemetry.update();
                 }
-
-                telemetry.update();
             }
 
 
@@ -193,8 +189,6 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("box position", bot.fourbar.getBoxPos());
             telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
             telemetry.addData("slides position", bot.slides.getCurrentPosition());
-            telemetry.update();
-
             bot.slides.periodic();
         }
     }
