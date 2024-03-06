@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Box;
 import org.firstinspires.ftc.teamcode.subsystems.Drone;
 import org.firstinspires.ftc.teamcode.subsystems.Fourbar;
@@ -224,5 +225,31 @@ public class Bot {
         BL.setMode(STOP_AND_RESET_ENCODER);
         slides.resetEncoder();
     }
+
+    public double getFLCurrent(){
+        return FL.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getFRCurrent(){
+        return FR.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getBLCurrent(){
+        return BR.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getBRCurrent(){
+        return BR.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getFLPower(){
+        return FL.getPower();
+    }
+    public double getFRPower(){
+        return FR.getPower();
+    }
+    public double getBLPower(){
+        return BR.getPower();
+    }
+    public double getBRPower(){
+        return BR.getPower();
+    }
+
 
 }

@@ -84,13 +84,11 @@ public class MainTeleOp extends LinearOpMode {
                 if(isIntake){
                     bot.stopIntake();
                     isIntake = false;
-                    telemetry.addData("Stopped Intaking", isIntake);
                 }
                 else {
                     bot.box.resetBox();
                     bot.intake();
                     isIntake = true;
-                    telemetry.addData("Currently Intaking", isIntake);
                 }
             }
 
@@ -108,7 +106,6 @@ public class MainTeleOp extends LinearOpMode {
                     bot.fourbar.storage();
                    // bot.noodles.intake();
                     isOuttakePosition=false;
-                    telemetry.addLine("Currently in storage position");
 
                 }
 
@@ -120,7 +117,6 @@ public class MainTeleOp extends LinearOpMode {
                     //outtake position
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
-                    telemetry.addLine("Currently in outtake position");
                 }
             }
 
@@ -147,7 +143,6 @@ public class MainTeleOp extends LinearOpMode {
                 isOuttakePosition = true;
                 bot.box.depositFirstPixel();
                 bot.box.depositSecondPixel();
-                telemetry.addLine("Currently in outtake position and deposited two pixels");
             }
 
 
@@ -178,17 +173,27 @@ public class MainTeleOp extends LinearOpMode {
             //shoot drone
             if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 bot.drone.shoot();
-                telemetry.addLine("Drone shooting");
             }
 
             if (gp1.wasJustPressed(GamepadKeys.Button.A)){
                 bot.drone.reset();
-                telemetry.addLine("Drone resetting");
             }
 
-            telemetry.addData("box position", bot.fourbar.getBoxPos());
-            telemetry.addData("fourbar position",bot.fourbar.getFourbarPos());
-            telemetry.addData("slides position", bot.slides.getCurrentPosition());
+            telemetry.addData("noodle motor current:", bot.noodles.getIntakeMotorCurrent());
+            telemetry.addData("FL motor current:",bot.getFLCurrent());
+            telemetry.addData("FR motor current:",bot.getFRCurrent());
+            telemetry.addData("BL motor current:",bot.getBLCurrent());
+            telemetry.addData("BR motor current:",bot.getBRCurrent());
+       //     telemetry.addData("right slides motor current:",bot.slides.getRightSlidesCurrent());
+        //    telemetry.addData("mid slides motor current:",bot.slides.getMidSlidesCurrent());
+            telemetry.addData("noodle motor power:", bot.noodles.getIntakeMotorPower());
+            telemetry.addData("FL motor power:",bot.getFLPower());
+            telemetry.addData("FR motor power:",bot.getFRPower());
+            telemetry.addData("BL motor power :",bot.getBLPower());
+            telemetry.addData("BR motor power:",bot.getBRPower());
+       //     telemetry.addData("right slides motor power:",bot.slides.getRightSlidesPower());
+         //   telemetry.addData("mid slides motor power:",bot.slides.getMidSlidesPower());
+            telemetry.update();
             bot.slides.periodic();
         }
     }

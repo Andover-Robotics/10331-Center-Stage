@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 
 public class Noodles {
 
@@ -120,11 +122,12 @@ public class Noodles {
 
 
 
-    public boolean getIntakeState(){
-        return isIntake;
+    public double getIntakeMotorCurrent(){
+        return noodleMotor.getCurrent(CurrentUnit.AMPS);
     }
-
-
+    public double getIntakeMotorPower(){
+        return noodleMotor.getPower();
+    }
 
 
 }
