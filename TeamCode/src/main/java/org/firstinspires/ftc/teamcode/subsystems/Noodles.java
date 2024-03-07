@@ -29,8 +29,8 @@ public class Noodles {
     private final double extendOneStoragePosition=1.0;
     private final double extendTwoStoragePosition=0.5;
 
-    private final double extendOneOuttakePosition=0.7;
-    private final double extendTwoOuttakePosition=0.825;
+    private final double extendOneOuttakePosition=0.625;
+    private final double extendTwoOuttakePosition=0.9;
 
 
     public Noodles(OpMode opMode) {

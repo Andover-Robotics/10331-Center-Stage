@@ -210,9 +210,12 @@ public class Slides {
         } else {
             if (profiler.isDone()) {
                 profiler = new MotionProfiler(30000, 20000);
+                midMotor.set(0);
+                rightMotor.set(0);
             }
 
             if (manualPower != 0) {
+
                 controller.setSetPoint(rightMotor.getCurrentPosition());
                 rightMotor.set(manualPower / manualDivide);
                 midMotor.set(manualPower / manualDivide);
