@@ -103,8 +103,8 @@ public class MainTeleOp extends LinearOpMode {
 
                 if(isOuttakePosition) {
                     bot.box.resetBox();
+                    bot.noodles.goToIntakePos();
                     bot.fourbar.storage();
-                   // bot.noodles.intake();
                     isOuttakePosition=false;
 
                 }
@@ -112,8 +112,9 @@ public class MainTeleOp extends LinearOpMode {
                 else {
                     if(isIntake){
                         isIntake = false;
-                        bot.stopIntake();
+                        bot.noodles.stopRunning();
                     }
+                    bot.noodles.goToIntakePos();
                     //outtake position
                     bot.fourbar.outtake();
                     isOuttakePosition=true;
@@ -177,6 +178,13 @@ public class MainTeleOp extends LinearOpMode {
 
             if (gp1.wasJustPressed(GamepadKeys.Button.A)){
                 bot.drone.reset();
+            }
+            if (gp1.wasJustPressed(GamepadKeys.Button.X)){
+                bot.noodles.goToIntakePos();
+            }
+
+            if (gp1.wasJustPressed(GamepadKeys.Button.Y)){
+                bot.noodles.storage();
             }
 
             telemetry.addData("noodle motor current:", bot.noodles.getIntakeMotorCurrent());

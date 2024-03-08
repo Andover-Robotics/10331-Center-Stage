@@ -45,6 +45,7 @@ public class Noodles {
 
 
     public void intake(){
+        goToIntakePos();
         counterRoller.setDirection(CRServo.Direction.FORWARD);
         noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
         noodleMotor.setPower(1);
@@ -54,6 +55,7 @@ public class Noodles {
 
 
     public void intake(double power){
+        goToIntakePos();
         counterRoller.setDirection(CRServo.Direction.FORWARD);
         noodleMotor.setDirection(DcMotorEx.Direction.REVERSE);
         noodleMotor.setPower(power);
@@ -61,12 +63,20 @@ public class Noodles {
         isIntake=true;
     }
 
-
-    public void stop(){
+    public void stopRunning(){
         isIntake= false;
         noodleMotor.setPower(0);
         counterRoller.setPower(0);
     }
+
+
+    public void stop(){
+        storage();
+        isIntake= false;
+        noodleMotor.setPower(0);
+        counterRoller.setPower(0);
+    }
+
     public void storage(){
         extendOne.setPosition(extendOneStoragePosition);
         extendTwo.setPosition(extendTwoStoragePosition);
@@ -82,6 +92,7 @@ public class Noodles {
 
 
     public void reverseIntake(){
+        goToIntakePos();
         noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
         noodleMotor.setPower(0.5);
         isIntake=false;
