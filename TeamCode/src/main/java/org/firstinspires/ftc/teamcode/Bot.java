@@ -251,5 +251,38 @@ public class Bot {
         return BR.getPower();
     }
 
+    public void strafeRight(){
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setPower(0.1);
+        FR.setPower(0.1);
+        BR.setPower(0.1);
+        BL.setPower(0.1);
+        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+        FL.setPower(0);
+        FR.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
+
+    }
+    public void strafeLeft(){
+
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setPower(0.1);
+        FR.setPower(0.1);
+        BR.setPower(0.1);
+        BL.setPower(0.1);
+        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
+        FL.setPower(0);
+        FR.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
+
+
+    }
+
 
 }
