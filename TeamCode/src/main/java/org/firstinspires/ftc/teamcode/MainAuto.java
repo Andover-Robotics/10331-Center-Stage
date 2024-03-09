@@ -9,6 +9,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.pipelines.TeamPropDetectionPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+
 
 @Autonomous
 public class MainAuto extends LinearOpMode {
@@ -18,6 +24,7 @@ public class MainAuto extends LinearOpMode {
     private double driveSpeed = 0.5;
     private double driveTime = 0.5; // in seconds
     private ElapsedTime time = new ElapsedTime();
+    TeamPropDetectionPipeline.TeamProp prop;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -25,6 +32,26 @@ public class MainAuto extends LinearOpMode {
         bot = Bot.getInstance(this);
         gp1 = new GamepadEx(gamepad1);
         gp2 = new GamepadEx(gamepad2);
+
+        WebcamName camName = hardwareMap.get(WebcamName.class, "webcam");
+        bot.camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
+        TeamPropDetectionPipeline teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
+        //  bot.aprilTagsPipeline= new AprilTagsPipeline(tagSize, fx, fy, cx, cy);
+
+
+        bot.camera.setPipeline(teamPropDetectionPipeline);
+        bot.camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+
+            @Override
+            public void onOpened() {
+                bot.camera.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
 
         // Initializing the robot
         bot.noodles.goToIntakePos();
@@ -49,6 +76,9 @@ public class MainAuto extends LinearOpMode {
             if(gp1.wasJustPressed(GamepadKeys.Button.B)) {
                 driveSpeed+=0.1;
             }
+
+            prop = teamPropDetectionPipeline.getTeamPropLocation();
+            telemetry.addData("detected prop", prop.toString());
             telemetry.addData("drive seconds", driveTime);
             telemetry.addData("drive speed", driveSpeed);
             telemetry.update();
