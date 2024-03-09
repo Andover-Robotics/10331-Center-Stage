@@ -54,28 +54,20 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
 
 
         if(alliance== TeamPropDetectionPipeline.Alliance.BLUE){
-    /*    lowH = 75;
-        lowS = 110;
-        lowV = 150;
-        highH = 181;
-        highS = 255;
-        highV = 255;
-
-     */
-            lowH = 100;
-            lowS = 0;
-            lowV = 158;
-            highH = 137;
-            highS = 71;
-            highV = 227;
+            lowH = 86;
+            lowS = 39;
+            lowV = 117;
+            highH = 113;
+            highS = 210;
+            highV = 255;
         }
         else{
-            lowH = 160;
-            lowS = 83;
-            lowV = 144;
+            lowH = 0;
+            lowS = 2;
+            lowV = 142;
             highH = 180;
-            highS = 181;
-            highV = 223;
+            highS = 216;
+            highV = 255;
         }
         lowHSV= new Scalar(lowH, lowS, lowV);
         highHSV= new Scalar(highH, highS, highV);
@@ -86,16 +78,18 @@ public class TeamPropDetectionPipeline extends OpenCvPipeline {
         //have to change values (divide screen into three)
         Rect frontRect = new Rect(0, 1, 640, 719);
         //    Rect leftRect = new Rect(426, 1, 426, 719);
+
+
         Rect rightRect = new Rect(640,1,640,719);
 
         //red
         //    Imgproc.rectangle(input, leftRect, new Scalar(255, 0, 0), 5);
 
         //blue
-        Imgproc.rectangle(input, rightRect, new Scalar(0, 0, 255), 5);
+        Imgproc.rectangle(input, rightRect, new Scalar(0, 0, 255), 10);
 
-        //green
-        Imgproc.rectangle(input, frontRect, new Scalar(0,255,0), 5);
+        //red
+        Imgproc.rectangle(input, frontRect, new Scalar(255, 0, 0), 10);
 
         Core.inRange(HSV, lowHSV, highHSV, HSV);
 

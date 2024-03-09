@@ -35,6 +35,8 @@ public class MainAutoTwo extends LinearOpMode {
     private double driveSpeed = 0.5;
     private double driveTime = 0.5; // in seconds
     Vector2d driveVector;
+    private boolean justPark;
+
 
     private ElapsedTime time = new ElapsedTime();
     TeamPropDetectionPipeline.TeamProp prop;
@@ -110,11 +112,17 @@ public class MainAutoTwo extends LinearOpMode {
             if(gp1.wasJustPressed(GamepadKeys.Button.B)) {
                 driveSpeed+=0.1;
             }
+            if(gp1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                justPark = true;
+            }
 
             prop = teamPropDetectionPipeline.getTeamPropLocation();
+            telemetry.addData("alliance is ", side);
+            telemetry.addData("distance to backdrop is ", dtb);
             telemetry.addData("detected prop", prop.toString());
             telemetry.addData("drive seconds", driveTime);
             telemetry.addData("drive speed", driveSpeed);
+            telemetry.addData("just park:", justPark);
             telemetry.update();
         }
 
@@ -123,29 +131,102 @@ public class MainAutoTwo extends LinearOpMode {
         telemetry.addLine("Autonomous has started");
         time.reset();
 
+        if(justPark) {
+            driveSpeed = 0.8;
+            driveTime = 5;
+            park();
+        } else {
+            moveBasedOnProp();
 
-        moveBasedOnProp();
-
-        if(side==Side.RED && dtb==DistanceToBackdrop.CLOSE) {
-            //RED CLOSE
-            driveSpeed = 0.7;
-            while (time.seconds() < driveTime) {
+            if(side==Side.RED && dtb==DistanceToBackdrop.CLOSE) {
+                //RED CLOSE
+                driveSpeed = 0.7;
+                while (time.seconds() < driveTime) {
+                    right();
+                }
+                depositPixel();
+                driveSpeed = 0.2;
+                while (time.seconds() < driveTime + 1.6) {
+                    back();
+                }
+                driveSpeed = 0.05;
+         /*   while (time.seconds() < driveTime + 1.5 + 0.1 + 0.2) {
                 right();
             }
-            depositPixel();
-            driveSpeed = 0.2;
-            while (time.seconds() < driveTime + 1.5 + 0.1) {
-                back();
+
+          */
             }
-            driveSpeed = 0.05;
-            while (time.seconds() < driveTime + 1.5 + 0.1 + 0.2) {
-                right();
+
+           /*
+Red close
+Left: nothing; right back
+Center: back ;right back
+Right: backer; right back
+            */
+            if(side==Side.BLUE && dtb==DistanceToBackdrop.CLOSE) {
+                //blue close
+
+                driveSpeed = 0.7;
+                while (time.seconds() < driveTime) {
+                    left();
+                }
+                depositPixel();
+                driveSpeed = 0.2;
+                while (time.seconds() < driveTime + 1.5 + 0.1) {
+                    back();
+                }
             }
+
+        /*
+        Blue close
+Left: backer ; left back
+Center: back ; left back
+Right: nothing; left back
+         */
+
+            if(side==Side.RED && dtb==DistanceToBackdrop.FAR) {
+                //red far
+
+                driveSpeed = 0.7;
+                while (time.seconds() < driveTime) {
+                    left();
+                }
+                depositPixel();
+                driveSpeed = 0.2;
+                while (time.seconds() < driveTime + 1.5 + 0.1) {
+                    lilback();
+                }
+            }
+/*
+        Red far
+        Left: backer ; left lil back
+        Center: back;  left lil back
+        Right: nothing ; left lil back
+        AFTER PLACED:
+        Left forward right?
+
+ */
+            if(side==Side.BLUE && dtb==DistanceToBackdrop.FAR) {
+                //blue far
+
+                driveSpeed = 0.7;
+                while (time.seconds() < driveTime) {
+                    lilback();
+                }
+                depositPixel();
+            }
+/*
+        Blue far
+        Left:  right; lil back
+        Center: back right; lil back
+        Right: back; lil back
+        AFTER PLACED:
+        Right forward left?
+     */
+            sleep(2500);
+
         }
 
-
-
-        sleep(2500);
     }
 
     private void drive(){
@@ -185,6 +266,18 @@ public class MainAutoTwo extends LinearOpMode {
         bot.noodles.storage();
     }
 
+    private void park() {
+        switch(side) {
+            case RED:
+                while(time.seconds() < driveTime)
+                    right();
+
+            case BLUE:
+                while(time.seconds() < driveTime)
+                    right();
+        }
+    }
+
     private void moveBasedOnProp(){
         if(prop == TeamPropDetectionPipeline.TeamProp.ONLEFT){
             if(side==Side.BLUE && dtb== DistanceToBackdrop.CLOSE)
@@ -194,6 +287,7 @@ public class MainAutoTwo extends LinearOpMode {
             else if(side==Side.RED && dtb== DistanceToBackdrop.FAR)
                 backer();
         }
+
         if(prop == TeamPropDetectionPipeline.TeamProp.MIDDLE) {
             if (side == Side.RED && dtb == DistanceToBackdrop.CLOSE)
                 back();
@@ -206,6 +300,7 @@ public class MainAutoTwo extends LinearOpMode {
             else if (side == Side.RED && dtb == DistanceToBackdrop.FAR)
                 back();
         }
+
         if(prop == TeamPropDetectionPipeline.TeamProp.ONRIGHT) {
             if (side == Side.RED && dtb == DistanceToBackdrop.CLOSE)
                 backer();
