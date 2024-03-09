@@ -18,6 +18,7 @@ public class MainTeleOp extends LinearOpMode {
     public boolean isIntake=false;
     public boolean isOuttakePosition=false;
     public boolean isIncrementFourbar=true;
+    boolean intakeUp = false;
 
 
     private ElapsedTime time = new ElapsedTime();
@@ -180,12 +181,13 @@ public class MainTeleOp extends LinearOpMode {
                 bot.drone.reset();
             }
             if (gp1.wasJustPressed(GamepadKeys.Button.X)){
-                bot.noodles.goToIntakePos();
+                intakeUp = !intakeUp;
+                if(intakeUp)
+                    bot.noodles.goToIntakePos();
+                else
+                    bot.noodles.storage();
             }
 
-            if (gp1.wasJustPressed(GamepadKeys.Button.Y)){
-                bot.noodles.storage();
-            }
 
             telemetry.addData("noodle motor current:", bot.noodles.getIntakeMotorCurrent());
             telemetry.addData("FL motor current:",bot.getFLCurrent());
