@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -36,7 +35,6 @@ public class MainAuto extends LinearOpMode {
         WebcamName camName = hardwareMap.get(WebcamName.class, "webcam");
         bot.camera = OpenCvCameraFactory.getInstance().createWebcam(camName);
         TeamPropDetectionPipeline teamPropDetectionPipeline = new TeamPropDetectionPipeline(telemetry);
-        //  bot.aprilTagsPipeline= new AprilTagsPipeline(tagSize, fx, fy, cx, cy);
 
 
         bot.camera.setPipeline(teamPropDetectionPipeline);
@@ -55,7 +53,6 @@ public class MainAuto extends LinearOpMode {
 
         // Initializing the robot
         bot.noodles.goToIntakePos();
-        bot.reverseMotors();
         bot.slides.resetEncoder();
         bot.slides.resetProfiler();
         bot.slides.runTo(0);
@@ -92,21 +89,28 @@ public class MainAuto extends LinearOpMode {
         // drive somewhere
         // calculate drive vector
         //RED CLOSE
+
         driveSpeed = 0.7;
-        Vector2d driveVector = new Vector2d(1.0, 0.0); // x - strafe, y - forward/backward
+        Vector2d driveVector = new Vector2d(1.0, 0.0); //strafe right
+
+
         // run drive function
         while(time.seconds() < driveTime) {
             bot.driveRobotCentric(driveVector.getX() * driveSpeed,
                     driveVector.getY() * driveSpeed, 0
             );
         }
+        
         bot.driveRobotCentric(0, 0, 0);
+
+
         // Reverse intake
         bot.noodles.goToIntakePos();
         sleep(1500);
         bot.noodles.storage();
         driveSpeed = 0.2;
-        driveVector = new Vector2d(0.0, 1.0);
+        driveVector = new Vector2d(0.0, 1.0); //back
+
         // run drive function
         while(time.seconds() < driveTime + 1.5 + 0.1) {
             bot.driveRobotCentric(driveVector.getX() * driveSpeed,
@@ -114,13 +118,16 @@ public class MainAuto extends LinearOpMode {
             );
         }
         driveSpeed = 0.05;
-        driveVector = new Vector2d(1.0, 0.0);
+        driveVector = new Vector2d(1.0, 0.0); //strafe right
+
         // run drive function
         while(time.seconds() < driveTime + 1.5 + 0.1 + 0.2) {
             bot.driveRobotCentric(driveVector.getX() * driveSpeed,
                     driveVector.getY() * driveSpeed, 0
             );
         }
+
+
 
         sleep(2500);
         //requestOpModeStop();

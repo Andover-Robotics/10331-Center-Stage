@@ -100,6 +100,14 @@ public class Noodles {
         counterRoller.setDirection(DcMotorEx.Direction.REVERSE);
         counterRoller.setPower(1);
     }
+    public void reverseIntake(double power){
+        noodleMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        noodleMotor.setPower(power);
+        isIntake=false;
+        noodleMotor.setPower(power);
+        counterRoller.setDirection(DcMotorEx.Direction.REVERSE);
+        counterRoller.setPower(1);
+    }
 
 
     public void incrementServoRight(){
