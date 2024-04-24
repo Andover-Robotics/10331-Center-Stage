@@ -132,6 +132,17 @@ public class MainAutoTwo extends LinearOpMode {
         time.reset();
 
         if(justPark) {
+            if (side == Side.RED && dtb == DistanceToBackdrop.CLOSE)
+                back();
+            else if (side == Side.BLUE && dtb == DistanceToBackdrop.CLOSE)
+                back();
+            else if (side == Side.BLUE && dtb == DistanceToBackdrop.FAR) {
+                back();
+                right();
+            }
+            else if (side == Side.RED && dtb == DistanceToBackdrop.FAR)
+                back();
+
             driveSpeed = 0.8;
             driveTime = 5;
             park();
@@ -271,10 +282,12 @@ Right: nothing; left back
             case RED:
                 while(time.seconds() < driveTime)
                     right();
+                    backer();
 
             case BLUE:
                 while(time.seconds() < driveTime)
-                    right();
+                    left();
+                    backer();
         }
     }
 

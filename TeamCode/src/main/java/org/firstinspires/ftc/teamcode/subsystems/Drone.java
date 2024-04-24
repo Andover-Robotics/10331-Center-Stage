@@ -11,7 +11,7 @@ public class Drone {
 
     public Drone(OpMode opMode) {
         droneServo = opMode.hardwareMap.servo.get("droneServo");
-        droneServo.setDirection(Servo.Direction.REVERSE);
+        droneServo.setDirection(Servo.Direction.FORWARD);
     }
 
     public void shoot(){
